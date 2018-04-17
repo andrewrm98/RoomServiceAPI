@@ -30,7 +30,7 @@ Create Table Request (
   CONSTRAINT fk_message_messageID FOREIGN KEY (messageID) REFERENCES Message(messageID) ON DELETE CASCADE);
 
 CREATE TABLE Inventory (
-  jnventoryID       VARCHAR(10) PRIMARY KEY,
+  ID                VARCHAR(10) PRIMARY KEY,
   type              VARCHAR(10) UNIQUE,
-  quantity          VARCHAR(10),
-  Location          VARCHAR(10));
+  quantity          INTEGER,
+  location          VARCHAR(10));

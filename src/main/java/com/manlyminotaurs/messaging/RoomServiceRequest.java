@@ -2,11 +2,12 @@ package com.manlyminotaurs.messaging;
 
 import java.time.LocalDateTime;
 
-class JanitorialRequest extends Request{
+class RoomServiceRequest extends Request{
 
-    JanitorialRequest(String requestID, String requestType, int priority, Boolean isComplete, Boolean adminConfirm, LocalDateTime startTime, LocalDateTime endTime, String nodeID, String messageID, String password) {
+    RoomServiceRequest(String requestID, String requestType, int priority, Boolean isComplete, Boolean adminConfirm, LocalDateTime startTime, LocalDateTime endTime, String nodeID, String messageID, String password) {
         super(requestID, requestType, priority, isComplete, adminConfirm, startTime,endTime, password, nodeID, messageID);
     }
+
     @Override
     public boolean service() {
         this.setComplete(true);

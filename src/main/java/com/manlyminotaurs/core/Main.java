@@ -1,6 +1,5 @@
 package com.manlyminotaurs.core;
 
-import com.manlyminotaurs.databases.DataModelI;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -11,14 +10,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-
-import javax.xml.crypto.Data;
 
 
 public class Main extends Application {

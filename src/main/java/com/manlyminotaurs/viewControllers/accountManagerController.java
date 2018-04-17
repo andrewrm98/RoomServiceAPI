@@ -1,7 +1,6 @@
 package com.manlyminotaurs.viewControllers;
 
 import com.jfoenix.controls.JFXTextField;
-import com.manlyminotaurs.databases.DataModelI;
 import com.manlyminotaurs.users.User;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;

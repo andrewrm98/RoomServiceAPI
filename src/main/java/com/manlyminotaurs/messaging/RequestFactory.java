@@ -1,9 +1,6 @@
 package com.manlyminotaurs.messaging;
 
 
-import com.manlyminotaurs.databases.DataModelI;
-
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -24,7 +21,7 @@ public class RequestFactory {
 
         messageID = dataModel.getNextMessageID();
         newMsg = new Message(messageID, message, false, LocalDate.now(), "11", senderID);
-        newReq = new JanitorialRequest(dataModel.getNextRequestID(), "JanitorialRequest", priority, false, false, LocalDateTime.now(), LocalDateTime.now(), nodeID, messageID, requestType.toString());
+        newReq = new RoomServiceRequest(dataModel.getNextRequestID(), "RoomServiceRequest", priority, false, false, LocalDateTime.now(), LocalDateTime.now(), nodeID, messageID, requestType.toString());
 
         return dataModel.addRequest(newReq, newMsg);
     }
@@ -47,7 +44,7 @@ public class RequestFactory {
     public Request genExistingRequest(String requestID, String requestType, int priority, Boolean isComplete, Boolean adminConfirm, LocalDateTime startTime, LocalDateTime endTime, String nodeID, String messageID, String password){
         Request newReq;
 
-        newReq = new JanitorialRequest(requestID, "JanitorialRequest", priority, isComplete, adminConfirm, startTime, endTime, nodeID, messageID, password);
+        newReq = new RoomServiceRequest(requestID, "RoomServiceRequest", priority, isComplete, adminConfirm, startTime, endTime, nodeID, messageID, password);
         return newReq;
     }
 }

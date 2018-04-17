@@ -1,8 +1,5 @@
 package com.manlyminotaurs.messaging;
 
-import com.manlyminotaurs.databases.DataModelI;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
