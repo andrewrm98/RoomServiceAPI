@@ -73,7 +73,9 @@ public class InventoryDBUtil {
 
 	public Inventory addinventory(Inventory inventory){
 		System.out.println("addinventory");
-		String inventoryID = generateInventoryID();
+		if(inventory.getID() == null || inventory.getID().equals("")) {
+			inventory.setID(generateInventoryID());
+		}
 
 		Connection connection = DataModelI.getInstance().getNewConnection();
 		try {

@@ -24,6 +24,23 @@ public class Main extends Application {
     private static DataModelI dataModelI = DataModelI.getInstance();
     public static String pathStrategy = "";
 
+    public int xcoord;
+    public int ycoord;
+    public int windowWidth;
+    public int windowLength;
+    public String cssPath;
+    public String destNodeID;
+    public String originNodeID;
+
+    public void run(int xcoord, int ycoord, int windowWidth, int windowLength, String cssPath, String destNodeID, String originNodeID) throws Exception {
+        this.xcoord = xcoord;
+        this.ycoord = ycoord;
+        this.windowWidth = windowWidth;
+        this.windowLength = windowLength;
+        this.cssPath = cssPath;
+        this.destNodeID = destNodeID;
+        this.originNodeID = originNodeID;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
