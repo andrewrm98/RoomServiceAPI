@@ -1,6 +1,8 @@
 package com.manlyminotaurs.databases;
 
 
+import com.manlyminotaurs.messaging.Inventory;
+
 import java.io.*;
 import java.sql.*;
 import java.text.ParseException;
@@ -52,6 +54,7 @@ class TableInitializer {
         UserDBUtil.setUserIDCounter(initializer.populateUserAccountTable("./UserAccountTable.csv"));
         MessagesDBUtil.setMessageIDCounter(initializer.populateMessageTable("./MessageTable.csv"));
         RequestsDBUtil.setRequestIDCounter(initializer.populateRequestTable("./RequestTable.csv"));
+        InventoryDBUtil.setInventoryIDCounter(initializer.populateInventoryTable("./InventoryTable.csv"));
 
         System.out.println("-----------------------------");
         System.out.println("-----------------------------");
@@ -213,6 +216,42 @@ class TableInitializer {
             DataModelI.getInstance().closeConnection();
         }
         return requestIDCounter;
+    }
+
+    private int populateInventoryTable(String CsvFileName) {
+        Connection connection = DataModelI.getInstance().getNewConnection();
+        int inventoryIDCounter = 0;
+        try {
+            // parse UserTable.csv file
+            CsvFileController csvFileControl = new CsvFileController();
+            List<String[]> requestList = csvFileControl.parseCsvFile(CsvFileName);
+            if(requestList == null){
+                return 0;
+            }
+
+            Statement stmt = connection.createStatement();
+
+            Iterator<String[]> iterator = requestList.iterator();
+            iterator.next(); // get rid of the header
+
+            //insert rows
+            while (iterator.hasNext()) {
+                inventoryIDCounter++;
+                String[] node_row = iterator.next();
+                String str = "INSERT INTO INVENTORY(ID, TYPE, QUANTITY, LOCATION) VALUES (?,?,?,?)";
+                PreparedStatement statement = connection.prepareStatement(str);
+                statement.setString(1, node_row[0]);
+                statement.setString(2, node_row[1]);
+                statement.setInt(3, Integer.parseInt(node_row[2]));
+                statement.setBoolean(4, Boolean.valueOf(node_row[3]));
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DataModelI.getInstance().closeConnection();
+        }
+        return inventoryIDCounter;
     }
 
 

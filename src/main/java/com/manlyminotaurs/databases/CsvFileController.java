@@ -1,5 +1,6 @@
 package com.manlyminotaurs.databases;
 
+import com.manlyminotaurs.messaging.Inventory;
 import com.manlyminotaurs.messaging.Message;
 import com.manlyminotaurs.messaging.Request;
 import com.manlyminotaurs.users.User;
@@ -74,6 +75,7 @@ public class CsvFileController {
         updateMessageCSVFile("./MessageTable.csv");
         updateRequestCSVFile("./RequestTable.csv");
         updateUserCSVFile("./UserAccountTable.csv");
+        updateInventoryCSVFile("./InventoryTable.csv");
     }
     /*---------------------------------- Messages --------------------------------------------------*/
     /**
@@ -149,4 +151,23 @@ public class CsvFileController {
         }
     }//updateUserCSVFile ends
 
+    /*---------------------------------- Inventory --------------------------------------------------*/
+    private void updateInventoryCSVFile(String csvFileName) {
+        Iterator<Inventory> iterator = DataModelI.getInstance().retrieveInventory().iterator();
+        System.out.println("Updating request csv file...");
+        try {
+            FileWriter fileWriter = new FileWriter(csvFileName);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.print("ID,type,quantity, ocation\n");
+            while (iterator.hasNext()) {
+                Inventory a_inventory = iterator.next();
+                printWriter.printf("%s,%s,%d,%s\n", a_inventory.getID(), a_inventory.getType(), a_inventory.getQuantity(),a_inventory.getLocation());
+            }
+            printWriter.close();
+            System.out.println("csv file updated");
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }//updateRequestCSVFile ends
 }
