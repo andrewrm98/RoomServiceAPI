@@ -175,6 +175,112 @@ public class roomServiceAPIController implements Initializable{
 	String userID;
 	User user;
 
+    public class InventoryItem{
+
+        String itemName;
+        int quantity;
+
+        InventoryItem(String itemName, int quantity){
+            this.itemName = itemName;
+            this.quantity = quantity;
+        }
+
+        public String getItemName() {
+            return itemName;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+    }
+
+    public class Employee{
+
+        String firstName;
+        String middleName;
+        String lastName;
+        int employeeID;
+        String employeeType;
+
+
+        Employee(String firstName, String middleName, String lastName, int employeeID, String employeeType){
+            this.firstName = firstName;
+            this.middleName = middleName;
+            this.lastName = lastName;
+            this.employeeID = employeeID;
+            this.employeeType = employeeType;
+        }
+
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getMiddleName() {
+            return middleName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public int getEmployeeID() {
+            return employeeID;
+        }
+
+        public String getEmployeeType() {
+            return employeeType;
+        }
+    }
+
+    public class Request {
+        String room;
+        String time;
+        String employee;
+        String status;
+        Cart cart;
+
+        public Request(String room, String time, String employee, String status, Cart cart) {
+            this.room = room;
+            this.time = time;
+            this.employee = employee;
+            this.status = status;
+            this.cart = cart;
+        }
+
+        public String getRoom() {
+            return room;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public String getEmployee() {
+            return employee;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public Cart getCart() {
+            return cart;
+        }
+    }
+
+    public class Cart {
+        ObservableList<InventoryItem> items;
+
+        public Cart(ObservableList<InventoryItem> items) {
+            this.items = items;
+        }
+
+        public ObservableList<InventoryItem> getItems() {
+            return items;
+        }
+    }
 
 	public void initialize(URL location, ResourceBundle resources) {
 

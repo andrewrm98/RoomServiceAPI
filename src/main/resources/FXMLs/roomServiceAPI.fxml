@@ -109,7 +109,7 @@
                             </children></Pane>
                     </children>
                 </VBox>
-                <HBox fx:id="boxManageEmployees" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxManageEmployees" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="920.0" prefWidth="1600.0">
                             <children>
@@ -167,7 +167,7 @@
                                                 <Font size="20.0" />
                                             </font>
                                         </Label>
-                                        <JFXTextField fx:id="txtEmployeeID" layoutX="50.0" layoutY="460.0" maxWidth="510.0" minWidth="400.0" prefHeight="30.0" prefWidth="510.0" promptText="Last Name" text="Employee ID">
+                                        <JFXTextField fx:id="txtEmployeeID" layoutX="50.0" layoutY="460.0" maxWidth="510.0" minWidth="400.0" prefHeight="30.0" prefWidth="510.0" promptText="Employee ID" text="Employee ID">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
@@ -314,7 +314,7 @@
                             </children></Pane>
                     </children>
                 </HBox>
-                <HBox fx:id="boxRequestRoomService" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxRequestRoomService" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="920.0" prefWidth="1600.0">
                             <children>
