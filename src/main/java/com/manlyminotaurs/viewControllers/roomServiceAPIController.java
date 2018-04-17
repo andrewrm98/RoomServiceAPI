@@ -1,8 +1,12 @@
-package main.java.com.manlyminotaurs.viewControllers;
+package com.manlyminotaurs.viewControllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import com.manlyminotaurs.databases.DataModelI;
+import com.manlyminotaurs.users.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -10,6 +14,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class roomServiceAPIController {
@@ -153,9 +159,23 @@ public class roomServiceAPIController {
 	@FXML
 	TableView<String> tblEmployeeDatabase;
 
+	final static ObservableList<String> UserTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Visitor", "Admin", "Janitor", "Interpreter", "Patient", "Security");
+	String firstName;
+	String middleName;
+	String lastName;
+	List<String> languages;
+	String language;
+	String type;
+	String username;
+	String password;
+	String userID;
+	User user;
 
+	//------------------------------------------------------------------------------------------------------------------
+	//
 	// General Functions
-
+	//
+	//------------------------------------------------------------------------------------------------------------------
 	public void setScreenToRequestRoomService(ActionEvent event) {
 
 		// Hide Screens
@@ -264,8 +284,11 @@ public class roomServiceAPIController {
 
 	}
 
-	// Clean Functions
-
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// Clean functions
+	//
+	//------------------------------------------------------------------------------------------------------------------
 	public void cleanRequestRoomService() {
 		txtRoomNumberRequestRoomService.clear();
 		//cmboItemRequestRoomService.setItems(); !!!
@@ -289,8 +312,11 @@ public class roomServiceAPIController {
 		//cmboEmployeeType.set();
 	}
 
-	// Request Room Service Functions
-
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// Request room service functions
+	//
+	//------------------------------------------------------------------------------------------------------------------
 	public void addSelectionToCart(ActionEvent event) {
 
 		// Update Tables
@@ -311,8 +337,11 @@ public class roomServiceAPIController {
 	}
 
 
-	// Manage Requests Functions
-
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// Manage requests
+	//
+	//------------------------------------------------------------------------------------------------------------------
 	public void assignEmployee(ActionEvent event) {
 
 		// Update Tables
@@ -335,8 +364,11 @@ public class roomServiceAPIController {
 	}
 
 
-	// Manage Inventory Functions
-
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// Manage inventory
+	//
+	//------------------------------------------------------------------------------------------------------------------
 	public void addItemToInventory(ActionEvent event) {
 
 		// Update Tables
@@ -357,26 +389,42 @@ public class roomServiceAPIController {
 	}
 
 
-	// Manage Employees Functions
-
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// Manage employee
+	//
+	//------------------------------------------------------------------------------------------------------------------
 	public void setType(ActionEvent event) {
 
 	}
 
 	public void addUser(ActionEvent event) {
-		// Update Tables
+		firstName = txtFirstName.getText();
+		middleName = txtMiddleName.getText();
+		lastName = txtLastName.getText();
+		type = cmboEmployeeType.getValue();
+		DataModelI.getInstance().addUser(firstName,middleName,lastName,languages,type,null,null);
+
 	}
 
 	public void modifyUser(ActionEvent event) {
-		// Update Tables
+		firstName = txtFirstName.getText();
+		middleName = txtMiddleName.getText();
+		lastName = txtLastName.getText();
+		type = cmboEmployeeType.getValue().toString();
+
+		DataModelI.getInstance().getUserByID(userID).setFirstName(firstName);
+		DataModelI.getInstance().getUserByID(userID).setLastName(lastName);
+		DataModelI.getInstance().getUserByID(userID).setMiddleName(middleName);
+		DataModelI.getInstance().getUserByID(userID).setUserType(type);
 	}
 
 	public void deleteUser(ActionEvent event) {
-		// Update Tables
+		DataModelI.getInstance().removeUserByID(txtEmployeeID.getText());
 	}
 
 	public void updateTablesEmployee() {
-
+		
 	}
 
 

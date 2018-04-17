@@ -205,6 +205,11 @@ public class DataModelI implements IDataModel{
 	}
 
 	@Override
+	public boolean removeUserByID(String userID) {
+		return userDBUtil.removeUserByID(userID);
+	}
+
+	@Override
 	public boolean modifyUser(User newUser) {
 		boolean tempBool = userDBUtil.modifyUser(newUser);
 		return tempBool;

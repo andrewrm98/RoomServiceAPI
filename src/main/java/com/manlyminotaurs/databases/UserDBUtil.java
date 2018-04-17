@@ -62,6 +62,48 @@ public class UserDBUtil {
         return isSuccess;
     }
 
+    boolean removeUserByID(String userID){
+        boolean isSuccess = false;
+        Connection connection = DataModelI.getInstance().getNewConnection();
+        try {
+            Statement stmt = connection.createStatement();
+            String str = "DELETE FROM UserAccount WHERE userID = '" + userID + "'";
+            stmt.executeUpdate(str);
+            stmt.close();
+            System.out.println("Node removed from database");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DataModelI.getInstance().closeConnection();
+        }
+        return isSuccess;
+    }
+
+    boolean removeUserByFields(String firstName, String middleName, String lastName, String userType) {
+        Connection connection = DataModelI.getInstance().getNewConnection();
+        boolean isSuccess = false;
+        try {
+            String str = "DELETE FROM UserAccount WHERE firstName = ? AND middleName = ? AND lastName = ? AND userType =?";
+
+            // Create the prepared statement
+            PreparedStatement statement = connection.prepareStatement(str);
+            statement.setString(1, firstName);
+            statement.setString(2, middleName);
+            statement.setString(3, lastName);
+            statement.setString(4, userType);
+            statement.executeUpdate();
+            statement.close();
+            System.out.println("User added to database");
+            isSuccess = true;
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        } finally {
+            DataModelI.getInstance().closeConnection();
+        }
+        return isSuccess;
+    }
+
     public boolean modifyUser(User newUser) {
         Connection connection = DataModelI.getInstance().getNewConnection();
         boolean isSuccess = false;
