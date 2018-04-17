@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.manlyminotaurs.databases.DataModelI;
+import com.manlyminotaurs.messaging.Inventory;
 import com.manlyminotaurs.users.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -512,18 +513,18 @@ public class roomServiceAPIController implements Initializable{
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	public void addItemToInventory(ActionEvent event) {
-
-		// Update Tables
+		//Inventory inventory = new Inventory(null, txtItemInventory.getText(), );
+		//DataModelI.getInstance().addinventory(inventory);
 	}
 
+	//TODO get info from table view
 	public void modifyItemToInventory(ActionEvent event) {
 
-		// Update Tables
 	}
 
+	//TODO get info from table view
 	public void deleteItemToInventory(ActionEvent event) {
 
-		// Update Tables
 	}
 
 	public void updateTablesInventory() {
@@ -537,7 +538,8 @@ public class roomServiceAPIController implements Initializable{
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	public void setType(ActionEvent event) {
-
+		userID = txtEmployeeID.getText();
+		DataModelI.getInstance().getUserByID(userID).setUserType(cmboEmployeeType.getValue());
 	}
 
 	public void addUser(ActionEvent event) {
@@ -554,6 +556,7 @@ public class roomServiceAPIController implements Initializable{
 		middleName = txtMiddleName.getText();
 		lastName = txtLastName.getText();
 		type = cmboEmployeeType.getValue().toString();
+		userID = txtEmployeeID.getText();
 
 		DataModelI.getInstance().getUserByID(userID).setFirstName(firstName);
 		DataModelI.getInstance().getUserByID(userID).setLastName(lastName);
@@ -566,7 +569,7 @@ public class roomServiceAPIController implements Initializable{
 	}
 
 	public void updateTablesEmployee() {
-		
+
 	}
 
 
