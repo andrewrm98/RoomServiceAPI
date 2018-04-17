@@ -371,8 +371,8 @@ public class roomServiceAPIController {
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	public void addItemToInventory(ActionEvent event) {
-		Inventory inventory = new Inventory(null, txtItemInventory.getText(), );
-		DataModelI.getInstance().addinventory(inventory);
+		//Inventory inventory = new Inventory(null, txtItemInventory.getText(), );
+		//DataModelI.getInstance().addinventory(inventory);
 	}
 
 	//TODO get info from table view
