@@ -66,7 +66,7 @@ public class InventoryDBUtil {
 		InventoryDBUtil.inventoryIDCounter = inventoryIDCounter;
 	}
 	
-	public String generateInventoryID(){
+	private String generateInventoryID(){
 		inventoryIDCounter++;
 		return Integer.toString(inventoryIDCounter);
 	}

@@ -1,5 +1,6 @@
 package com.manlyminotaurs.databases;
 
+import com.manlyminotaurs.messaging.Inventory;
 import com.manlyminotaurs.messaging.Message;
 import com.manlyminotaurs.messaging.Request;
 import com.manlyminotaurs.users.User;
@@ -25,7 +26,14 @@ public interface IDataModel {
 
     Connection getNewConnection();
     boolean closeConnection();
-
+    /*----------------------------------------- Inventory -------------------------------------------------------------*/
+    /*------------------------------ Add / Modify / Remove Inventory ---------------------------------------------------*/
+    boolean modifyinventory(Inventory inventory);
+    boolean removeinventory(Inventory inventory);
+    Inventory addinventory(Inventory inventory);
+    /*------------------------------ Retrieve/get ---------------------------------------------------*/
+    List<Inventory> retrieveInventory();
+    Inventory getInventoryByID(String ID);
 
     /*----------------------------------------- Messages -------------------------------------------------------------*/
     /*------------------------------ Add / Modify / Remove Message ---------------------------------------------------*/

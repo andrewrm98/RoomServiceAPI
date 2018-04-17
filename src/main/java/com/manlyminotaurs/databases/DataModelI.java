@@ -1,5 +1,6 @@
 package com.manlyminotaurs.databases;
 
+import com.manlyminotaurs.messaging.Inventory;
 import com.manlyminotaurs.messaging.Message;
 import com.manlyminotaurs.messaging.Request;
 import com.manlyminotaurs.users.User;
@@ -52,6 +53,7 @@ public class DataModelI implements IDataModel{
 		requestsDBUtil = new RequestsDBUtil();
 		userDBUtil = new UserDBUtil();
 		tableInitializer = new TableInitializer();
+		inventoryDBUtil = new InventoryDBUtil();
 	}
 
 	public static DataModelI getInstance(){
@@ -235,4 +237,30 @@ public class DataModelI implements IDataModel{
 		new CsvFileController().updateAllCSVFiles();
 	}
 
+	/*------------------------------------------------ Inventory -------------------------------------------------------*/
+
+	@Override
+	public boolean modifyinventory(Inventory inventory) {
+		return inventoryDBUtil.modifyinventory(inventory);
+	}
+
+	@Override
+	public boolean removeinventory(Inventory inventory) {
+		return inventoryDBUtil.removeinventory(inventory);
+	}
+
+	@Override
+	public Inventory addinventory(Inventory inventory) {
+		return inventoryDBUtil.addinventory(inventory);
+	}
+
+	@Override
+	public List<Inventory> retrieveInventory() {
+		return inventoryDBUtil.retrieveInventory();
+	}
+
+	@Override
+	public Inventory getInventoryByID(String ID) {
+		return inventoryDBUtil.getInventoryByID(ID);
+	}
 }
