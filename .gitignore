@@ -1,0 +1,8 @@
+.idea
+.DS_STORE
+**/nodesDB
+.dat
+.csv
+.log
+gradle/
+derby.log
