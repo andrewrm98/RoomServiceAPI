@@ -9,16 +9,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 
 import javax.swing.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
-public class roomServiceAPIController {
+public class roomServiceAPIController implements Initializable{
 
 	// General Objects
 	@FXML
@@ -159,7 +162,8 @@ public class roomServiceAPIController {
 	@FXML
 	TableView<String> tblEmployeeDatabase;
 
-	final static ObservableList<String> UserTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Visitor", "Admin", "Janitor", "Interpreter", "Patient", "Security");
+	final static ObservableList<String> employeeTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Visitor", "Admin", "Janitor", "Interpreter", "Patient", "Security");
+	final static ObservableList<String> currentItems = FXCollections.observableArrayList("Blanket", "Towel", "Pillow");
 	String firstName;
 	String middleName;
 	String lastName;
@@ -170,6 +174,36 @@ public class roomServiceAPIController {
 	String password;
 	String userID;
 	User user;
+
+
+	public void initialize(URL location, ResourceBundle resources) {
+
+		// Hide Screens
+		boxManageRequests.setVisible(false);
+		boxManageInventory.setVisible(false);
+		boxManageEmployees.setVisible(false);
+
+		// Show Screen
+		boxRequestRoomService.setVisible(true);
+
+		// Set button color
+		btnRequestRoomService.setStyle("-fx-background-color: #edbf54");
+		btnManageRequests.setStyle("-fx-background-color: #2b65ac");
+		btnManageInventory.setStyle("-fx-background-color: #2b65ac");
+		btnManageEmployees.setStyle("-fx-background-color: #2b65ac");
+
+		// Change Subtitle
+		lblSubtitle.setText("Request Room Service");
+
+		// Clean fields
+		cleanRequestRoomService();
+
+		// Update Tables
+
+		// Update ComboBoxes
+		cmboItemRequestRoomService.setItems(currentItems);
+
+	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	//
@@ -200,6 +234,8 @@ public class roomServiceAPIController {
 
 		// Update Tables
 
+		// Update ComboBoxes
+		cmboItemRequestRoomService.setItems(currentItems);
 	}
 
 	public void setScreenToManageRequests(ActionEvent event) {
