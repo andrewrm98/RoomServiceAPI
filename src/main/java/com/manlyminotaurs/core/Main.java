@@ -38,7 +38,7 @@ public class Main extends Application {
         this.windowWidth = windowWidth;
         this.windowLength = windowLength;
         this.cssPath = cssPath;
-        this.destNodeID = destNodeID;
+        this.destNodeID = null;
         this.originNodeID = originNodeID;
     }
 
