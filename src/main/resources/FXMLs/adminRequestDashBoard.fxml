@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manlyminotaurs.viewControllers.adminRequestDashboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manlyminotaurs.viewControllers.adminRequestDashboardController">
    <children>
       <Pane layoutX="1145.0" layoutY="200.0" prefHeight="841.0" prefWidth="750.0" style="-fx-background-color: #2b65ac;">
          <effect>
@@ -79,7 +79,7 @@
                   <Font size="28.0" />
                </font>
             </Button>
-            <Label prefHeight="60.0" prefWidth="1750.0" style="-fx-background-color: #102c57;" text="Admin Request Manager" textFill="#f1f1f1">
+            <Label prefHeight="60.0" prefWidth="1750.0" style="-fx-background-color: #102c57;" text="Room Service Request Manager" textFill="#f1f1f1">
                <font>
                   <Font size="28.0" />
                </font>
