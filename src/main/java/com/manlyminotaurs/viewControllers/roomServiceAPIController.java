@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.manlyminotaurs.databases.DataModelI;
+import com.manlyminotaurs.databases.InventoryDBUtil;
 import com.manlyminotaurs.databases.UserDBUtil;
 import com.manlyminotaurs.messaging.Inventory;
 import com.manlyminotaurs.messaging.Message;
@@ -90,7 +91,7 @@ public class roomServiceAPIController implements Initializable{
 	TableView<String> tblCart;
 
 	@FXML
-	TableView<String> tblInventoryMenu;
+	TableView<InventoryItem> tblInventoryMenu;
 
 
 	// Manage Requests
@@ -138,7 +139,7 @@ public class roomServiceAPIController implements Initializable{
 	JFXButton btnDeleteItem;
 
 	@FXML
-	TableView<String> tblInventory;
+	TableView<InventoryItem> tblInventory;
 
 
 	// Manage Employees
@@ -171,10 +172,12 @@ public class roomServiceAPIController implements Initializable{
 	TableView<Employee> tblEmployeeDatabase;
 
     UserDBUtil empDB = new UserDBUtil();
+    InventoryDBUtil invDB = new InventoryDBUtil();
 	ObservableList<String> employeeTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Admin", "Janitor", "Interpreter", "Patient", "Security");
 	final static ObservableList<String> currentItems = FXCollections.observableArrayList("Blanket", "Towel", "Pillow");
     ObservableList<Employee> employeeList =  FXCollections.observableArrayList();
     ObservableList<String> employeeNames = FXCollections.observableArrayList();
+    ObservableList<InventoryItem> inventoryList = FXCollections.observableArrayList();
     ObservableList<String> emptyList = FXCollections.observableArrayList();
 	String firstName;
 	String middleName;
@@ -203,6 +206,10 @@ public class roomServiceAPIController implements Initializable{
 
         public int getQuantity() {
             return quantity;
+        }
+
+        public void setQuantity(int num) {
+            this.quantity = num;
         }
 
     }
@@ -331,7 +338,17 @@ public class roomServiceAPIController implements Initializable{
 		empID.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeID"));
 		empType.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeType"));
 
+		// Create Inventory Table
+        TableColumn itemName = new TableColumn("Item");
+        TableColumn quantity = new TableColumn("Quantity");
+
+        tblInventory.getColumns().addAll(itemName, quantity);
+
+        itemName.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
+        quantity.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
+
 		// Update ComboBoxes
+        cmboEmployeeType.setItems(employeeTypes);
 		cmboItemRequestRoomService.setItems(currentItems);
 
 	}
@@ -420,7 +437,7 @@ public class roomServiceAPIController implements Initializable{
 		cleanManageInventory();
 
 		// Update Tables
-
+        updateTablesInventory();
 	}
 
 	public void setScreenToManageEmployees(ActionEvent event) {
@@ -543,21 +560,99 @@ public class roomServiceAPIController implements Initializable{
 	public void addItemToInventory(ActionEvent event) {
 		//Inventory inventory = new Inventory(null, txtItemInventory.getText(), );
 		//DataModelI.getInstance().addinventory(inventory);
-	}
+
+        int sameItemIndex = -1;
+        int currentQuantity = 0;
+
+        if ((txtItemInventory.getText().equals("")) || (txtQuantityInventory.getText().equals(""))) {
+            System.out.print("Error: Not a valid item");
+        } else {
+            for (InventoryItem item: inventoryList) {
+                if(item.itemName.equals(txtItemInventory.getText())) {
+                    sameItemIndex = inventoryList.indexOf(item);
+                    currentQuantity = item.quantity;
+                    System.out.println("There's something that is the same");
+                    break;
+                }
+
+            }
+
+            if (sameItemIndex == -1) { // not same item
+
+                inventoryList.add(new InventoryItem(txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText())));
+                cleanManageInventory();
+
+            } else {
+
+                int addedQuantity = Integer.parseInt(txtQuantityInventory.getText());
+                currentQuantity = currentQuantity + addedQuantity;
+                InventoryItem replacedItem = new InventoryItem(txtItemInventory.getText(), currentQuantity);
+                inventoryList.remove(sameItemIndex);
+                inventoryList.add(sameItemIndex,replacedItem);
+                cleanManageInventory();
+
+            }
+
+        }
+    }
+
 
 	//TODO get info from table view
 	public void modifyItemToInventory(ActionEvent event) {
-
+        if(tblInventory.getSelectionModel().getSelectedItem() == null){
+        } else {
+            int inventoryIndex = tblInventory.getSelectionModel().getSelectedIndex();
+            InventoryItem item = new InventoryItem(txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText()));
+            inventoryList.remove(tblInventory.getSelectionModel().getSelectedItem());
+            inventoryList.add(inventoryIndex, item);
+            cleanManageInventory();
+            tblInventory.getSelectionModel().clearSelection();
+        }
 	}
 
 	//TODO get info from table view
 	public void deleteItemToInventory(ActionEvent event) {
-
+        if(tblInventory.getSelectionModel().getSelectedItem() == null){
+        } else {
+            inventoryList.remove(tblInventory.getSelectionModel().getSelectedItem());
+            cleanManageInventory();
+            tblInventory.getSelectionModel().clearSelection();
+        } 
 	}
 
 	public void updateTablesInventory() {
+        // Populate List
+        List<Inventory> inventory = invDB.retrieveInventory();
+
+        inventoryList.removeAll();
+        inventoryList.clear();
+        tblInventory.setItems(inventoryList);
+
+        for(Inventory inv : inventory) {
+            inventoryList.add(new InventoryItem(inv.getType(), inv.getQuantity()));
+        }
+
+        tblInventory.setItems(inventoryList);
 
 	}
+
+
+	public void inventoryClicked() {
+        if(tblInventory.getSelectionModel().getSelectedItem() == null){
+        }
+        else {
+			/*
+			requestInfo selectedRequest = (requestInfo) tblOpenRequests.getSelectionModel().getSelectedItem();
+			com.manlyminotaurs.messaging.Request actualRequest = dBUtil.getRequestByID(selectedRequest.requestID);
+			lblRequestDetails.setText("SenderID: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getSenderID() + "\n" +
+					"Priority: " + dBUtil.getRequestByID(selectedRequest.requestID).getPriority() + "\n" +
+					"Location: " + dBUtil.getNodeByIDFromList(actualRequest.getNodeID(), dBUtil.retrieveNodes()).getLongName() + "\n" +
+					"Message: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getMessage());
+			*/
+            txtItemInventory.setText(tblInventory.getSelectionModel().getSelectedItem().getItemName());
+            txtQuantityInventory.setText(Integer.toString(tblInventory.getSelectionModel().getSelectedItem().getQuantity()));
+        }
+    }
 
 
 	//------------------------------------------------------------------------------------------------------------------

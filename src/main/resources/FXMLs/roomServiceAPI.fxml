@@ -109,7 +109,7 @@
                             </children></Pane>
                     </children>
                 </VBox>
-                <HBox fx:id="boxManageEmployees" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxManageEmployees" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="920.0" prefWidth="1600.0">
                             <children>
@@ -197,7 +197,7 @@
                             </children></Pane>
                     </children>
                 </HBox>
-                <HBox fx:id="boxManageInventory" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxManageInventory" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="920.0" prefWidth="1600.0">
                             <children>
@@ -234,7 +234,7 @@
                                 </Pane>
                                 <Pane layoutX="610.0" prefHeight="920.0" prefWidth="990.0" style="-fx-background-color: #d4dee9;">
                                     <children>
-                                        <TableView fx:id="tblInventory" layoutX="50.0" layoutY="150.0" prefHeight="720.0" prefWidth="890.0" />
+                                        <TableView fx:id="tblInventory" layoutX="50.0" layoutY="150.0" onMouseClicked="#inventoryClicked" prefHeight="720.0" prefWidth="890.0" />
                                         <Label layoutX="50.0" layoutY="50.0" prefHeight="50.0" prefWidth="520.0" text="INVENTORY">
                                             <font>
                                                 <Font size="60.0" />
