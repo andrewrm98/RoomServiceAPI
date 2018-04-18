@@ -88,7 +88,7 @@ public class roomServiceAPIController implements Initializable{
 	JFXButton btnSubmitRoomServiceRequest;
 
 	@FXML
-	TableView<String> tblCart;
+	TableView<InventoryItem> tblCart;
 
 	@FXML
 	TableView<InventoryItem> tblInventoryMenu;
@@ -174,12 +174,14 @@ public class roomServiceAPIController implements Initializable{
     UserDBUtil empDB = new UserDBUtil();
     InventoryDBUtil invDB = new InventoryDBUtil();
 	ObservableList<String> employeeTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Admin", "Janitor", "Interpreter", "Patient", "Security");
-	final static ObservableList<String> currentItems = FXCollections.observableArrayList("Blanket", "Towel", "Pillow");
-    ObservableList<Employee> employeeList =  FXCollections.observableArrayList();
+	final static ObservableList<String> currentItems = FXCollections.observableArrayList();
+    ObservableList<Employee> employeeList =  FXCollections.observableArrayList(); //1
     ObservableList<String> employeeNames = FXCollections.observableArrayList();
-    ObservableList<InventoryItem> inventoryList = FXCollections.observableArrayList();
-    //ObservableList<InventoryItem> inventoryMenuList = FXCollections.observableArrayList();
+    ObservableList<InventoryItem> inventoryList = FXCollections.observableArrayList(); //2
+    ObservableList<InventoryItem> cartList = FXCollections.observableArrayList();
     ObservableList<String> emptyList = FXCollections.observableArrayList();
+    ObservableList<RequestInfo> openList = FXCollections.observableArrayList(); //4
+    ObservableList<RequestInfo> closedList = FXCollections.observableArrayList(); //5
 	String firstName;
 	String middleName;
 	String lastName;
@@ -254,18 +256,14 @@ public class roomServiceAPIController implements Initializable{
         }
     }
 
-    public class Request {
+    public class RequestInfo {
         String room;
-        String time;
         String employee;
-        String status;
         Cart cart;
 
-        public Request(String room, String time, String employee, String status, Cart cart) {
+        public RequestInfo(String room, String employee, Cart cart) {
             this.room = room;
-            this.time = time;
             this.employee = employee;
-            this.status = status;
             this.cart = cart;
         }
 
@@ -273,16 +271,9 @@ public class roomServiceAPIController implements Initializable{
             return room;
         }
 
-        public String getTime() {
-            return time;
-        }
 
         public String getEmployee() {
             return employee;
-        }
-
-        public String getStatus() {
-            return status;
         }
 
         public Cart getCart() {
@@ -292,21 +283,19 @@ public class roomServiceAPIController implements Initializable{
 
     public class Cart {
 
-        String item;
-        int quantity;
+        ObservableList<InventoryItem> cart = FXCollections.observableArrayList();
 
 
-        public Cart(String item, int quantity) {
-            this.item = item;
-            this.quantity = quantity;
+        public Cart(ObservableList<InventoryItem> cart) {
+            this.cart = cart;
         }
 
-        public String getItem() {
-            return item;
+        public ObservableList<InventoryItem> getCart() {
+            return cart;
         }
 
-        public int getQuantity() {
-            return quantity;
+        public void setCart(ObservableList<InventoryItem> cart) {
+            this.cart = cart;
         }
     }
 
@@ -340,6 +329,7 @@ public class roomServiceAPIController implements Initializable{
 		TableColumn empType = new TableColumn("Employee Type");
 
 		tblEmployeeDatabase.getColumns().addAll(fName, mName, lName, empID, empType);
+		tblEmployeeDatabase.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
 		fName.setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
 		mName.setCellValueFactory(new PropertyValueFactory<Employee, String>("middleName"));
@@ -352,6 +342,7 @@ public class roomServiceAPIController implements Initializable{
         TableColumn quantity = new TableColumn("Quantity");
 
         tblInventory.getColumns().addAll(itemName, quantity);
+        tblInventory.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         itemName.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
         quantity.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
@@ -361,19 +352,66 @@ public class roomServiceAPIController implements Initializable{
         TableColumn quantityMenu = new TableColumn("Quantity");
 
         tblInventoryMenu.getColumns().addAll(itemNameMenu, quantityMenu);
+        tblInventoryMenu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         itemNameMenu.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
         quantityMenu.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
 
-		// Update ComboBoxes
-        cmboEmployeeType.setItems(employeeTypes);
-		cmboItemRequestRoomService.setItems(currentItems);
+        // Create Cart Table
+        TableColumn itemCart = new TableColumn("Item");
+        TableColumn quantityCart = new TableColumn("Quantity");
+
+        tblCart.getColumns().addAll(itemCart, quantityCart);
+        tblCart.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        itemCart.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
+        quantityCart.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
+
+        //OPEN LIST-----------------------
+        TableColumn typeColOpen = new TableColumn("Request Type");
+        TableColumn msgColOpen = new TableColumn("Request Message");
+        TableColumn isAssignedColOpen = new TableColumn("Is Assigned");
+
+        tblOpenRequests.getColumns().addAll(typeColOpen, msgColOpen, isAssignedColOpen);
+        tblOpenRequests.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        typeColOpen.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("requestType"));
+        msgColOpen.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("message"));
+        isAssignedColOpen.setCellValueFactory(new PropertyValueFactory<RequestInfo, Boolean>("isAssigned"));
+
+        //CLOSED LIST----------------------
+        TableColumn typeColClosed = new TableColumn("Request Type");
+        TableColumn msgColClosed = new TableColumn("Request Message");
+        TableColumn reqConfirmedClosed = new TableColumn("Was Confirmed");
+
+        tblClosedRequests.getColumns().addAll(typeColClosed, msgColClosed, reqConfirmedClosed);
+        tblClosedRequests.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        typeColClosed.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("requestType"));
+        msgColClosed.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("message"));
+        reqConfirmedClosed.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("isAssigned"));
+
+        //TODO fix this
+        /*
+        //POPULATE LISTS----------------------------------------
+        for(Request currReq : DataModelI.getInstance().retrieveRequests()) {
+            if (!currReq.getComplete()) {
+                openList.add(new RequestInfo(currReq.getRequestID(), currReq.getRequestType(), null));
+            } else {
+                closedList.add(new RequestInfo(currReq.getRequestID(), currReq.getRequestType(), null));
+            }
+        } */
 
 		// Update Tables
         updateTablesInventory();
         updateTablesRoomServiceRequest();
-        updateTablesInventoryMenu();
         updateTablesEmployee();
+
+        // Update ComboBoxes
+        cmboEmployeeType.setItems(employeeTypes);
+        updateCurrentItems();
+
+        tblCart.setItems(cartList);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -401,11 +439,10 @@ public class roomServiceAPIController implements Initializable{
 		lblSubtitle.setText("Request Room Service");
 
 		// Clean fields
-		cleanRequestRoomService();
+		//cleanRequestRoomService();
 
 		// Update ComboBoxes
-		cmboItemRequestRoomService.setItems(currentItems);
-
+		updateCurrentItems();
 	}
 
 	public void setScreenToManageRequests(ActionEvent event) {
@@ -430,7 +467,9 @@ public class roomServiceAPIController implements Initializable{
 		// Clean fields
 		cleanManageRequests();
 
-	}
+
+
+    }
 
 	public void setScreenToManageInventory(ActionEvent event) {
 
@@ -495,6 +534,10 @@ public class roomServiceAPIController implements Initializable{
 		txtQuantityRequestRoomService.clear();
 		tblInventoryMenu.getSelectionModel().clearSelection();
 		tblCart.getSelectionModel().clearSelection();
+		//clearTablesCart();
+
+		//cartList.removeAll();
+		cartList.clear();
 	}
 
 	public void cleanManageRequests() {
@@ -530,27 +573,128 @@ public class roomServiceAPIController implements Initializable{
 	//------------------------------------------------------------------------------------------------------------------
 	public void addSelectionToCart(ActionEvent event) {
 
-		// Update Tables
+        int sameItemIndex = -1;
+        int currentQuantity = 0;
+
+
+        if ((txtRoomNumberRequestRoomService.getText().equals("")) || (txtQuantityRequestRoomService.getText().equals("")) || (cmboItemRequestRoomService.getValue() == null)) {
+            System.out.print("Error: Not a valid selection");
+
+        } else {
+
+            for (InventoryItem item: inventoryList) {
+                if(item.itemName.equals(cmboItemRequestRoomService.getValue())) {
+                    sameItemIndex = inventoryList.indexOf(item);
+                    currentQuantity = item.quantity;
+                    break;
+                }
+            }
+
+
+            int subtractedQuantity = Integer.parseInt(txtQuantityRequestRoomService.getText());
+            currentQuantity = currentQuantity - subtractedQuantity;
+
+            if (currentQuantity < 0) {
+
+                System.out.print("Error: Quantity not large enough for selected item");
+
+            } else {
+
+                InventoryItem newItemInCart = new InventoryItem(cmboItemRequestRoomService.getValue(),subtractedQuantity);
+                InventoryItem returnedItemInInventory = new InventoryItem(cmboItemRequestRoomService.getValue(),currentQuantity);
+                inventoryList.remove(sameItemIndex);
+                inventoryList.add(sameItemIndex,returnedItemInInventory);
+                cartList.add(newItemInCart);
+
+            }
+
+        }
 	}
 
 	public void deleteRoomServiceRequest(ActionEvent event) {
 
-		// Update Tables
+        int sameItemIndex = -1;
+        int currentQuantity = 0;
+
+        if(tblCart.getSelectionModel().getSelectedItem() == null){
+
+        }
+        else {
+
+            for (InventoryItem item: inventoryList) {
+                if(item.itemName.equals(tblCart.getSelectionModel().getSelectedItem().itemName)) {
+                    sameItemIndex = inventoryList.indexOf(item);
+                    currentQuantity = item.quantity;
+                    break;
+                }
+            }
+
+            int addedQuantity = tblCart.getSelectionModel().getSelectedItem().getQuantity();
+            currentQuantity = currentQuantity + addedQuantity;
+            InventoryItem renewedItem = new InventoryItem(tblCart.getSelectionModel().getSelectedItem().itemName, currentQuantity);
+            inventoryList.remove(sameItemIndex);
+            cartList.remove(tblCart.getSelectionModel().getSelectedItem());
+            inventoryList.add(sameItemIndex,renewedItem);
+
+            cleanManageInventory();
+
+        }
 	}
 
 	public void submitRoomServiceRequest(ActionEvent event) {
-
-		// Update Tables
+        System.out.println(openList.size());
+        RequestInfo newReq = new RequestInfo(txtRoomNumberRequestRoomService.getText(), null,  new Cart(cartList));
+        openList.add(newReq);
+        cartList.clear();
+        cmboItemRequestRoomService.setValue(null);
+        txtQuantityRequestRoomService.clear();
+        txtRoomNumberRequestRoomService.clear();
+        System.out.println(openList.size());
 	}
 
 	public void updateTablesRoomServiceRequest() {
-
+        updateTablesInventoryMenu();
+        clearTablesCart();
 	}
 
     public void updateTablesInventoryMenu() {
 
         // Populate List Based on Inventory
         tblInventoryMenu.setItems(inventoryList);
+    }
+
+    public void clearTablesCart() {
+        for ( int i = 0; i<tblCart.getItems().size(); i++) {
+            tblCart.getItems().clear();
+        }
+    }
+
+    public void cartClicked() {
+        if(tblCart.getSelectionModel().getSelectedItem() == null){
+        }
+        else {
+			/*
+			requestInfo selectedRequest = (requestInfo) tblOpenRequests.getSelectionModel().getSelectedItem();
+			com.manlyminotaurs.messaging.Request actualRequest = dBUtil.getRequestByID(selectedRequest.requestID);
+			lblRequestDetails.setText("SenderID: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getSenderID() + "\n" +
+					"Priority: " + dBUtil.getRequestByID(selectedRequest.requestID).getPriority() + "\n" +
+					"Location: " + dBUtil.getNodeByIDFromList(actualRequest.getNodeID(), dBUtil.retrieveNodes()).getLongName() + "\n" +
+					"Message: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getMessage());
+			*/
+            //tblInventory.getSelectionModel().getSelectedItem()
+            //txtQuantityInventory.setText(Integer.toString(tblInventory.getSelectionModel().getSelectedItem().getQuantity()));
+        }
+    }
+
+    public void updateCurrentItems() {
+
+        currentItems.clear();
+
+        for(int x=0; x<inventoryList.size(); x++) {
+            currentItems.add(inventoryList.get(x).getItemName());
+        }
+
+        cmboItemRequestRoomService.setItems(currentItems);
     }
 
 
@@ -625,8 +769,6 @@ public class roomServiceAPIController implements Initializable{
         }
     }
 
-
-	//TODO get info from table view
 	public void modifyItemToInventory(ActionEvent event) {
         if(tblInventory.getSelectionModel().getSelectedItem() == null){
         } else {
@@ -639,7 +781,6 @@ public class roomServiceAPIController implements Initializable{
         }
 	}
 
-	//TODO get info from table view
 	public void deleteItemToInventory(ActionEvent event) {
         if(tblInventory.getSelectionModel().getSelectedItem() == null){
         } else {
@@ -653,8 +794,7 @@ public class roomServiceAPIController implements Initializable{
         // Populate List
         List<Inventory> inventory = invDB.retrieveInventory();
 
-        inventoryList.removeAll();
-        inventoryList.clear();
+        inventoryList.clear(); // !!!
         tblInventory.setItems(inventoryList);
 
         for(Inventory inv : inventory) {
@@ -664,7 +804,6 @@ public class roomServiceAPIController implements Initializable{
         tblInventory.setItems(inventoryList);
 
 	}
-
 
 	public void inventoryClicked() {
         if(tblInventory.getSelectionModel().getSelectedItem() == null){
@@ -689,7 +828,7 @@ public class roomServiceAPIController implements Initializable{
 	// Manage employee
 	//
 	//------------------------------------------------------------------------------------------------------------------
-	public void setType(ActionEvent event) {
+	public void setType(ActionEvent event) { // not used
     	/*
 		userID = txtEmployeeID.getText();
 		DataModelI.getInstance().getUserByID(userID).setUserType(cmboEmployeeType.getValue());*/

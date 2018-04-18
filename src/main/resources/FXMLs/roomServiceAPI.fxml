@@ -341,7 +341,7 @@
                                         <Font size="20.0" />
                                     </font>
                                 </JFXButton>
-                                <TableView fx:id="tblCart" layoutX="50.0" layoutY="450.0" prefHeight="350.0" prefWidth="690.0" />
+                                <TableView fx:id="tblCart" layoutX="50.0" layoutY="450.0" onMouseClicked="#cartClicked" prefHeight="350.0" prefWidth="690.0" />
                                 <Label layoutX="50.0" layoutY="390.0" prefHeight="50.0" prefWidth="690.0" text="CART">
                                     <font>
                                         <Font size="30.0" />
