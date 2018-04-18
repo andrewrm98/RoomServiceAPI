@@ -134,7 +134,6 @@
                                                 <Font size="18.0" />
                                             </font>
                                         </JFXTextField>
-                                        <Pane fx:id="paneModify" prefHeight="860.0" prefWidth="1600.0" visible="false" />
                                         <JFXButton fx:id="btnAddUser" buttonType="RAISED" layoutX="50.0" layoutY="650.0" onAction="#addUser" prefHeight="60.0" prefWidth="510.0" style="-fx-background-color: #2B65AC;" text="ADD" textFill="WHITE">
                                             <font>
                                                 <Font size="30.0" />
@@ -181,6 +180,7 @@
                                                 <Font size="50.0" />
                                             </font>
                                         </Label>
+                              <Label fx:id="lblEmployeeWarning" layoutX="50.0" layoutY="625.0" prefHeight="20.0" prefWidth="465.0" text="Warning" visible="false" />
                                     </children>
                                 </Pane>
                                 <Pane fx:id="paneDelete" layoutX="610.0" prefHeight="920.0" prefWidth="990.0" style="-fx-background-color: #d4dee9;">
@@ -229,6 +229,7 @@
                                                 <Font size="40.0" />
                                             </font>
                                         </JFXButton>
+                              <Label fx:id="lblInventoryWarning" layoutX="50.0" layoutY="430.0" prefHeight="30.0" prefWidth="510.0" text="WARNING" visible="false" />
                                     </children>
                                 </Pane>
                                 <Pane layoutX="610.0" prefHeight="920.0" prefWidth="990.0" style="-fx-background-color: #d4dee9;">
@@ -244,7 +245,7 @@
                             </children></Pane>
                     </children>
                 </HBox>
-                <HBox fx:id="boxManageRequests" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxManageRequests" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="460.0" prefWidth="1600.0">
                             <children>
@@ -299,11 +300,25 @@
                                             </font>
                                         </Label>
                                         <TableView fx:id="tblClosedRequestDetails" layoutX="660.0" layoutY="100.0" prefHeight="310.0" prefWidth="580.0" />
+                              <Pane layoutX="1300.0" layoutY="40.0" prefHeight="370.0" prefWidth="250.0" style="-fx-background-color: #f1f1f1;">
+                                 <children>
+                                    <Label layoutX="20.0" layoutY="65.0" prefHeight="290.0" prefWidth="210.0" text="Click on an open request to view its details. Assign an employee to an open request by selecting an employee and pressing update. Complete and delete an open request by selecting an open request and selecting the respective buttons." wrapText="true">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="20.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" text="HELP">
+                                       <font>
+                                          <Font size="30.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
                                     </children></Pane>
                             </children></Pane>
                     </children>
                 </HBox>
-                <HBox fx:id="boxRequestRoomService" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxRequestRoomService" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="920.0" prefWidth="1600.0">
                             <children>
@@ -352,6 +367,7 @@
                                         <Font size="15.0" />
                                     </font>
                                 </JFXButton>
+                        <Label fx:id="lblRoomServiceWarning" layoutX="50.0" layoutY="290.0" text="Warning" visible="false" />
                             </children>
                         </Pane>
                     </children>

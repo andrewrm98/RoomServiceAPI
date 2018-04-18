@@ -95,6 +95,9 @@ public class roomServiceAPIController implements Initializable{
 	@FXML
 	TableView<InventoryItem> tblInventoryMenu;
 
+    @FXML
+    Label lblRoomServiceWarning;
+
 
 	// Manage Requests
 
@@ -143,6 +146,9 @@ public class roomServiceAPIController implements Initializable{
 	@FXML
 	TableView<InventoryItem> tblInventory;
 
+	@FXML
+    Label lblInventoryWarning;
+
 
 	// Manage Employees
 
@@ -172,6 +178,9 @@ public class roomServiceAPIController implements Initializable{
 
 	@FXML
 	TableView<Employee> tblEmployeeDatabase;
+
+	@FXML
+    Label lblEmployeeWarning;
 
     UserDBUtil empDB = new UserDBUtil();
     InventoryDBUtil invDB = new InventoryDBUtil();
@@ -284,24 +293,6 @@ public class roomServiceAPIController implements Initializable{
             return items;
         }
     }
-/*
-    public class Cart {
-
-        ObservableList<InventoryItem> items;
-
-
-        public Cart(ObservableList<InventoryItem> items) {
-            this.items = items;
-        }
-
-        public ObservableList<InventoryItem> getItems() {
-            return items;
-        }
-
-        public void setItems(ObservableList<InventoryItem> items) {
-            this.items = items;
-        }
-    }*/
 
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -473,6 +464,7 @@ public class roomServiceAPIController implements Initializable{
 
 		// Clean fields
 		//cleanRequestRoomService();
+        lblRoomServiceWarning.setVisible(false);
 
 		// Update ComboBoxes
 		updateCurrentItems();
