@@ -5,7 +5,6 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -245,7 +244,7 @@
                             </children></Pane>
                     </children>
                 </HBox>
-                <HBox fx:id="boxManageRequests" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxManageRequests" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="460.0" prefWidth="1600.0">
                             <children>
@@ -256,7 +255,7 @@
                                                 <Font size="30.0" />
                                             </font>
                                         </Label>
-                                        <TableView fx:id="tblOpenRequests" layoutX="50.0" layoutY="100.0" prefHeight="310.0" prefWidth="580.0" />
+                                        <TableView fx:id="tblOpenRequests" layoutX="50.0" layoutY="100.0" onMouseClicked="#loadRequestDetails" prefHeight="310.0" prefWidth="580.0" />
                                         <Label layoutX="660.0" layoutY="40.0" prefHeight="50.0" prefWidth="580.0" text="REQUEST DETAILS">
                                             <font>
                                                 <Font size="30.0" />
@@ -293,28 +292,18 @@
                                                 <Font size="30.0" />
                                             </font>
                                         </Label>
-                                        <TableView fx:id="tblClosedRequests" layoutX="50.0" layoutY="100.0" prefHeight="310.0" prefWidth="580.0">
-                                            <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                            </columns>
-                                        </TableView>
+                                        <TableView fx:id="tblClosedRequests" layoutX="50.0" layoutY="100.0" onMouseClicked="#loadRequestDetailsClosed" prefHeight="310.0" prefWidth="580.0" />
                                         <Label layoutX="660.0" layoutY="40.0" prefHeight="50.0" prefWidth="580.0" text="REQUEST DETAILS">
                                             <font>
                                                 <Font size="30.0" />
                                             </font>
                                         </Label>
-                                        <TableView fx:id="tblClosedRequestDetails" layoutX="660.0" layoutY="100.0" prefHeight="310.0" prefWidth="580.0">
-                                            <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                            </columns>
-                                        </TableView>
+                                        <TableView fx:id="tblClosedRequestDetails" layoutX="660.0" layoutY="100.0" prefHeight="310.0" prefWidth="580.0" />
                                     </children></Pane>
                             </children></Pane>
                     </children>
                 </HBox>
-                <HBox fx:id="boxRequestRoomService" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxRequestRoomService" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="920.0" prefWidth="1600.0">
                             <children>

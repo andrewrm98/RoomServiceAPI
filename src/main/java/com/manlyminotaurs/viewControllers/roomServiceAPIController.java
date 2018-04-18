@@ -24,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import javax.swing.*;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.*;
 
@@ -98,16 +99,16 @@ public class roomServiceAPIController implements Initializable{
 	// Manage Requests
 
 	@FXML
-	TableView<String> tblOpenRequests;
+	TableView<RequestInfo> tblOpenRequests;
 
 	@FXML
-	TableView<String> tblOpenRequestDetails;
+	TableView<InventoryItem> tblOpenRequestDetails;
 
 	@FXML
-	TableView<String> tblClosedRequests;
+	TableView<RequestInfo> tblClosedRequests;
 
 	@FXML
-	TableView<String> tblClosedRequestDetails;
+	TableView<InventoryItem> tblClosedRequestDetails;
 
 	@FXML
 	JFXComboBox<String> cmboAssignEmployee;
@@ -182,7 +183,10 @@ public class roomServiceAPIController implements Initializable{
     ObservableList<InventoryItem> cartList = FXCollections.observableArrayList();
     ObservableList<String> emptyList = FXCollections.observableArrayList();
     ObservableList<RequestInfo> openList = FXCollections.observableArrayList(); //4
+    ObservableList<InventoryItem> openDetailsList = FXCollections.observableArrayList(); //4
     ObservableList<RequestInfo> closedList = FXCollections.observableArrayList(); //5
+    ObservableList<InventoryItem> closedDetailsList = FXCollections.observableArrayList(); //5
+
 	String firstName;
 	String middleName;
 	String lastName;
@@ -260,45 +264,44 @@ public class roomServiceAPIController implements Initializable{
     public class RequestInfo {
         String room;
         String employee;
-        Cart cart;
+        ObservableList<InventoryItem> items;
 
-        public RequestInfo(String room, String employee, Cart cart) {
+        public RequestInfo(String room, String employee, ObservableList<InventoryItem> items) {
             this.room = room;
             this.employee = employee;
-            this.cart = cart;
+            this.items = items;
         }
 
         public String getRoom() {
             return room;
         }
 
-
         public String getEmployee() {
             return employee;
         }
 
-        public Cart getCart() {
-            return cart;
+        public ObservableList<InventoryItem> getItems() {
+            return items;
         }
     }
-
+/*
     public class Cart {
 
-        ObservableList<InventoryItem> cart = FXCollections.observableArrayList();
+        ObservableList<InventoryItem> items;
 
 
-        public Cart(ObservableList<InventoryItem> cart) {
-            this.cart = cart;
+        public Cart(ObservableList<InventoryItem> items) {
+            this.items = items;
         }
 
-        public ObservableList<InventoryItem> getCart() {
-            return cart;
+        public ObservableList<InventoryItem> getItems() {
+            return items;
         }
 
-        public void setCart(ObservableList<InventoryItem> cart) {
-            this.cart = cart;
+        public void setItems(ObservableList<InventoryItem> items) {
+            this.items = items;
         }
-    }
+    }*/
 
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -373,29 +376,45 @@ public class roomServiceAPIController implements Initializable{
         itemCart.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
         quantityCart.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
 
-        //OPEN LIST-----------------------
-        TableColumn typeColOpen = new TableColumn("Request Type");
-        TableColumn msgColOpen = new TableColumn("Request Message");
-        TableColumn isAssignedColOpen = new TableColumn("Is Assigned");
+        // Open List Table
+        TableColumn roomNumberOpen = new TableColumn("Room Number");
+        TableColumn employeeAssignedOpen = new TableColumn("Employee Assigned");
 
-        tblOpenRequests.getColumns().addAll(typeColOpen, msgColOpen, isAssignedColOpen);
+        tblOpenRequests.getColumns().addAll(roomNumberOpen, employeeAssignedOpen);
         tblOpenRequests.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        typeColOpen.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("requestType"));
-        msgColOpen.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("message"));
-        isAssignedColOpen.setCellValueFactory(new PropertyValueFactory<RequestInfo, Boolean>("isAssigned"));
+        roomNumberOpen.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("room"));
+        employeeAssignedOpen.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("employee"));
 
-        //CLOSED LIST----------------------
-        TableColumn typeColClosed = new TableColumn("Request Type");
-        TableColumn msgColClosed = new TableColumn("Request Message");
-        TableColumn reqConfirmedClosed = new TableColumn("Was Confirmed");
+        // Closed List Table
+        TableColumn roomNumberClosed = new TableColumn("Room Number");
+        TableColumn employeeAssignedClosed = new TableColumn("Employee Assigned");
 
-        tblClosedRequests.getColumns().addAll(typeColClosed, msgColClosed, reqConfirmedClosed);
+        tblClosedRequests.getColumns().addAll(roomNumberClosed, employeeAssignedClosed);
         tblClosedRequests.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        typeColClosed.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("requestType"));
-        msgColClosed.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("message"));
-        reqConfirmedClosed.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("isAssigned"));
+        roomNumberClosed.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("room"));
+        employeeAssignedClosed.setCellValueFactory(new PropertyValueFactory<RequestInfo, String>("employee"));
+
+        // Open Request Details
+        TableColumn itemDetailsOpen = new TableColumn("Item");
+        TableColumn quantityDetailsOpen = new TableColumn("Quantity");
+
+        tblOpenRequestDetails.getColumns().addAll(itemDetailsOpen, quantityDetailsOpen);
+        tblOpenRequestDetails.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        itemDetailsOpen.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
+        quantityDetailsOpen.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
+
+        // Closed Request Details
+        TableColumn itemDetailsClosed = new TableColumn("Item");
+        TableColumn quantityDetailsClosed = new TableColumn("Quantity");
+
+        tblClosedRequestDetails.getColumns().addAll(itemDetailsClosed, quantityDetailsClosed);
+        tblClosedRequestDetails.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        itemDetailsClosed.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
+        quantityDetailsClosed.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
 
         //TODO fix this
         /*
@@ -410,16 +429,23 @@ public class roomServiceAPIController implements Initializable{
 
 
 		// Update Tables
-        updateTablesInventory();
+        //updateTablesInventory();
         updateTablesRoomServiceRequest();
-        updateTablesEmployee();
+        //updateTablesEmployee();
 
         // Update ComboBoxes
         cmboEmployeeType.setItems(employeeTypes);
         updateCurrentItems();
 
         tblCart.setItems(cartList);
-	}
+        tblOpenRequests.setItems(openList);
+        tblClosedRequests.setItems(closedList);
+        tblOpenRequestDetails.setItems(openDetailsList);
+        tblClosedRequestDetails.setItems(closedDetailsList);
+        tblInventory.setItems(inventoryList);
+        tblEmployeeDatabase.setItems(employeeList);
+
+    }
 
 	//------------------------------------------------------------------------------------------------------------------
 	//
@@ -527,7 +553,7 @@ public class roomServiceAPIController implements Initializable{
 	}
 
 	public void exit(ActionEvent event) {
-
+        System.exit(0);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -649,14 +675,21 @@ public class roomServiceAPIController implements Initializable{
 	}
 
 	public void submitRoomServiceRequest(ActionEvent event) {
-        System.out.println(openList.size());
-        RequestInfo newReq = new RequestInfo(txtRoomNumberRequestRoomService.getText(), null,  new Cart(cartList));
+        System.out.println(cartList.size());
+        ObservableList<InventoryItem> newCart = FXCollections.observableArrayList();
+
+        for(int x=0; x<cartList.size();x++) {
+            newCart.add(cartList.get(x));
+        }
+
+        RequestInfo newReq = new RequestInfo(txtRoomNumberRequestRoomService.getText(), null, newCart);
         openList.add(newReq);
         cartList.clear();
         cmboItemRequestRoomService.setValue(null);
         txtQuantityRequestRoomService.clear();
         txtRoomNumberRequestRoomService.clear();
         System.out.println(openList.size());
+
 	}
 
 	public void updateTablesRoomServiceRequest() {
@@ -713,24 +746,62 @@ public class roomServiceAPIController implements Initializable{
 	//------------------------------------------------------------------------------------------------------------------
 	public void assignEmployee(ActionEvent event) {
 
-		// Update Tables
+		RequestInfo replacedRequestInfo = new RequestInfo(tblOpenRequests.getSelectionModel().getSelectedItem().room, cmboAssignEmployee.getValue(),tblOpenRequests.getSelectionModel().getSelectedItem().getItems());
+		openList.remove(tblOpenRequests.getSelectionModel().getSelectedItem());
+        openList.add(replacedRequestInfo);
 	}
 
 	public void completeRequest(ActionEvent event) {
 
-		// Update Tables
-
+		closedList.add(tblOpenRequests.getSelectionModel().getSelectedItem());
+		openList.remove(tblOpenRequests.getSelectionModel().getSelectedItem());
 	}
 
 	public void deleteRequest(ActionEvent event) {
 
-		// Update Tables
+        openList.remove(tblOpenRequests.getSelectionModel().getSelectedItem());
 
-	}
+    }
 
 	public void updateTablesManageRequest() {
 
 	}
+
+	public void loadRequestDetails() {
+
+	    openDetailsList.clear();
+
+        if(tblOpenRequests.getSelectionModel().getSelectedItem() == null){
+            System.out.println("touched open request");
+        }
+        else {
+            System.out.println("entered else");
+            System.out.println(tblOpenRequests.getSelectionModel().getSelectedItem().getItems().get(0).getItemName());
+            //openDetailsList = tblOpenRequests.getSelectionModel().getSelectedItem().getItems();
+
+            for(int x=0; x<tblOpenRequests.getSelectionModel().getSelectedItem().getItems().size();x++) {
+                openDetailsList.add(tblOpenRequests.getSelectionModel().getSelectedItem().getItems().get(x));
+            }
+        }
+    }
+
+    public void loadRequestDetailsClosed() {
+
+        closedDetailsList.clear();
+
+        if(tblClosedRequests.getSelectionModel().getSelectedItem() == null){
+            System.out.println("touched open request");
+        }
+        else {
+            System.out.println("entered else");
+            System.out.println(tblClosedRequests.getSelectionModel().getSelectedItem().getItems().get(0).getItemName());
+            //openDetailsList = tblOpenRequests.getSelectionModel().getSelectedItem().getItems();
+
+            for(int x=0; x<tblClosedRequests.getSelectionModel().getSelectedItem().getItems().size();x++) {
+                closedDetailsList.add(tblClosedRequests.getSelectionModel().getSelectedItem().getItems().get(x));
+            }
+        }
+    }
 
 	//------------------------------------------------------------------------------------------------------------------
 	//
@@ -799,16 +870,16 @@ public class roomServiceAPIController implements Initializable{
 
 	public void updateTablesInventory() {
         // Populate List
-        List<Inventory> inventory = invDB.retrieveInventory();
+        /*List<Inventory> inventory = invDB.retrieveInventory();
 
         inventoryList.clear(); // !!!
         tblInventory.setItems(inventoryList);
 
         for(Inventory inv : inventory) {
             inventoryList.add(new InventoryItem(inv.getType(), inv.getQuantity()));
-        }
+        }*/
 
-        tblInventory.setItems(inventoryList);
+
 
 	}
 
@@ -916,7 +987,6 @@ public class roomServiceAPIController implements Initializable{
             employeeList.add(new Employee(user.getFirstName(),user.getMiddleName(), user.getLastName(), user.getUserID(), user.getUserType()));
         }
 
-        tblEmployeeDatabase.setItems(employeeList);
 	}
 
 	public void updateAssignEmployee() {
