@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.manlyminotaurs.databases.DataModelI;
 import com.manlyminotaurs.databases.UserDBUtil;
 import com.manlyminotaurs.messaging.Inventory;
+import com.manlyminotaurs.messaging.Message;
 import com.manlyminotaurs.messaging.Request;
 import com.manlyminotaurs.users.User;
 import javafx.beans.InvalidationListener;
@@ -577,9 +578,6 @@ public class roomServiceAPIController implements Initializable{
 		DataModelI.getInstance().removeUserByID(txtEmployeeID.getText());
 	}
 
-
-
-
 	public void updateTablesEmployee() {
 
 
@@ -620,57 +618,6 @@ public class roomServiceAPIController implements Initializable{
         cmboAssignEmployee.setItems(employeeNames);
 
 	}
-
-
-
-
-        /*
-        //OPEN LIST-----------------------
-        TableColumn typeColOpen = new TableColumn("Request Type");
-        TableColumn msgColOpen = new TableColumn("Request Message");
-        TableColumn isAssignedColOpen = new TableColumn("Is Assigned");
-
-        tblOpenRequests.getColumns().addAll(typeColOpen, msgColOpen, isAssignedColOpen);
-
-        typeColOpen.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("requestType"));
-        msgColOpen.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("message"));
-        isAssignedColOpen.setCellValueFactory(new PropertyValueFactory<requestInfo, Boolean>("isAssigned"));
-
-        //CLOSED LIST----------------------
-        TableColumn typeColClosed = new TableColumn("Request Type");
-        TableColumn msgColClosed = new TableColumn("Request Message");
-        TableColumn reqConfirmedClosed = new TableColumn("Was Confirmed");
-
-        tblClosedRequests.getColumns().addAll(typeColClosed, msgColClosed, reqConfirmedClosed);
-
-        typeColClosed.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("requestType"));
-        msgColClosed.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("message"));
-        reqConfirmedClosed.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("isAssigned"));
-
-        //POPULATE LISTS----------------------------------------
-        for(com.manlyminotaurs.messaging.Request currReq : reqestList) {
-            if (!currReq.getComplete()) {
-                openList.add(new requestInfo(currReq.getRequestType(), dBUtil.getMessageByID(currReq.getMessageID()).getMessage(), currReq.getAdminConfirm(), currReq.getRequestID()));
-            } else {
-                closedList.add(new requestInfo(currReq.getRequestType(), dBUtil.getMessageByID(currReq.getMessageID()).getMessage(), currReq.getAdminConfirm(), currReq.getRequestID()));
-            }
-        }
-
-        tblOpenRequests.setItems(openList);
-        tblClosedRequests.setItems(closedList);
-
-        List<User> userList = dBUtil.retrieveUsers();
-        List<String> nurseNames = new ArrayList<>();
-        for(User currUser : userList){
-            if(currUser != null && (currUser.isType("Doctor") || (currUser.isType("Nurse")))){
-                nurseNames.add(currUser.getFirstName() + " " + currUser.getLastName());
-            }
-        }
-
-        combBoxAssignNurse.setItems(FXCollections.observableArrayList(nurseNames));
-
-	}
-            */
 
 
 }
