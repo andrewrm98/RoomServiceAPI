@@ -4,22 +4,26 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.manlyminotaurs.databases.DataModelI;
+import com.manlyminotaurs.databases.UserDBUtil;
 import com.manlyminotaurs.messaging.Inventory;
+import com.manlyminotaurs.messaging.Request;
 import com.manlyminotaurs.users.User;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import javax.swing.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class roomServiceAPIController implements Initializable{
@@ -161,10 +165,14 @@ public class roomServiceAPIController implements Initializable{
 	JFXButton btnDeleteUser;
 
 	@FXML
-	TableView<String> tblEmployeeDatabase;
+	TableView<Employee> tblEmployeeDatabase;
 
+    UserDBUtil empDB = new UserDBUtil();
 	final static ObservableList<String> employeeTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Visitor", "Admin", "Janitor", "Interpreter", "Patient", "Security");
 	final static ObservableList<String> currentItems = FXCollections.observableArrayList("Blanket", "Towel", "Pillow");
+    ObservableList<Employee> employeeList =  FXCollections.observableArrayList();
+    ObservableList<String> employeeNames = FXCollections.observableArrayList();
+    ObservableList<String> emptyList = FXCollections.observableArrayList();
 	String firstName;
 	String middleName;
 	String lastName;
@@ -201,11 +209,11 @@ public class roomServiceAPIController implements Initializable{
         String firstName;
         String middleName;
         String lastName;
-        int employeeID;
+        String employeeID;
         String employeeType;
 
 
-        Employee(String firstName, String middleName, String lastName, int employeeID, String employeeType){
+        Employee(String firstName, String middleName, String lastName, String employeeID, String employeeType){
             this.firstName = firstName;
             this.middleName = middleName;
             this.lastName = lastName;
@@ -226,7 +234,7 @@ public class roomServiceAPIController implements Initializable{
             return lastName;
         }
 
-        public int getEmployeeID() {
+        public String getEmployeeID() {
             return employeeID;
         }
 
@@ -306,6 +314,7 @@ public class roomServiceAPIController implements Initializable{
 		cleanRequestRoomService();
 
 		// Update Tables
+		updateTablesEmployee();
 
 		// Update ComboBoxes
 		cmboItemRequestRoomService.setItems(currentItems);
@@ -568,10 +577,100 @@ public class roomServiceAPIController implements Initializable{
 		DataModelI.getInstance().removeUserByID(txtEmployeeID.getText());
 	}
 
+
+
+
 	public void updateTablesEmployee() {
+
+
+        // Employee Database
+        TableColumn fName = new TableColumn("First Name");
+        TableColumn mName = new TableColumn("Middle Name");
+        TableColumn lName = new TableColumn("Last Name");
+        TableColumn empID = new TableColumn("Employee ID");
+        TableColumn empType = new TableColumn("Employee Type");
+
+        tblEmployeeDatabase.getColumns().addAll(fName, mName, lName, empID, empType);
+
+        fName.setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
+        mName.setCellValueFactory(new PropertyValueFactory<Employee, String>("middleName"));
+        lName.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
+        empID.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeID"));
+        empType.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeType"));
+
+        // Populate List
+        List<User> userList = empDB.retrieveUsers();
+
+        for(User user : userList) {
+            employeeList.add(new Employee(user.getFirstName(),user.getMiddleName(), user.getLastName(), user.getUserID(), user.getUserType()));
+            System.out.println("i made an employee be proud of me");
+        }
+
+        tblEmployeeDatabase.setItems(employeeList);
+
+		// Update assign button
+        employeeNames.clear();
+        for (Employee emp: employeeList) {
+            String first = emp.getFirstName();
+            String last = emp.getLastName();
+            String type = emp.getEmployeeType();
+            employeeNames.add(first + " " + last + ": " + type);
+        }
+
+        cmboAssignEmployee.setItems(employeeNames);
 
 	}
 
+
+
+
+        /*
+        //OPEN LIST-----------------------
+        TableColumn typeColOpen = new TableColumn("Request Type");
+        TableColumn msgColOpen = new TableColumn("Request Message");
+        TableColumn isAssignedColOpen = new TableColumn("Is Assigned");
+
+        tblOpenRequests.getColumns().addAll(typeColOpen, msgColOpen, isAssignedColOpen);
+
+        typeColOpen.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("requestType"));
+        msgColOpen.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("message"));
+        isAssignedColOpen.setCellValueFactory(new PropertyValueFactory<requestInfo, Boolean>("isAssigned"));
+
+        //CLOSED LIST----------------------
+        TableColumn typeColClosed = new TableColumn("Request Type");
+        TableColumn msgColClosed = new TableColumn("Request Message");
+        TableColumn reqConfirmedClosed = new TableColumn("Was Confirmed");
+
+        tblClosedRequests.getColumns().addAll(typeColClosed, msgColClosed, reqConfirmedClosed);
+
+        typeColClosed.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("requestType"));
+        msgColClosed.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("message"));
+        reqConfirmedClosed.setCellValueFactory(new PropertyValueFactory<requestInfo, String>("isAssigned"));
+
+        //POPULATE LISTS----------------------------------------
+        for(com.manlyminotaurs.messaging.Request currReq : reqestList) {
+            if (!currReq.getComplete()) {
+                openList.add(new requestInfo(currReq.getRequestType(), dBUtil.getMessageByID(currReq.getMessageID()).getMessage(), currReq.getAdminConfirm(), currReq.getRequestID()));
+            } else {
+                closedList.add(new requestInfo(currReq.getRequestType(), dBUtil.getMessageByID(currReq.getMessageID()).getMessage(), currReq.getAdminConfirm(), currReq.getRequestID()));
+            }
+        }
+
+        tblOpenRequests.setItems(openList);
+        tblClosedRequests.setItems(closedList);
+
+        List<User> userList = dBUtil.retrieveUsers();
+        List<String> nurseNames = new ArrayList<>();
+        for(User currUser : userList){
+            if(currUser != null && (currUser.isType("Doctor") || (currUser.isType("Nurse")))){
+                nurseNames.add(currUser.getFirstName() + " " + currUser.getLastName());
+            }
+        }
+
+        combBoxAssignNurse.setItems(FXCollections.observableArrayList(nurseNames));
+
+	}
+            */
 
 
 }
