@@ -26,6 +26,8 @@ import javax.swing.*;
 import java.net.URL;
 import java.util.*;
 
+import static com.sun.tools.corba.se.idl.Util.capitalize;
+
 
 public class roomServiceAPIController implements Initializable{
 
@@ -169,7 +171,7 @@ public class roomServiceAPIController implements Initializable{
 	TableView<Employee> tblEmployeeDatabase;
 
     UserDBUtil empDB = new UserDBUtil();
-	final static ObservableList<String> employeeTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Visitor", "Admin", "Janitor", "Interpreter", "Patient", "Security");
+	ObservableList<String> employeeTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Admin", "Janitor", "Interpreter", "Patient", "Security");
 	final static ObservableList<String> currentItems = FXCollections.observableArrayList("Blanket", "Towel", "Pillow");
     ObservableList<Employee> employeeList =  FXCollections.observableArrayList();
     ObservableList<String> employeeNames = FXCollections.observableArrayList();
@@ -314,8 +316,20 @@ public class roomServiceAPIController implements Initializable{
 		// Clean fields
 		cleanRequestRoomService();
 
-		// Update Tables
-		updateTablesEmployee();
+		// Create Employee Database Table
+		TableColumn fName = new TableColumn("First Name");
+		TableColumn mName = new TableColumn("Middle Name");
+		TableColumn lName = new TableColumn("Last Name");
+		TableColumn empID = new TableColumn("Employee ID");
+		TableColumn empType = new TableColumn("Employee Type");
+
+		tblEmployeeDatabase.getColumns().addAll(fName, mName, lName, empID, empType);
+
+		fName.setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
+		mName.setCellValueFactory(new PropertyValueFactory<Employee, String>("middleName"));
+		lName.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
+		empID.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeID"));
+		empType.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeType"));
 
 		// Update ComboBoxes
 		cmboItemRequestRoomService.setItems(currentItems);
@@ -353,6 +367,8 @@ public class roomServiceAPIController implements Initializable{
 
 		// Update ComboBoxes
 		cmboItemRequestRoomService.setItems(currentItems);
+
+		updateTablesEmployee();
 	}
 
 	public void setScreenToManageRequests(ActionEvent event) {
@@ -430,6 +446,7 @@ public class roomServiceAPIController implements Initializable{
 		cleanManageEmployees();
 
 		// Update Tables
+		updateTablesEmployee();
 
 	}
 
@@ -462,7 +479,8 @@ public class roomServiceAPIController implements Initializable{
 		txtMiddleName.clear();
 		txtLastName.clear();
 		txtEmployeeID.clear();
-		//cmboEmployeeType.set();
+		cmboEmployeeType.setItems(employeeTypes);
+		cmboEmployeeType.getSelectionModel().clearSelection();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -548,21 +566,33 @@ public class roomServiceAPIController implements Initializable{
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	public void setType(ActionEvent event) {
+    	/*
 		userID = txtEmployeeID.getText();
-		DataModelI.getInstance().getUserByID(userID).setUserType(cmboEmployeeType.getValue());
+		DataModelI.getInstance().getUserByID(userID).setUserType(cmboEmployeeType.getValue());*/
 	}
 
 	public void addUser(ActionEvent event) {
-		firstName = txtFirstName.getText();
+
+		/*firstName = txtFirstName.getText();
 		middleName = txtMiddleName.getText();
 		lastName = txtLastName.getText();
 		type = cmboEmployeeType.getValue();
-		DataModelI.getInstance().addUser(firstName,middleName,lastName,languages,type,null,null);
+		DataModelI.getInstance().addUser(firstName,middleName,lastName,languages,type,null,null); */
+		UserDBUtil db = new UserDBUtil();
 
+		if ((txtFirstName.getText().equals("")) || (txtLastName.getText().equals("")) || (txtEmployeeID.getText().equals("")) || (cmboEmployeeType.getValue() == (null)) ) {
+			System.out.print("Error: Not a valid Employee");
+		} else {
+			System.out.println(cmboEmployeeType.getValue());
+			employeeList.add(new Employee(txtFirstName.getText(), txtMiddleName.getText(), txtLastName.getText(), txtEmployeeID.getText(), cmboEmployeeType.getValue()));
+			cleanManageEmployees();
+			updateAssignEmployee();
+		}
 	}
 
 	public void modifyUser(ActionEvent event) {
-		firstName = txtFirstName.getText();
+
+    	/*firstName = txtFirstName.getText();
 		middleName = txtMiddleName.getText();
 		lastName = txtLastName.getText();
 		type = cmboEmployeeType.getValue().toString();
@@ -571,52 +601,85 @@ public class roomServiceAPIController implements Initializable{
 		DataModelI.getInstance().getUserByID(userID).setFirstName(firstName);
 		DataModelI.getInstance().getUserByID(userID).setLastName(lastName);
 		DataModelI.getInstance().getUserByID(userID).setMiddleName(middleName);
-		DataModelI.getInstance().getUserByID(userID).setUserType(type);
+		DataModelI.getInstance().getUserByID(userID).setUserType(type); */
+
+		if(tblEmployeeDatabase.getSelectionModel().getSelectedItem() == null){
+		} else {
+			int employeeIndex = tblEmployeeDatabase.getSelectionModel().getSelectedIndex();
+			Employee emp = new Employee(txtFirstName.getText(), txtMiddleName.getText(), txtLastName.getText(), txtEmployeeID.getText(), cmboEmployeeType.getValue());
+			employeeList.remove(tblEmployeeDatabase.getSelectionModel().getSelectedItem());
+			employeeList.add(employeeIndex, emp);
+			cleanManageEmployees();
+			updateAssignEmployee();
+			tblEmployeeDatabase.getSelectionModel().clearSelection();
+		}
+
+
 	}
 
 	public void deleteUser(ActionEvent event) {
+		/*
 		DataModelI.getInstance().removeUserByID(txtEmployeeID.getText());
+		 */
+
+		if(tblEmployeeDatabase.getSelectionModel().getSelectedItem() == null){
+		} else {
+			employeeList.remove(tblEmployeeDatabase.getSelectionModel().getSelectedItem());
+			cleanManageEmployees();
+			updateAssignEmployee();
+			tblEmployeeDatabase.getSelectionModel().clearSelection();
+
+		}
+
 	}
 
 	public void updateTablesEmployee() {
 
-
-        // Employee Database
-        TableColumn fName = new TableColumn("First Name");
-        TableColumn mName = new TableColumn("Middle Name");
-        TableColumn lName = new TableColumn("Last Name");
-        TableColumn empID = new TableColumn("Employee ID");
-        TableColumn empType = new TableColumn("Employee Type");
-
-        tblEmployeeDatabase.getColumns().addAll(fName, mName, lName, empID, empType);
-
-        fName.setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
-        mName.setCellValueFactory(new PropertyValueFactory<Employee, String>("middleName"));
-        lName.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
-        empID.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeID"));
-        empType.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeType"));
-
         // Populate List
         List<User> userList = empDB.retrieveUsers();
 
+		employeeList.removeAll();
+		employeeList.clear();
+		tblEmployeeDatabase.setItems(employeeList);
+
         for(User user : userList) {
             employeeList.add(new Employee(user.getFirstName(),user.getMiddleName(), user.getLastName(), user.getUserID(), user.getUserType()));
-            System.out.println("i made an employee be proud of me");
         }
 
         tblEmployeeDatabase.setItems(employeeList);
+	}
 
+	public void updateAssignEmployee() {
 		// Update assign button
-        employeeNames.clear();
-        for (Employee emp: employeeList) {
-            String first = emp.getFirstName();
-            String last = emp.getLastName();
-            String type = emp.getEmployeeType();
-            employeeNames.add(first + " " + last + ": " + type);
-        }
+		employeeNames.clear();
+		for (Employee emp: employeeList) {
+			String first = emp.getFirstName();
+			String last = emp.getLastName();
+			String type = emp.getEmployeeType();
+			employeeNames.add(first + " " + last + ": " + type);
+		}
 
-        cmboAssignEmployee.setItems(employeeNames);
+		cmboAssignEmployee.setItems(employeeNames);
+	}
 
+	public void employeeListClicked(){
+		if(tblEmployeeDatabase.getSelectionModel().getSelectedItem() == null){
+		}
+		else {
+			/*
+			requestInfo selectedRequest = (requestInfo) tblOpenRequests.getSelectionModel().getSelectedItem();
+			com.manlyminotaurs.messaging.Request actualRequest = dBUtil.getRequestByID(selectedRequest.requestID);
+			lblRequestDetails.setText("SenderID: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getSenderID() + "\n" +
+					"Priority: " + dBUtil.getRequestByID(selectedRequest.requestID).getPriority() + "\n" +
+					"Location: " + dBUtil.getNodeByIDFromList(actualRequest.getNodeID(), dBUtil.retrieveNodes()).getLongName() + "\n" +
+					"Message: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getMessage());
+			*/
+			txtFirstName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().firstName);
+			txtMiddleName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().middleName);
+			txtLastName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().lastName);
+			txtEmployeeID.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().employeeID);
+			cmboEmployeeType.getSelectionModel().select(capitalize(tblEmployeeDatabase.getSelectionModel().getSelectedItem().employeeType));
+		}
 	}
 
 
