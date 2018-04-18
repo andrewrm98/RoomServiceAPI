@@ -178,6 +178,7 @@ public class roomServiceAPIController implements Initializable{
     ObservableList<Employee> employeeList =  FXCollections.observableArrayList();
     ObservableList<String> employeeNames = FXCollections.observableArrayList();
     ObservableList<InventoryItem> inventoryList = FXCollections.observableArrayList();
+    //ObservableList<InventoryItem> inventoryMenuList = FXCollections.observableArrayList();
     ObservableList<String> emptyList = FXCollections.observableArrayList();
 	String firstName;
 	String middleName;
@@ -290,14 +291,22 @@ public class roomServiceAPIController implements Initializable{
     }
 
     public class Cart {
-        ObservableList<InventoryItem> items;
 
-        public Cart(ObservableList<InventoryItem> items) {
-            this.items = items;
+        String item;
+        int quantity;
+
+
+        public Cart(String item, int quantity) {
+            this.item = item;
+            this.quantity = quantity;
         }
 
-        public ObservableList<InventoryItem> getItems() {
-            return items;
+        public String getItem() {
+            return item;
+        }
+
+        public int getQuantity() {
+            return quantity;
         }
     }
 
@@ -347,10 +356,24 @@ public class roomServiceAPIController implements Initializable{
         itemName.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
         quantity.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
 
+        // Create Inventory Menu Table
+        TableColumn itemNameMenu = new TableColumn("Item");
+        TableColumn quantityMenu = new TableColumn("Quantity");
+
+        tblInventoryMenu.getColumns().addAll(itemNameMenu, quantityMenu);
+
+        itemNameMenu.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
+        quantityMenu.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
+
 		// Update ComboBoxes
         cmboEmployeeType.setItems(employeeTypes);
 		cmboItemRequestRoomService.setItems(currentItems);
 
+		// Update Tables
+        updateTablesInventory();
+        updateTablesRoomServiceRequest();
+        updateTablesInventoryMenu();
+        updateTablesEmployee();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -380,12 +403,9 @@ public class roomServiceAPIController implements Initializable{
 		// Clean fields
 		cleanRequestRoomService();
 
-		// Update Tables
-
 		// Update ComboBoxes
 		cmboItemRequestRoomService.setItems(currentItems);
 
-		updateTablesEmployee();
 	}
 
 	public void setScreenToManageRequests(ActionEvent event) {
@@ -409,8 +429,6 @@ public class roomServiceAPIController implements Initializable{
 
 		// Clean fields
 		cleanManageRequests();
-
-		// Update Tables
 
 	}
 
@@ -436,8 +454,6 @@ public class roomServiceAPIController implements Initializable{
 		// Clean fields
 		cleanManageInventory();
 
-		// Update Tables
-        updateTablesInventory();
 	}
 
 	public void setScreenToManageEmployees(ActionEvent event) {
@@ -462,9 +478,6 @@ public class roomServiceAPIController implements Initializable{
 		// Clean fields
 		cleanManageEmployees();
 
-		// Update Tables
-		updateTablesEmployee();
-
 	}
 
 	public void exit(ActionEvent event) {
@@ -480,16 +493,24 @@ public class roomServiceAPIController implements Initializable{
 		txtRoomNumberRequestRoomService.clear();
 		//cmboItemRequestRoomService.setItems(); !!!
 		txtQuantityRequestRoomService.clear();
+		tblInventoryMenu.getSelectionModel().clearSelection();
+		tblCart.getSelectionModel().clearSelection();
 	}
 
 	public void cleanManageRequests() {
 		//cmboAssignEmployee.setItems(); !!!
-	}
+        tblOpenRequests.getSelectionModel().clearSelection();
+        tblOpenRequestDetails.getSelectionModel().clearSelection();
+        tblClosedRequests.getSelectionModel().clearSelection();
+        tblClosedRequestDetails.getSelectionModel().clearSelection();
+
+    }
 
 	public void cleanManageInventory() {
 		txtItemInventory.clear();
 		txtQuantityInventory.clear();
-	}
+        tblInventory.getSelectionModel().clearSelection();
+    }
 
 	public void cleanManageEmployees() {
 		txtFirstName.clear();
@@ -498,7 +519,9 @@ public class roomServiceAPIController implements Initializable{
 		txtEmployeeID.clear();
 		cmboEmployeeType.setItems(employeeTypes);
 		cmboEmployeeType.getSelectionModel().clearSelection();
-	}
+        tblEmployeeDatabase.getSelectionModel().clearSelection();
+
+    }
 
 	//------------------------------------------------------------------------------------------------------------------
 	//
@@ -524,8 +547,15 @@ public class roomServiceAPIController implements Initializable{
 
 	}
 
+    public void updateTablesInventoryMenu() {
 
-	//------------------------------------------------------------------------------------------------------------------
+        // Populate List Based on Inventory
+        tblInventoryMenu.setItems(inventoryList);
+    }
+
+
+
+    //------------------------------------------------------------------------------------------------------------------
 	//
 	// Manage requests
 	//
@@ -550,7 +580,6 @@ public class roomServiceAPIController implements Initializable{
 	public void updateTablesManageRequest() {
 
 	}
-
 
 	//------------------------------------------------------------------------------------------------------------------
 	//
@@ -617,7 +646,7 @@ public class roomServiceAPIController implements Initializable{
             inventoryList.remove(tblInventory.getSelectionModel().getSelectedItem());
             cleanManageInventory();
             tblInventory.getSelectionModel().clearSelection();
-        } 
+        }
 	}
 
 	public void updateTablesInventory() {
