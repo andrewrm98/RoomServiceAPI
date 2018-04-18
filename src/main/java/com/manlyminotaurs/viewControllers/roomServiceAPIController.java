@@ -27,7 +27,8 @@ import javax.swing.*;
 import java.net.URL;
 import java.util.*;
 
-import static com.sun.tools.corba.se.idl.Util.capitalize;
+//import static com.sun.tools.corba.se.idl.Util.capitalize;
+import static com.sun.xml.internal.ws.util.StringUtils.capitalize;
 
 
 public class roomServiceAPIController implements Initializable{
@@ -337,6 +338,9 @@ public class roomServiceAPIController implements Initializable{
 		empID.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeID"));
 		empType.setCellValueFactory(new PropertyValueFactory<Employee, String>("employeeType"));
 
+		tblEmployeeDatabase.setColumnResizePolicy(tblInventory.CONSTRAINED_RESIZE_POLICY);
+
+
 		// Create Inventory Table
         TableColumn itemName = new TableColumn("Item");
         TableColumn quantity = new TableColumn("Quantity");
@@ -346,6 +350,8 @@ public class roomServiceAPIController implements Initializable{
 
         itemName.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
         quantity.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
+
+		tblInventory.setColumnResizePolicy(tblInventory.CONSTRAINED_RESIZE_POLICY);
 
         // Create Inventory Menu Table
         TableColumn itemNameMenu = new TableColumn("Item");
@@ -401,6 +407,7 @@ public class roomServiceAPIController implements Initializable{
                 closedList.add(new RequestInfo(currReq.getRequestID(), currReq.getRequestType(), null));
             }
         } */
+
 
 		// Update Tables
         updateTablesInventory();
