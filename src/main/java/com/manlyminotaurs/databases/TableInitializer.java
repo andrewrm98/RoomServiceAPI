@@ -52,8 +52,8 @@ public class TableInitializer {
         initializer.initTables();
 
         UserDBUtil.setUserIDCounter(initializer.populateUserAccountTable("./UserAccountTable.csv"));
-        RequestsDBUtil.setRequestIDCounter(initializer.populateRequestTable("./RequestTable.csv"));
-        InventoryDBUtil.setInventoryIDCounter(initializer.populateInventoryTable("./InventoryTable.csv"));
+        initializer.populateRequestTable("./RequestTable.csv");
+        initializer.populateInventoryTable("./InventoryTable.csv");
 
         System.out.println("-----------------------------");
         System.out.println("-----------------------------");
