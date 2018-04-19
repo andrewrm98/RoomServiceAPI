@@ -67,9 +67,9 @@ public class CsvFileController {
     /*---------------------------------- Update CSV Files --------------------------------------------------*/
 
     public void updateAllCSVFiles(){
-        updateRequestCSVFile("./RequestTable.csv");
-        updateUserCSVFile("./UserAccountTable.csv");
-        updateInventoryCSVFile("./InventoryTable.csv");
+        updateRequestCSVFile("./RequestTableAPI.csv");
+        updateUserCSVFile("./UserAccountTableAPI.csv");
+        updateInventoryCSVFile("./InventoryTableAPI.csv");
     }
 
 

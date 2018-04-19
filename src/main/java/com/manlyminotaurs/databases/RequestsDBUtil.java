@@ -250,6 +250,9 @@ class RequestsDBUtil {
     //------------------------------------------HElper---------------------------------------
 
     ObservableList<InventoryItem> getItemList ( String itemConcat){
+	    if(itemConcat == null || itemConcat.equals("")){
+	        return null;
+        }
         List<String> itemList = new ArrayList<String>(Arrays.asList(itemConcat.split("/")));
         List<InventoryItem> inventoryItemList = new ArrayList<>();
         for(String itemID : itemList) {
@@ -259,9 +262,18 @@ class RequestsDBUtil {
     }
 
     String getItemString(ObservableList<InventoryItem> items){
+	    if(items ==null){
+	        return null;
+        }
+        if(items.get(0) == null || items.get(0).equals("")){
+	        return null;
+        }
         String listOfItemID = items.get(0).getID();
         for(int i = 1; i<items.size(); i++){
             listOfItemID = listOfItemID + "/" + items.get(i).getID();
+            if(items.get(i) == null || items.get(i).equals("")){
+                return null;
+            }
         }
         return listOfItemID;
     }

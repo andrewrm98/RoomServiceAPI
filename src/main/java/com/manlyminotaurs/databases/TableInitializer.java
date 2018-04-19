@@ -24,8 +24,8 @@ public class TableInitializer {
         try {
             connection = DriverManager.getConnection("jdbc:derby:requestDB;create=true");
             stmt = connection.createStatement();
-            tableInit.executeDBScripts("/DropTables.sql", stmt);
-            tableInit.executeDBScripts("/CreateTables.sql", stmt);
+            tableInit.executeDBScripts("/DropTablesAPI.sql", stmt);
+            tableInit.executeDBScripts("/CreateTablesAPI.sql", stmt);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -51,9 +51,9 @@ public class TableInitializer {
 
         initializer.initTables();
 
-        UserDBUtil.setUserIDCounter(initializer.populateUserAccountTable("./UserAccountTable.csv"));
-        initializer.populateRequestTable("./RequestTable.csv");
-        initializer.populateInventoryTable("./InventoryTable.csv");
+        UserDBUtil.setUserIDCounter(initializer.populateUserAccountTable("./UserAccountTableAPI.csv"));
+        initializer.populateRequestTable("./RequestTableAPI.csv");
+        initializer.populateInventoryTable("./InventoryTableAPI.csv");
 
         System.out.println("-----------------------------");
         System.out.println("-----------------------------");

@@ -33,7 +33,7 @@ public class InventoryDBUtil {
 			String str = "SELECT * FROM INVENTORY";
 			ResultSet rset = stmt.executeQuery(str);
 
-			if (rset.next()) {
+			while (rset.next()) {
 				ID = rset.getString("ID");
 				type = rset.getString("type");
 				quantity = rset.getInt("quantity");

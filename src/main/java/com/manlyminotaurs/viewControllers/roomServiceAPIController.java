@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 //import static com.sun.tools.corba.se.idl.Util.capitalize;
-import static com.sun.xml.internal.ws.util.StringUtils.capitalize;
+//import static com.sun.xml.internal.ws.util.StringUtils.capitalize;
 
 
 public class roomServiceAPIController implements Initializable{
@@ -617,20 +617,26 @@ public class roomServiceAPIController implements Initializable{
 	}
 
 	public void submitRoomServiceRequest(ActionEvent event) {
-        System.out.println(cartList.size());
-        ObservableList<InventoryItem> newCart = FXCollections.observableArrayList();
 
-        for(int x=0; x<cartList.size();x++) {
-            newCart.add(cartList.get(x));
-        }
+		System.out.println(cartList.size());
+		ObservableList<InventoryItem> newCart = FXCollections.observableArrayList();
 
-        RequestInfo newReq = new RequestInfo(txtRoomNumberRequestRoomService.getText(), null, newCart);
-        openList.add(newReq);
-        cartList.clear();
-        cmboItemRequestRoomService.setValue(null);
-        txtQuantityRequestRoomService.clear();
-        txtRoomNumberRequestRoomService.clear();
-        System.out.println(openList.size());
+		for (int x = 0; x < cartList.size(); x++) {
+			newCart.add(cartList.get(x));
+		}
+
+		if(txtRoomNumberRequestRoomService.getText().equals("") || (newCart.size() == 0)) {
+			System.out.println("Not a valid room service request");
+
+		} else {
+			RequestInfo newReq = new RequestInfo(txtRoomNumberRequestRoomService.getText(), null, newCart);
+			openList.add(newReq);
+			cartList.clear();
+			cmboItemRequestRoomService.setValue(null);
+			txtQuantityRequestRoomService.clear();
+			txtRoomNumberRequestRoomService.clear();
+			System.out.println(openList.size());
+		}
 
 	}
 
@@ -738,7 +744,7 @@ public class roomServiceAPIController implements Initializable{
         }
         else {
             System.out.println("entered else");
-            System.out.println(tblClosedRequests.getSelectionModel().getSelectedItem().getItems().get(0).getItemName());
+            //System.out.println(tblClosedRequests.getSelectionModel().getSelectedItem().getItems().get(0).getItemName());
             //openDetailsList = tblOpenRequests.getSelectionModel().getSelectedItem().getItems();
 
             for(int x=0; x<tblClosedRequests.getSelectionModel().getSelectedItem().getItems().size();x++) {
@@ -962,7 +968,7 @@ public class roomServiceAPIController implements Initializable{
 			txtMiddleName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getMiddleName());
 			txtLastName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getLastName());
 			txtEmployeeID.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getEmployeeID());
-			cmboEmployeeType.getSelectionModel().select(capitalize(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getEmployeeType()));
+			cmboEmployeeType.getSelectionModel().select(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getEmployeeType());
 		}
 	}
 
