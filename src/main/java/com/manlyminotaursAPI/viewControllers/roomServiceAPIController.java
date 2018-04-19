@@ -353,6 +353,7 @@ public class roomServiceAPIController implements Initializable{
 		}
 		List<Request> listOfRequest = DataModelIAPI.getInstance().retrieveRequests();
 		closedList.clear();
+		openList.clear();
 		for(Request currReq : listOfRequest) {
 			RequestInfo aRequestInfo = new RequestInfo(currReq.getRequestID(), currReq.getRequestInfo().getRoom(), currReq.getRequestInfo().getEmployee(), currReq.getRequestInfo().getItems());
 			if (!currReq.getComplete()) {
