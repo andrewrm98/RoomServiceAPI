@@ -771,7 +771,7 @@ public class roomServiceAPIController implements Initializable{
             System.out.print("Error: Not a valid item");
         } else {
             for (InventoryItem item: inventoryList) {
-                if(item.getItemName().equals(txtItemInventory.getText())) {
+                if(item.getItemName().toLowerCase().equals(txtItemInventory.getText().toLowerCase())) {
                     sameItemIndex = inventoryList.indexOf(item);
                     currentQuantity = item.getQuantity();
                     System.out.println("There's something that is the same");
@@ -789,7 +789,7 @@ public class roomServiceAPIController implements Initializable{
 
                 int addedQuantity = Integer.parseInt(txtQuantityInventory.getText());
                 currentQuantity = currentQuantity + addedQuantity;
-                InventoryItem replacedItem = new InventoryItem("",txtItemInventory.getText(), currentQuantity);
+                InventoryItem replacedItem = new InventoryItem("",inventoryList.get(sameItemIndex).getItemName(), currentQuantity);
                 inventoryList.remove(sameItemIndex);
                 inventoryList.add(sameItemIndex,replacedItem);
                 cleanManageInventory();
@@ -800,8 +800,9 @@ public class roomServiceAPIController implements Initializable{
     }
 
 	public void modifyItemToInventory(ActionEvent event) {
-        if(tblInventory.getSelectionModel().getSelectedItem() == null){
-        } else {
+        if((tblInventory.getSelectionModel().getSelectedItem() == null) || (txtItemInventory.getText().equals("")) || (isNotNumber(txtQuantityInventory.getText()))) {
+			System.out.print("Error: Not a valid quantity");
+		} else {
             int inventoryIndex = tblInventory.getSelectionModel().getSelectedIndex();
             InventoryItem item = new InventoryItem("",txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText()));
             inventoryList.remove(tblInventory.getSelectionModel().getSelectedItem());
