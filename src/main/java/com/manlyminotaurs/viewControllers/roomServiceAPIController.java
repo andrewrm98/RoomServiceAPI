@@ -365,6 +365,8 @@ public class roomServiceAPIController implements Initializable{
 			employeeList.add(aEmployee);
 		}
 
+
+
 		System.out.println("hello checkpoint");
         //-----------------------------------POPULATE LISTS ENDED----------------------------------
 
@@ -384,6 +386,9 @@ public class roomServiceAPIController implements Initializable{
         tblClosedRequestDetails.setItems(closedDetailsList);
         tblInventory.setItems(inventoryList);
         tblEmployeeDatabase.setItems(employeeList);
+
+		// Populate Employee Combobox
+		updateAssignEmployee();
 
     }
 
@@ -682,10 +687,12 @@ public class roomServiceAPIController implements Initializable{
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	public void assignEmployee(ActionEvent event) {
-
-		RequestInfo replacedRequestInfo = new RequestInfo(tblOpenRequests.getSelectionModel().getSelectedItem().getRoom(), cmboAssignEmployee.getValue(),tblOpenRequests.getSelectionModel().getSelectedItem().getItems());
-		openList.remove(tblOpenRequests.getSelectionModel().getSelectedItem());
-        openList.add(replacedRequestInfo);
+	    if (tblOpenRequests.getSelectionModel() == null) {
+        } else {
+            RequestInfo replacedRequestInfo = new RequestInfo(tblOpenRequests.getSelectionModel().getSelectedItem().getRoom(), cmboAssignEmployee.getValue(), tblOpenRequests.getSelectionModel().getSelectedItem().getItems());
+            openList.remove(tblOpenRequests.getSelectionModel().getSelectedItem());
+            openList.add(replacedRequestInfo);
+        }
 	}
 
 	public void completeRequest(ActionEvent event) {
