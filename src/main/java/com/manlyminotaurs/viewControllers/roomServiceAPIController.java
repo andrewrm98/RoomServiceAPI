@@ -63,10 +63,6 @@ public class roomServiceAPIController implements Initializable{
 	@FXML
 	HBox boxManageEmployees;
 
-	@FXML
-	JFXButton btnExit;
-
-
 	// Request Room Service Objects
 
 	@FXML
@@ -495,10 +491,6 @@ public class roomServiceAPIController implements Initializable{
 		// Clean fields
 		cleanManageEmployees();
 
-	}
-
-	public void exit(ActionEvent event) {
-        System.exit(0);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

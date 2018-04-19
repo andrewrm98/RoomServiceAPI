@@ -73,15 +73,6 @@
                     <children>
                         <Pane maxHeight="160.0" prefHeight="160.0" prefWidth="1600.0" style="-fx-background-color: #102b5c;">
                             <children>
-                                <JFXButton fx:id="btnExit" buttonType="RAISED" ellipsisString="" layoutX="1445.0" layoutY="10.0" onAction="#exit" prefHeight="140.0" prefWidth="140.0">
-                                    <graphic>
-                                        <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@../Icons/PowerIcon.png" />
-                                            </image>
-                                        </ImageView>
-                                    </graphic>
-                                </JFXButton>
                                 <Label fx:id="lblTitle" layoutX="40.0" layoutY="30.0" prefHeight="100.0" prefWidth="580.0" text="ROOM SERVICE" textFill="WHITE">
                                     <font>
                                         <Font size="75.0" />
@@ -327,7 +318,10 @@
                                         <Font size="30.0" />
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="txtRoomNumberRequestRoomService" layoutX="50.0" layoutY="90.0" prefHeight="50.0" prefWidth="690.0" />
+                                <JFXTextField fx:id="txtRoomNumberRequestRoomService" layoutX="50.0" layoutY="90.0" prefHeight="50.0" prefWidth="690.0">
+                           <font>
+                              <Font size="20.0" />
+                           </font></JFXTextField>
                                 <Label layoutX="50.0" layoutY="170.0" prefHeight="50.0" prefWidth="350.0" text="ITEM">
                                     <font>
                                         <Font size="30.0" />
@@ -338,7 +332,10 @@
                                         <Font size="30.0" />
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="txtQuantityRequestRoomService" layoutX="450.0" layoutY="220.0" prefHeight="50.0" prefWidth="290.0" />
+                                <JFXTextField fx:id="txtQuantityRequestRoomService" layoutX="450.0" layoutY="220.0" prefHeight="50.0" prefWidth="290.0">
+                           <font>
+                              <Font size="20.0" />
+                           </font></JFXTextField>
                                 <JFXComboBox fx:id="cmboItemRequestRoomService" layoutX="50.0" layoutY="220.0" prefHeight="50.0" prefWidth="350.0" />
                                 <JFXButton fx:id="btnAddSelectionToCart" buttonType="RAISED" layoutX="50.0" layoutY="310.0" onAction="#addSelectionToCart" prefHeight="60.0" prefWidth="690.0" style="-fx-background-color: #012c57;" text="ADD SELECTION TO CART" textFill="WHITE">
                                     <font>
@@ -367,7 +364,7 @@
                                         <Font size="15.0" />
                                     </font>
                                 </JFXButton>
-                        <Label fx:id="lblRoomServiceWarning" layoutX="50.0" layoutY="290.0" text="Warning" visible="false" />
+                        <Label fx:id="lblRoomServiceWarning" layoutX="50.0" layoutY="290.0" prefHeight="17.0" prefWidth="690.0" text="Warning" visible="false" />
                             </children>
                         </Pane>
                     </children>
