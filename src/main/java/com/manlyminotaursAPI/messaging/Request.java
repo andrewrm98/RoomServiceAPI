@@ -1,13 +1,12 @@
-package com.manlyminotaurs.messaging;
+package com.manlyminotaursAPI.messaging;
 
-import com.manlyminotaurs.databases.DataModelI;
+import com.manlyminotaursAPI.databases.DataModelIAPI;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Request {
-	DataModelI dataModelI = DataModelI.getInstance();
+	DataModelIAPI dataModelIAPI = DataModelIAPI.getInstance();
     String requestID;
     String requestType;
     int priority;

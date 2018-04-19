@@ -72,13 +72,13 @@ dependencies {
 
 jar {
 	manifest {
-		attributes 'Main-Class': 'com.manlyminotaurs.core.Runner'
+		attributes 'Main-Class': 'com.manlyminotaursAPI.core.Runner'
 	}
 	from configurations.runtime.collect { zipTree(it) }
 }
 
 task run(type: JavaExec) {
-	main = 'com.manlyminotaurs.core.Runner'
+	main = 'com.manlyminotaursAPI.core.Runner'
 	classpath = sourceSets.main.runtimeClasspath
 }
 

@@ -1,7 +1,7 @@
-package com.manlyminotaurs.databases;
+package com.manlyminotaursAPI.databases;
 
 
-import com.manlyminotaurs.viewControllers.roomServiceAPIController;
+import com.manlyminotaursAPI.viewControllers.roomServiceAPIController;
 
 import java.io.*;
 import java.sql.*;
@@ -71,7 +71,7 @@ public class TableInitializer {
 
 
     private int populateUserAccountTable(String CsvFileName) {
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         int userIDCounter = 0;
         try {
             // parse UserTable.csv file
@@ -102,13 +102,13 @@ public class TableInitializer {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return userIDCounter;
     }
 
     public int populateRequestTable(String CsvFileName) {
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         int requestIDCounter = 0;
         try {
             // parse UserTable.csv file
@@ -147,13 +147,13 @@ public class TableInitializer {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return requestIDCounter;
     }
 
     private int populateInventoryTable(String CsvFileName) {
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         int inventoryIDCounter = 0;
         try {
             // parse UserTable.csv file
@@ -184,7 +184,7 @@ public class TableInitializer {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return inventoryIDCounter;
     }

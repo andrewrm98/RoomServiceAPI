@@ -1,15 +1,15 @@
-package com.manlyminotaurs.viewControllers;
+package com.manlyminotaursAPI.viewControllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import com.manlyminotaurs.databases.DataModelI;
-import com.manlyminotaurs.databases.InventoryDBUtil;
-import com.manlyminotaurs.databases.UserDBUtil;
-import com.manlyminotaurs.messaging.InventoryItem;
-import com.manlyminotaurs.messaging.Request;
-import com.manlyminotaurs.messaging.RequestInfo;
-import com.manlyminotaurs.users.Employee;
+import com.manlyminotaursAPI.databases.DataModelIAPI;
+import com.manlyminotaursAPI.databases.InventoryDBUtil;
+import com.manlyminotaursAPI.databases.UserDBUtil;
+import com.manlyminotaursAPI.messaging.InventoryItem;
+import com.manlyminotaursAPI.messaging.Request;
+import com.manlyminotaursAPI.messaging.RequestInfo;
+import com.manlyminotaursAPI.users.Employee;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,8 +22,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
-import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.*;
 
 //import static com.sun.tools.corba.se.idl.Util.capitalize;
@@ -214,7 +212,7 @@ public class roomServiceAPIController implements Initializable{
 	String username;
 	String password;
 	String userID;
-	com.manlyminotaurs.users.Employee user;
+	com.manlyminotaursAPI.users.Employee user;
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
@@ -347,11 +345,11 @@ public class roomServiceAPIController implements Initializable{
 
 
         //---------------------------------POPULATE LISTS From DATABASE------------------------
-		List<InventoryItem> itemList = DataModelI.getInstance().retrieveInventory();
+		List<InventoryItem> itemList = DataModelIAPI.getInstance().retrieveInventory();
 		for(InventoryItem aItem: itemList){
 			inventoryList.add(aItem);
 		}
-		List<Request> listOfRequest = DataModelI.getInstance().retrieveRequests();
+		List<Request> listOfRequest = DataModelIAPI.getInstance().retrieveRequests();
 		for(Request currReq : listOfRequest) {
 			RequestInfo aRequestInfo = new RequestInfo(currReq.getRequestInfo().getRoom(), currReq.getRequestInfo().getEmployee(), currReq.getRequestInfo().getItems());
 			if (!currReq.getComplete()) {
@@ -361,7 +359,7 @@ public class roomServiceAPIController implements Initializable{
             }
         }
 
-		for(com.manlyminotaurs.users.Employee aEmployee : DataModelI.getInstance().retrieveUsers()){
+		for(com.manlyminotaursAPI.users.Employee aEmployee : DataModelIAPI.getInstance().retrieveUsers()){
 			employeeList.add(aEmployee);
 		}
 
@@ -663,7 +661,7 @@ public class roomServiceAPIController implements Initializable{
         else {
 			/*
 			requestInfo selectedRequest = (requestInfo) tblOpenRequests.getSelectionModel().getSelectedItem();
-			com.manlyminotaurs.messaging.Request actualRequest = dBUtil.getRequestByID(selectedRequest.requestID);
+			com.manlyminotaursAPI.messaging.Request actualRequest = dBUtil.getRequestByID(selectedRequest.requestID);
 			lblRequestDetails.setText("SenderID: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getSenderID() + "\n" +
 					"Priority: " + dBUtil.getRequestByID(selectedRequest.requestID).getPriority() + "\n" +
 					"Location: " + dBUtil.getNodeByIDFromList(actualRequest.getNodeID(), dBUtil.retrieveNodes()).getLongName() + "\n" +
@@ -760,7 +758,7 @@ public class roomServiceAPIController implements Initializable{
 	//------------------------------------------------------------------------------------------------------------------
 	public void addItemToInventory(ActionEvent event) {
 		//InventoryItem inventory = new InventoryItem(null, txtItemInventory.getText(), );
-		//DataModelI.getInstance().addInventory(inventory);
+		//DataModelIAPI.getInstance().addInventory(inventory);
 
         int sameItemIndex = -1;
         int currentQuantity = 0;
@@ -839,7 +837,7 @@ public class roomServiceAPIController implements Initializable{
         else {
 			/*
 			requestInfo selectedRequest = (requestInfo) tblOpenRequests.getSelectionModel().getSelectedItem();
-			com.manlyminotaurs.messaging.Request actualRequest = dBUtil.getRequestByID(selectedRequest.requestID);
+			com.manlyminotaursAPI.messaging.Request actualRequest = dBUtil.getRequestByID(selectedRequest.requestID);
 			lblRequestDetails.setText("SenderID: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getSenderID() + "\n" +
 					"Priority: " + dBUtil.getRequestByID(selectedRequest.requestID).getPriority() + "\n" +
 					"Location: " + dBUtil.getNodeByIDFromList(actualRequest.getNodeID(), dBUtil.retrieveNodes()).getLongName() + "\n" +
@@ -859,7 +857,7 @@ public class roomServiceAPIController implements Initializable{
 	public void setType(ActionEvent event) { // not used
     	/*
 		userID = txtEmployeeID.getText();
-		DataModelI.getInstance().getUserByID(userID).setUserType(cmboEmployeeType.getValue());*/
+		DataModelIAPI.getInstance().getUserByID(userID).setUserType(cmboEmployeeType.getValue());*/
 	}
 
 	public void addUser(ActionEvent event) {
@@ -868,7 +866,7 @@ public class roomServiceAPIController implements Initializable{
 		middleName = txtMiddleName.getText();
 		lastName = txtLastName.getText();
 		type = cmboEmployeeType.getValue();
-		DataModelI.getInstance().addUser(firstName,middleName,lastName,languages,type,null,null); */
+		DataModelIAPI.getInstance().addUser(firstName,middleName,lastName,languages,type,null,null); */
 		UserDBUtil db = new UserDBUtil();
 
 		if ((txtFirstName.getText().equals("")) || (txtLastName.getText().equals("")) || (txtEmployeeID.getText().equals("")) || (cmboEmployeeType.getValue() == (null)) ) {
@@ -889,10 +887,10 @@ public class roomServiceAPIController implements Initializable{
 		type = cmboEmployeeType.getValue().toString();
 		userID = txtEmployeeID.getText();
 
-		DataModelI.getInstance().getUserByID(userID).setFirstName(firstName);
-		DataModelI.getInstance().getUserByID(userID).setLastName(lastName);
-		DataModelI.getInstance().getUserByID(userID).setMiddleName(middleName);
-		DataModelI.getInstance().getUserByID(userID).setUserType(type); */
+		DataModelIAPI.getInstance().getUserByID(userID).setFirstName(firstName);
+		DataModelIAPI.getInstance().getUserByID(userID).setLastName(lastName);
+		DataModelIAPI.getInstance().getUserByID(userID).setMiddleName(middleName);
+		DataModelIAPI.getInstance().getUserByID(userID).setUserType(type); */
 
 		if(tblEmployeeDatabase.getSelectionModel().getSelectedItem() == null){
 		} else {
@@ -910,7 +908,7 @@ public class roomServiceAPIController implements Initializable{
 
 	public void deleteUser(ActionEvent event) {
 		/*
-		DataModelI.getInstance().removeUserByID(txtEmployeeID.getText());
+		DataModelIAPI.getInstance().removeUserByID(txtEmployeeID.getText());
 		 */
 
 		if(tblEmployeeDatabase.getSelectionModel().getSelectedItem() == null){
@@ -927,13 +925,13 @@ public class roomServiceAPIController implements Initializable{
 	public void updateTablesEmployee() {
 
         // Populate List
-        List<com.manlyminotaurs.users.Employee> userList = DataModelI.getInstance().retrieveUsers();
+        List<com.manlyminotaursAPI.users.Employee> userList = DataModelIAPI.getInstance().retrieveUsers();
 
 		employeeList.removeAll();
 		employeeList.clear();
 		tblEmployeeDatabase.setItems(employeeList);
 
-        for(com.manlyminotaurs.users.Employee user : userList) {
+        for(com.manlyminotaursAPI.users.Employee user : userList) {
             employeeList.add(new Employee(user.getFirstName(),user.getMiddleName(), user.getLastName(), user.getEmployeeID(), user.getEmployeeType()));
         }
 

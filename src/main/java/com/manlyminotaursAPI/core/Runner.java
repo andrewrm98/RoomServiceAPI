@@ -1,8 +1,8 @@
-package com.manlyminotaurs.core;
+package com.manlyminotaursAPI.core;
 
-import com.manlyminotaurs.databases.DataModelI;
-import com.manlyminotaurs.databases.TableInitializer;
-import com.manlyminotaurs.viewControllers.roomServiceAPIController;
+import com.manlyminotaursAPI.databases.DataModelIAPI;
+import com.manlyminotaursAPI.databases.TableInitializer;
+import com.manlyminotaursAPI.viewControllers.roomServiceAPIController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -36,8 +36,8 @@ public class Runner extends Application{
 
         TableInitializer tableInitializer = new TableInitializer();
         tableInitializer.initTables();
-        DataModelI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList());
-        DataModelI.getInstance().updateAllCSVFiles();
+        DataModelIAPI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList());
+        DataModelIAPI.getInstance().updateAllCSVFiles();
 
         System.out.println("Files Saved!");
     }

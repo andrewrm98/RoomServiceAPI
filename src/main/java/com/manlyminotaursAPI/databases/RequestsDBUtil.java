@@ -1,7 +1,7 @@
-package com.manlyminotaurs.databases;
+package com.manlyminotaursAPI.databases;
 
-import com.manlyminotaurs.messaging.InventoryItem;
-import com.manlyminotaurs.messaging.Request;
+import com.manlyminotaursAPI.messaging.InventoryItem;
+import com.manlyminotaursAPI.messaging.Request;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -61,12 +61,12 @@ class RequestsDBUtil {
         {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
     }
 
     boolean removeRequest(Request request) {
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         boolean isSucessful = true;
         try {
             Statement stmt = connection.createStatement();
@@ -77,13 +77,13 @@ class RequestsDBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return isSucessful;
     }
 
     public boolean modifyRequest(Request newRequest) {
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         boolean isSuccess = false;
         try {
             String str = "UPDATE Request SET requestType= ?,priority = ?,isComplete= ?,adminConfirm= ?,startTime =?, endTime = ?,nodeID= ?,messageID= ?,password= ? WHERE requestID = '"+ newRequest.getRequestID()+ "'";
@@ -107,7 +107,7 @@ class RequestsDBUtil {
         {
             System.out.println("Request already in the database");
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return isSuccess;
     }
@@ -115,7 +115,7 @@ class RequestsDBUtil {
 
     public List<Request> retrieveRequests() {
         // Connection
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
 
         // Variables
         Request requestObject;
@@ -147,7 +147,7 @@ class RequestsDBUtil {
                 messageID = rset.getString("messageID"); // employee
                 password = rset.getString("password"); // list of itemID
                 // Add the new edge to the list
-                ObservableList<InventoryItem> items = DataModelI.getInstance().getItemList(password);
+                ObservableList<InventoryItem> items = DataModelIAPI.getInstance().getItemList(password);
                 requestObject = new Request(requestID, requestType, priority, isComplete, adminConfirm, startTime.toLocalDateTime(), endTime.toLocalDateTime(), nodeID, messageID, items);
                 listOfRequest.add(requestObject);
             }
@@ -157,14 +157,14 @@ class RequestsDBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return listOfRequest;
     }
 
     /*------------------------------------ Set status Complete/Admin Confirm -------------------------------------------------*/
     void setIsAdminConfim(Request request, boolean newConfirmStatus){
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         try {
             Statement stmt = connection.createStatement();
             String sql = "UPDATE Request SET ADMINCONFIRM = '" + newConfirmStatus + "'" + " WHERE requestID = '" + request.getRequestID() + "'";
@@ -175,12 +175,12 @@ class RequestsDBUtil {
             //Handle errors for JDBC
             se.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
     }
 
     void setIsComplete(Request request, boolean newCompleteStatus){
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         request.setComplete(newCompleteStatus);
         try {
             Statement stmt = connection.createStatement();
@@ -192,7 +192,7 @@ class RequestsDBUtil {
             //Handle errors for JDBC
             se.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
     }
 
@@ -201,7 +201,7 @@ class RequestsDBUtil {
 
 	Request getRequestByID(String requestID){
         // Connection
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
 
         // Variables
         Request requestObject = null;
@@ -242,7 +242,7 @@ class RequestsDBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return requestObject;
     }
@@ -256,7 +256,7 @@ class RequestsDBUtil {
         List<String> itemList = new ArrayList<String>(Arrays.asList(itemConcat.split("/")));
         List<InventoryItem> inventoryItemList = new ArrayList<>();
         for(String itemID : itemList) {
-            inventoryItemList.add(DataModelI.getInstance().getInventoryByID(itemID));
+            inventoryItemList.add(DataModelIAPI.getInstance().getInventoryByID(itemID));
         }
         return FXCollections.observableArrayList(inventoryItemList);
     }

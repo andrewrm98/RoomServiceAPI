@@ -1,4 +1,4 @@
-package com.manlyminotaurs.messaging;
+package com.manlyminotaursAPI.messaging;
 
 public class InventoryItem {
 

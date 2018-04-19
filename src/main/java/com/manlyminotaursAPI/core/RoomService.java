@@ -1,7 +1,6 @@
-package com.manlyminotaurs.core;
+package com.manlyminotaursAPI.core;
 
-import com.manlyminotaurs.databases.DataModelI;
-import javafx.application.Application;
+import com.manlyminotaursAPI.databases.DataModelIAPI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,20 +11,20 @@ import javafx.stage.Stage;
 public class RoomService {
 
     private Stage primaryStage;
-    private static DataModelI dataModelI;
+    private static DataModelIAPI dataModelIAPI;
     private static String pathStrategy = "";
     private static AnchorPane root;
     private static boolean createTables = true;
 
     public RoomService() {
-        dataModelI = DataModelI.getInstance();
+        dataModelIAPI = DataModelIAPI.getInstance();
     }
 
     public void thing(int xcoord, int ycoord, int windowWidth, int windowLength, String cssPath) {
         Stage primaryStage = new Stage();
         new FXMLLoader(this.getClass().getResource("FXMLs/roomServiceAPI.fxml"));
 
-        DataModelI.getInstance().startDB();
+        DataModelIAPI.getInstance().startDB();
 
         Parent root;
         try {

@@ -1,8 +1,8 @@
-package com.manlyminotaurs.databases;
+package com.manlyminotaursAPI.databases;
 
-import com.manlyminotaurs.messaging.InventoryItem;
-import com.manlyminotaurs.messaging.Request;
-import com.manlyminotaurs.users.Employee;
+import com.manlyminotaursAPI.messaging.InventoryItem;
+import com.manlyminotaursAPI.messaging.Request;
+import com.manlyminotaursAPI.users.Employee;
 
 import java.io.*;
 import java.time.format.DateTimeFormatter;
@@ -79,7 +79,7 @@ public class CsvFileController {
      * @param csvFileName the csv file to be updated
      */
     private void updateRequestCSVFile(String csvFileName) {
-        Iterator<Request> iterator = DataModelI.getInstance().retrieveRequests().iterator();
+        Iterator<Request> iterator = DataModelIAPI.getInstance().retrieveRequests().iterator();
         System.out.println("Updating request csv file...");
         try {
             FileWriter fileWriter = new FileWriter(csvFileName);
@@ -87,7 +87,7 @@ public class CsvFileController {
             printWriter.print("requestID,requestType,priority,isComplete,adminConfirm,startTime,endTime,nodeID,messageID,password\n");
             while (iterator.hasNext()) {
                 Request a_request = iterator.next();
-                printWriter.printf("%s,%s,%d,%b,%b,%s,%s,%s,%s,%s\n", a_request.getRequestID(),a_request.getRequestType(),a_request.getPriority(),a_request.getComplete(),a_request.getAdminConfirm(), a_request.getStartTime().format(dateTimeFormatter), a_request.getEndTime().format(dateTimeFormatter),a_request.getRequestInfo().getRoom(),a_request.getRequestInfo().getEmployee(),DataModelI.getInstance().getItemString(a_request.getRequestInfo().getItems()));
+                printWriter.printf("%s,%s,%d,%b,%b,%s,%s,%s,%s,%s\n", a_request.getRequestID(),a_request.getRequestType(),a_request.getPriority(),a_request.getComplete(),a_request.getAdminConfirm(), a_request.getStartTime().format(dateTimeFormatter), a_request.getEndTime().format(dateTimeFormatter),a_request.getRequestInfo().getRoom(),a_request.getRequestInfo().getEmployee(),DataModelIAPI.getInstance().getItemString(a_request.getRequestInfo().getItems()));
             }
             printWriter.close();
             System.out.println("csv file updated");
@@ -104,7 +104,7 @@ public class CsvFileController {
      * @param csvFileName the csv file to be updated
      */
     private void updateUserCSVFile(String csvFileName) {
-        Iterator<Employee> iterator = DataModelI.getInstance().retrieveUsers().iterator();
+        Iterator<Employee> iterator = DataModelIAPI.getInstance().retrieveUsers().iterator();
         System.out.println("Updating user csv file...");
         try {
             FileWriter fileWriter = new FileWriter(csvFileName);
@@ -124,7 +124,7 @@ public class CsvFileController {
 
     /*---------------------------------- InventoryItem --------------------------------------------------*/
     private void updateInventoryCSVFile(String csvFileName) {
-        Iterator<InventoryItem> iterator = DataModelI.getInstance().retrieveInventory().iterator();
+        Iterator<InventoryItem> iterator = DataModelIAPI.getInstance().retrieveInventory().iterator();
         System.out.println("Updating request csv file...");
         try {
             FileWriter fileWriter = new FileWriter(csvFileName);

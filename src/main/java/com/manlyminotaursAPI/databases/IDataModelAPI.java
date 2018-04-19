@@ -1,9 +1,9 @@
-package com.manlyminotaurs.databases;
+package com.manlyminotaursAPI.databases;
 
-import com.manlyminotaurs.messaging.InventoryItem;
-import com.manlyminotaurs.messaging.Request;
-import com.manlyminotaurs.messaging.RequestInfo;
-import com.manlyminotaurs.users.Employee;
+import com.manlyminotaursAPI.messaging.InventoryItem;
+import com.manlyminotaursAPI.messaging.Request;
+import com.manlyminotaursAPI.messaging.RequestInfo;
+import com.manlyminotaursAPI.users.Employee;
 import javafx.collections.ObservableList;
 
 import java.sql.Connection;
@@ -19,7 +19,7 @@ import java.util.List;
 //
 //
 
-public interface IDataModel {
+public interface IDataModelAPI {
 
     void startDB();
 

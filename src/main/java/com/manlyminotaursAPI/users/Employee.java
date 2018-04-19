@@ -1,4 +1,4 @@
-package com.manlyminotaurs.users;
+package com.manlyminotaursAPI.users;
 
 
 public class Employee {

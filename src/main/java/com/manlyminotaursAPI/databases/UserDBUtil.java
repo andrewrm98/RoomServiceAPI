@@ -1,6 +1,6 @@
-package com.manlyminotaurs.databases;
+package com.manlyminotaursAPI.databases;
 
-import com.manlyminotaurs.users.*;
+import com.manlyminotaursAPI.users.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class UserDBUtil {
             userID = generateUserID();
         }
         Employee userObject = userBuilder(userID,firstName,middleName,lastName, userType);
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         try {
             String str = "INSERT INTO UserAccount(userID,firstName,middleName,lastName,userType) VALUES (?,?,?,?,?)";
 
@@ -45,7 +45,7 @@ public class UserDBUtil {
 
     boolean removeUser(Employee oldUser){
         boolean isSuccess = false;
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         try {
             Statement stmt = connection.createStatement();
             String str = "DELETE FROM UserAccount WHERE userID = '" + oldUser.getEmployeeID() + "'";
@@ -55,14 +55,14 @@ public class UserDBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return isSuccess;
     }
 
     boolean removeUserByID(String userID){
         boolean isSuccess = false;
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         try {
             Statement stmt = connection.createStatement();
             String str = "DELETE FROM UserAccount WHERE userID = '" + userID + "'";
@@ -72,13 +72,13 @@ public class UserDBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return isSuccess;
     }
 
     boolean removeUserByFields(String firstName, String middleName, String lastName, String userType) {
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         boolean isSuccess = false;
         try {
             String str = "DELETE FROM UserAccount WHERE firstName = ? AND middleName = ? AND lastName = ? AND userType =?";
@@ -97,13 +97,13 @@ public class UserDBUtil {
         {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return isSuccess;
     }
 
     public boolean modifyUser(Employee newUser) {
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
         boolean isSuccess = false;
         try {
             String str = "UPDATE UserAccount SET firstName = ?,middleName = ?,lastName = ?,language = ?,userType =? WHERE userID = '"+ newUser.getEmployeeID() +"'" ;
@@ -122,7 +122,7 @@ public class UserDBUtil {
         {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return isSuccess;
     }
@@ -133,7 +133,7 @@ public class UserDBUtil {
      */
     public List<Employee> retrieveUsers() {
         // Connection
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
 
         // Variables
         Employee userObject;
@@ -167,7 +167,7 @@ public class UserDBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
 
         return listOfUsers;
@@ -190,7 +190,7 @@ public class UserDBUtil {
 
     Employee getUserByID(String userID){
         // Connection
-        Connection connection = DataModelI.getInstance().getNewConnection();
+        Connection connection = DataModelIAPI.getInstance().getNewConnection();
 
         // Variables
         Employee userObject = null;
@@ -220,13 +220,13 @@ public class UserDBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DataModelI.getInstance().closeConnection();
+            DataModelIAPI.getInstance().closeConnection();
         }
         return userObject;
     }
 
     public static Employee userBuilder(String userID, String firstName, String middleName, String lastName, String userType){
-        Employee userObject = new Employee(userID, firstName, middleName, lastName, userType);
+        Employee userObject = new Employee(firstName, middleName, lastName, userID, userType);
         return userObject;
     }
 

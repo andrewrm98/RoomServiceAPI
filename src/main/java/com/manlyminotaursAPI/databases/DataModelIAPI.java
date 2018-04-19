@@ -1,9 +1,9 @@
-package com.manlyminotaurs.databases;
+package com.manlyminotaursAPI.databases;
 
-import com.manlyminotaurs.messaging.InventoryItem;
-import com.manlyminotaurs.messaging.Request;
-import com.manlyminotaurs.messaging.RequestInfo;
-import com.manlyminotaurs.users.Employee;
+import com.manlyminotaursAPI.messaging.InventoryItem;
+import com.manlyminotaursAPI.messaging.Request;
+import com.manlyminotaursAPI.messaging.RequestInfo;
+import com.manlyminotaursAPI.users.Employee;
 import javafx.collections.ObservableList;
 
 import java.sql.Connection;
@@ -20,7 +20,7 @@ import java.util.List;
 //
 //
 
-public class DataModelI implements IDataModel{
+public class DataModelIAPI implements IDataModelAPI {
 
 	/*---------------------------------------------- Variables -------------------------------------------------------*/
 
@@ -32,32 +32,32 @@ public class DataModelI implements IDataModel{
 
 	// list of all objects
 
-	private static DataModelI dataModelI = null;
+	private static DataModelIAPI dataModelIAPI = null;
 	private Connection connection = null;
 
 	/*------------------------------------------------ Methods -------------------------------------------------------*/
 
 	public static void main(String[] args){
-		DataModelI.getInstance().startDB();
-		DataModelI.getInstance().updateAllCSVFiles();
+		DataModelIAPI.getInstance().startDB();
+		DataModelIAPI.getInstance().updateAllCSVFiles();
 
 		TableInitializer tableInitializer = new TableInitializer();
 		//    System.out.println(tableInitializer.convertStringToDate("2018-04-06"));
 		//   System.out.println(tableInitializer.convertStringToTimestamp("2018-04-06 07:43:10:2").toLocalDateTime().toString().replace("T"," "));
 	}
 
-	private DataModelI() {
+	private DataModelIAPI() {
 		requestsDBUtil = new RequestsDBUtil();
 		userDBUtil = new UserDBUtil();
 		tableInitializer = new TableInitializer();
 		inventoryDBUtil = new InventoryDBUtil();
 	}
 
-	public static DataModelI getInstance(){
-		if(dataModelI == null) {
-			dataModelI = new DataModelI();
+	public static DataModelIAPI getInstance(){
+		if(dataModelIAPI == null) {
+			dataModelIAPI = new DataModelIAPI();
 		}
-		return dataModelI;
+		return dataModelIAPI;
 	}
 
 	@Override
@@ -70,21 +70,21 @@ public class DataModelI implements IDataModel{
 	@Override
 	public Connection getNewConnection() {
 		try {
-			if(DataModelI.getInstance().connection == null || DataModelI.getInstance().connection.isClosed()) {
-				DataModelI.getInstance().connection = DriverManager.getConnection("jdbc:derby:requestDB;create=true");
+			if(DataModelIAPI.getInstance().connection == null || DataModelIAPI.getInstance().connection.isClosed()) {
+				DataModelIAPI.getInstance().connection = DriverManager.getConnection("jdbc:derby:requestDB;create=true");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return DataModelI.getInstance().connection;
+		return DataModelIAPI.getInstance().connection;
 	}
 
 	@Override
 	public boolean closeConnection() {
 		try {
-			if(DataModelI.getInstance().connection != null) {
-				DataModelI.getInstance().connection.close();
-				DataModelI.getInstance().connection = null;
+			if(DataModelIAPI.getInstance().connection != null) {
+				DataModelIAPI.getInstance().connection.close();
+				DataModelIAPI.getInstance().connection = null;
 				return true;
 			}
 			return false;
@@ -181,22 +181,22 @@ public class DataModelI implements IDataModel{
 
 	    for(InventoryItem aItem: inventoryList){
             System.out.println("inventory");
-            DataModelI.getInstance().addInventory(aItem);
+            DataModelIAPI.getInstance().addInventory(aItem);
         }
 
         for(RequestInfo aRequest: openList){
             System.out.println("openList");
-            DataModelI.getInstance().addRequest(true,aRequest);
+            DataModelIAPI.getInstance().addRequest(true,aRequest);
         }
 
         for(RequestInfo aRequest: closedList){
             System.out.println("closedList");
-            DataModelI.getInstance().addRequest(false,aRequest);
+            DataModelIAPI.getInstance().addRequest(false,aRequest);
         }
 
         for(Employee employee: employeeList){
             System.out.println("employee");
-            DataModelI.getInstance().addUser(employee.getEmployeeID(),employee.getFirstName(),employee.getMiddleName(),employee.getLastName(),employee.getEmployeeType());
+            DataModelIAPI.getInstance().addUser(employee.getEmployeeID(),employee.getFirstName(),employee.getMiddleName(),employee.getLastName(),employee.getEmployeeType());
         }
     }
 

@@ -1,6 +1,6 @@
-package com.manlyminotaurs.databases;
+package com.manlyminotaursAPI.databases;
 
-import com.manlyminotaurs.messaging.InventoryItem;
+import com.manlyminotaursAPI.messaging.InventoryItem;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class InventoryDBUtil {
 	 */
 	public List<InventoryItem> retrieveInventory() {
 		// Connection
-		Connection connection = DataModelI.getInstance().getNewConnection();
+		Connection connection = DataModelIAPI.getInstance().getNewConnection();
 
 		// Variables
 		InventoryItem inventory = null;
@@ -49,7 +49,7 @@ public class InventoryDBUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			DataModelI.getInstance().closeConnection();
+			DataModelIAPI.getInstance().closeConnection();
 		}
 		return listOfInventory;
 	}
@@ -76,7 +76,7 @@ public class InventoryDBUtil {
 			inventory.setID(generateInventoryID());
 		}
 
-		Connection connection = DataModelI.getInstance().getNewConnection();
+		Connection connection = DataModelIAPI.getInstance().getNewConnection();
 		try {
 			String str = "INSERT INTO inventory(ID, type, quantity) VALUES (?,?,?)";
 
@@ -94,14 +94,14 @@ public class InventoryDBUtil {
 			System.out.println("inventory already in the database");
 			e.printStackTrace();
 		} finally {
-			DataModelI.getInstance().closeConnection();
+			DataModelIAPI.getInstance().closeConnection();
 		}
 		return inventory;
 	}
 
 	public boolean removeInventory(InventoryItem inventory){
 		boolean isSuccess = false;
-		Connection connection = DataModelI.getInstance().getNewConnection();
+		Connection connection = DataModelIAPI.getInstance().getNewConnection();
 		try {
 			Statement stmt = connection.createStatement();
 			String str = "DELETE FROM inventory WHERE ID = '" + inventory.getID() + "'";
@@ -111,14 +111,14 @@ public class InventoryDBUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			DataModelI.getInstance().closeConnection();
+			DataModelIAPI.getInstance().closeConnection();
 			isSuccess = true;
 		}
 		return isSuccess;
 	}
 
 	public boolean modifyInventory(InventoryItem inventory) {
-		Connection connection = DataModelI.getInstance().getNewConnection();
+		Connection connection = DataModelIAPI.getInstance().getNewConnection();
 		boolean isSuccess = false;
 		try {
 			String str = "UPDATE inventory SET type = ?, quantity = ? WHERE ID = '"+ inventory.getID() +"'" ;
@@ -135,7 +135,7 @@ public class InventoryDBUtil {
 		{
 			e.printStackTrace();
 		} finally {
-			DataModelI.getInstance().closeConnection();
+			DataModelIAPI.getInstance().closeConnection();
 		}
 		return isSuccess;
 	}
@@ -147,7 +147,7 @@ public class InventoryDBUtil {
 	//------------------------------------------------------------------------------------------------------------------
 	public InventoryItem getInventoryByID(String ID){
 		// Connection
-		Connection connection = DataModelI.getInstance().getNewConnection();
+		Connection connection = DataModelIAPI.getInstance().getNewConnection();
 
 		// Variables
 		InventoryItem inventory = null;
@@ -177,7 +177,7 @@ public class InventoryDBUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-		//	DataModelI.getInstance().closeConnection();
+		//	DataModelIAPI.getInstance().closeConnection();
 		}
 		return inventory;
 	}
