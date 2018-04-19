@@ -178,19 +178,24 @@ public class DataModelI implements IDataModel{
 
     @Override
     public void updateAllDatabase(List<InventoryItem> inventoryList, List<RequestInfo> openList, List<RequestInfo> closedList,List<Employee> employeeList){
-        for(InventoryItem aItem: inventoryList){
+
+	    for(InventoryItem aItem: inventoryList){
+            System.out.println("inventory");
             DataModelI.getInstance().addInventory(aItem);
         }
 
         for(RequestInfo aRequest: openList){
+            System.out.println("openList");
             DataModelI.getInstance().addRequest(true,aRequest);
         }
 
         for(RequestInfo aRequest: closedList){
+            System.out.println("closedList");
             DataModelI.getInstance().addRequest(false,aRequest);
         }
 
         for(Employee employee: employeeList){
+            System.out.println("employee");
             DataModelI.getInstance().addUser(employee.getEmployeeID(),employee.getFirstName(),employee.getMiddleName(),employee.getLastName(),employee.getEmployeeType());
         }
     }

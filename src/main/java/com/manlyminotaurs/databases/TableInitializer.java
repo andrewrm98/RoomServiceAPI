@@ -11,12 +11,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-class TableInitializer {
+public class TableInitializer {
     /*------------------------------------------------ Initialize Tables -----------------------------------------------------*/
     /**
      * Delete any pre-existing tables and create new tables in the database
      */
-    private void initTables(){
+    public void initTables(){
         TableInitializer tableInit = new TableInitializer();
         // Get the database connection
         Connection connection = null;
