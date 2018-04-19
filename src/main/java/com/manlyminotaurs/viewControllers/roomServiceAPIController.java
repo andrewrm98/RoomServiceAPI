@@ -552,7 +552,7 @@ public class roomServiceAPIController implements Initializable{
         int currentQuantity = 0;
 
 
-        if ((txtRoomNumberRequestRoomService.getText().equals("")) || (txtQuantityRequestRoomService.getText().equals("")) || (cmboItemRequestRoomService.getValue() == null)) {
+        if ((txtRoomNumberRequestRoomService.getText().equals("")) || (txtQuantityRequestRoomService.getText().equals("")) || (cmboItemRequestRoomService.getValue() == null) || (isNotNumber(txtQuantityRequestRoomService.getText()))) {
             System.out.print("Error: Not a valid selection");
 
         } else {
@@ -726,7 +726,7 @@ public class roomServiceAPIController implements Initializable{
         }
         else {
             System.out.println("entered else");
-            System.out.println(tblOpenRequests.getSelectionModel().getSelectedItem().getItems().get(0).getItemName());
+            //System.out.println(tblOpenRequests.getSelectionModel().getSelectedItem().getItems().get(0).getItemName());
             //openDetailsList = tblOpenRequests.getSelectionModel().getSelectedItem().getItems();
 
             for(int x=0; x<tblOpenRequests.getSelectionModel().getSelectedItem().getItems().size();x++) {
@@ -765,7 +765,7 @@ public class roomServiceAPIController implements Initializable{
         int sameItemIndex = -1;
         int currentQuantity = 0;
 
-        if ((txtItemInventory.getText().equals("")) || (txtQuantityInventory.getText().equals(""))) {
+        if ((txtItemInventory.getText().equals("")) || (isNotNumber(txtQuantityInventory.getText()))) {
             System.out.print("Error: Not a valid item");
         } else {
             for (InventoryItem item: inventoryList) {
@@ -956,20 +956,33 @@ public class roomServiceAPIController implements Initializable{
 		if(tblEmployeeDatabase.getSelectionModel().getSelectedItem() == null){
 		}
 		else {
-			/*
-			requestInfo selectedRequest = (requestInfo) tblOpenRequests.getSelectionModel().getSelectedItem();
-			com.manlyminotaurs.messaging.Request actualRequest = dBUtil.getRequestByID(selectedRequest.requestID);
-			lblRequestDetails.setText("SenderID: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getSenderID() + "\n" +
-					"Priority: " + dBUtil.getRequestByID(selectedRequest.requestID).getPriority() + "\n" +
-					"Location: " + dBUtil.getNodeByIDFromList(actualRequest.getNodeID(), dBUtil.retrieveNodes()).getLongName() + "\n" +
-					"Message: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getMessage());
-			*/
 			txtFirstName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getFirstName());
 			txtMiddleName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getMiddleName());
 			txtLastName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getLastName());
 			txtEmployeeID.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getEmployeeID());
 			cmboEmployeeType.getSelectionModel().select(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getEmployeeType());
 		}
+	}
+
+	public boolean isNotNumber(String supposedlyNumber) {
+		String numbers = "0123456789";
+		int countRight;
+
+		for(int x=0; x<supposedlyNumber.length();x++) {
+
+			countRight = 0;
+
+			for(int y=0; y<numbers.length();y++) {
+
+				if(supposedlyNumber.charAt(x) == numbers.charAt(y)) {
+					countRight = 1;
+					break;
+				}
+			} if(countRight!=1) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
