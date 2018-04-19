@@ -226,7 +226,7 @@ public class UserDBUtil {
     }
 
     public static Employee userBuilder(String userID, String firstName, String middleName, String lastName, String userType){
-        Employee userObject = new Employee(firstName, middleName, lastName, userID, userType);
+        Employee userObject = new Employee(userID, firstName, middleName, lastName, userType);
         return userObject;
     }
 
