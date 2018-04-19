@@ -13,8 +13,8 @@ Create Table Request (
   adminConfirm  BOOLEAN,
   startTime     TIMESTAMP,
   endTime       TIMESTAMP,
-  nodeID        VARCHAR(10),
-  messageID     VARCHAR(10) UNIQUE,
+  nodeID        VARCHAR(50),
+  messageID     VARCHAR(50) UNIQUE,
   password      VARCHAR(255));
 
 CREATE TABLE Inventory (
