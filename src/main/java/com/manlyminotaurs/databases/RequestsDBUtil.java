@@ -36,7 +36,7 @@ class RequestsDBUtil {
     }
     /*------------------------------------------------ Add/Remove Request -------------------------------------------------------*/
 
-    public void addRequest(String room, String employee, ObservableList<InventoryItem> itemList) {
+    public void addRequest(boolean openRequest, String room, String employee, ObservableList<InventoryItem> itemList) {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:derby:requestDB;create=true");
@@ -47,7 +47,7 @@ class RequestsDBUtil {
             statement.setString(1, requestID);
             statement.setString(2, "Room Service");
             statement.setInt(3, 1);
-            statement.setBoolean(4, false);
+            statement.setBoolean(4, openRequest);
             statement.setBoolean(5, false);
             statement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
             statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));

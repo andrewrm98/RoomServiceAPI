@@ -1,6 +1,7 @@
 package com.manlyminotaurs.core;
 
 import com.manlyminotaurs.databases.DataModelI;
+import com.manlyminotaurs.viewControllers.roomServiceAPIController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -75,7 +76,8 @@ public class Main extends Application {
     @Override
     public void stop(){
         System.out.println("closing Application");
-
+        roomServiceAPIController apiController = new roomServiceAPIController();
+        DataModelI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList());
         DataModelI.getInstance().updateAllCSVFiles();
 
         System.out.println("Files Saved!");

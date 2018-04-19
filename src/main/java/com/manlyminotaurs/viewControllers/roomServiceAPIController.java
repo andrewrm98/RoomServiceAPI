@@ -193,6 +193,22 @@ public class roomServiceAPIController implements Initializable{
     ObservableList<RequestInfo> closedList = FXCollections.observableArrayList(); //4
     ObservableList<InventoryItem> closedDetailsList = FXCollections.observableArrayList();
 
+	public ObservableList<Employee> getEmployeeList() {
+		return employeeList;
+	}
+
+	public ObservableList<InventoryItem> getInventoryList() {
+		return inventoryList;
+	}
+
+	public ObservableList<RequestInfo> getOpenList() {
+		return openList;
+	}
+
+	public ObservableList<RequestInfo> getClosedList() {
+		return closedList;
+	}
+
 	String firstName;
 	String middleName;
 	String lastName;
@@ -341,11 +357,11 @@ public class roomServiceAPIController implements Initializable{
 		}
 		List<Request> listOfRequest = DataModelI.getInstance().retrieveRequests();
 		for(Request currReq : listOfRequest) {
-			RequestInfo aRequest = new RequestInfo(currReq.getRequestInfo().getRoom(), currReq.getRequestInfo().getEmployee(), currReq.getRequestInfo().getItems());
+			RequestInfo aRequestInfo = new RequestInfo(currReq.getRequestInfo().getRoom(), currReq.getRequestInfo().getEmployee(), currReq.getRequestInfo().getItems());
 			if (!currReq.getComplete()) {
-				openList.add(aRequest);
+				openList.add(aRequestInfo);
             } else {
-				closedList.add(aRequest);
+				closedList.add(aRequestInfo);
             }
         }
 

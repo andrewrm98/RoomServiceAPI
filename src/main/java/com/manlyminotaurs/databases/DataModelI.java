@@ -99,9 +99,8 @@ public class DataModelI implements IDataModel{
 
 	/*------------------------------------------------ Requests -------------------------------------------------------*/
 	@Override
-	public void addRequest(Request requestObject) {
-		RequestInfo aInfo = requestObject.getRequestInfo();
-		requestsDBUtil.addRequest(aInfo.getRoom(),aInfo.getEmployee(),aInfo.getItems());
+	public void addRequest(boolean openRequest,RequestInfo aInfo) {
+		requestsDBUtil.addRequest(openRequest, aInfo.getRoom(),aInfo.getEmployee(),aInfo.getItems());
 	}
 
 	@Override
@@ -133,8 +132,8 @@ public class DataModelI implements IDataModel{
 	/*------------------------------------------------ Users -------------------------------------------------------*/
 
 	@Override
-	public Employee addUser(String firstName, String middleName, String lastName, List<String> languages, String userType, String userName, String password) {
-		Employee newUser = userDBUtil.addUser(firstName, middleName, lastName, languages, userType, userName, password);
+	public Employee addUser(String employeeID, String firstName, String middleName, String lastName, String userType) {
+		Employee newUser = userDBUtil.addUser(employeeID, firstName, middleName, lastName, userType);
 		return newUser;
 	}
 
@@ -177,10 +176,30 @@ public class DataModelI implements IDataModel{
 
 	//--------------------------------------CSV stuffs------------------------------------------
 
+    @Override
+    public void updateAllDatabase(List<InventoryItem> inventoryList, List<RequestInfo> openList, List<RequestInfo> closedList,List<Employee> employeeList){
+        for(InventoryItem aItem: inventoryList){
+            DataModelI.getInstance().addInventory(aItem);
+        }
+
+        for(RequestInfo aRequest: openList){
+            DataModelI.getInstance().addRequest(true,aRequest);
+        }
+
+        for(RequestInfo aRequest: closedList){
+            DataModelI.getInstance().addRequest(false,aRequest);
+        }
+
+        for(Employee employee: employeeList){
+            DataModelI.getInstance().addUser(employee.getEmployeeID(),employee.getFirstName(),employee.getMiddleName(),employee.getLastName(),employee.getEmployeeType());
+        }
+    }
+
 	@Override
 	public void updateAllCSVFiles() {
 		new CsvFileController().updateAllCSVFiles();
 	}
+
 
 	@Override
 	public ObservableList<InventoryItem> getItemList(String itemConcat){

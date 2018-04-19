@@ -2,6 +2,7 @@ package com.manlyminotaurs.databases;
 
 import com.manlyminotaurs.messaging.InventoryItem;
 import com.manlyminotaurs.messaging.Request;
+import com.manlyminotaurs.messaging.RequestInfo;
 import com.manlyminotaurs.users.Employee;
 import javafx.collections.ObservableList;
 
@@ -34,7 +35,7 @@ public interface IDataModel {
     InventoryItem getInventoryByID(String ID);
 
     /*----------------------------------------- Requests ------------------------------------------------------------*/
-    void addRequest(Request requestObject);
+    void addRequest(boolean openRequest, RequestInfo aInfo);
     boolean removeRequest(Request oldRequest);
     boolean modifyRequest(Request newRequest);
     public List<Request> retrieveRequests();
@@ -43,7 +44,7 @@ public interface IDataModel {
 
     /*------------------------------------------ Users -------------------------------------------------------------*/
     /*-------------------------------- Add / Modify / Remove Employee --------------------------------------------------*/
-    Employee addUser(String firstName, String middleName, String lastName, List<String> languages, String userType, String userName, String password);
+    Employee addUser(String employeeID, String firstName, String middleName, String lastName, String userType);
     boolean removeUser(Employee oldUser);
 	boolean removeUserByID(String userID);
     boolean modifyUser(Employee newUser);
@@ -56,6 +57,7 @@ public interface IDataModel {
 
     //---------------------------------------UPDATE CSV FIles--------------------------------
     void updateAllCSVFiles();
+    void updateAllDatabase(List<InventoryItem> inventoryList, List<RequestInfo> openList, List<RequestInfo> closedList, List<Employee> employeeList);
 
     ObservableList<InventoryItem> getItemList (String itemConcat);
     String getItemString(ObservableList<InventoryItem> items);
