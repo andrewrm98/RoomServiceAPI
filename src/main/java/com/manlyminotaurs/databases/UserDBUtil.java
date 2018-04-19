@@ -141,8 +141,6 @@ public class UserDBUtil {
         String firstName;
         String middleName;
         String lastName;
-        List<String> languages;
-        String languagesConcat;
         String userType;
         List<Employee> listOfUsers = new ArrayList<>();
 

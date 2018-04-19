@@ -5,6 +5,7 @@ import com.manlyminotaurs.messaging.Request;
 import com.manlyminotaurs.users.Employee;
 
 import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 //
 
 public class CsvFileController {
-
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss:S");
     /*---------------------------------- Parse CSV File --------------------------------------------------*/
     /**
      * http://www.avajava.com/tutorials/lessons/how-do-i-read-a-string-from-a-file-line-by-line.html
@@ -86,7 +87,7 @@ public class CsvFileController {
             printWriter.print("requestID,requestType,priority,isComplete,adminConfirm,startTime,endTime,nodeID,messageID,password\n");
             while (iterator.hasNext()) {
                 Request a_request = iterator.next();
-                printWriter.printf("%s,%s,%d,%b,%b,%s,%s,%s,%s,%s\n", a_request.getRequestID(),a_request.getRequestType(),a_request.getPriority(),a_request.getComplete(),a_request.getAdminConfirm(), a_request.getStartTime().toString().replace("T"," ").replace(".",":"), a_request.getEndTime().toString().replace("T"," ").replace(".",":"),a_request.getRequestInfo().getRoom(),a_request.getRequestInfo().getEmployee(),DataModelI.getInstance().getItemString(a_request.getRequestInfo().getItems()));
+                printWriter.printf("%s,%s,%d,%b,%b,%s,%s,%s,%s,%s\n", a_request.getRequestID(),a_request.getRequestType(),a_request.getPriority(),a_request.getComplete(),a_request.getAdminConfirm(), a_request.getStartTime().format(dateTimeFormatter), a_request.getEndTime().format(dateTimeFormatter),a_request.getRequestInfo().getRoom(),a_request.getRequestInfo().getEmployee(),DataModelI.getInstance().getItemString(a_request.getRequestInfo().getItems()));
             }
             printWriter.close();
             System.out.println("csv file updated");
