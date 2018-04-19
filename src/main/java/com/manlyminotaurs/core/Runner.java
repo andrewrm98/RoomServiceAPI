@@ -1,6 +1,7 @@
 package com.manlyminotaurs.core;
 
 import com.manlyminotaurs.databases.DataModelI;
+import com.manlyminotaurs.databases.TableInitializer;
 import com.manlyminotaurs.viewControllers.roomServiceAPIController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -32,8 +33,11 @@ public class Runner extends Application{
     public void stop(){
         System.out.println("closing Application");
         roomServiceAPIController apiController = new roomServiceAPIController();
+
+        TableInitializer tableInitializer = new TableInitializer();
+        tableInitializer.initTables();
         DataModelI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList());
-      //  DataModelI.getInstance().updateAllCSVFiles();
+        DataModelI.getInstance().updateAllCSVFiles();
 
         System.out.println("Files Saved!");
     }

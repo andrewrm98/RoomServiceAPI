@@ -179,14 +179,14 @@ public class roomServiceAPIController implements Initializable{
     InventoryDBUtil invDB = new InventoryDBUtil();
 	ObservableList<String> employeeTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Admin", "Janitor", "Interpreter", "Patient", "Security");
 	final static ObservableList<String> currentItems = FXCollections.observableArrayList();
-    ObservableList<Employee> employeeList =  FXCollections.observableArrayList(); //1
+    static ObservableList<Employee> employeeList =  FXCollections.observableArrayList(); //1
     ObservableList<String> employeeNames = FXCollections.observableArrayList();
-    ObservableList<InventoryItem> inventoryList = FXCollections.observableArrayList(); //2
+    static ObservableList<InventoryItem> inventoryList = FXCollections.observableArrayList(); //2
     ObservableList<InventoryItem> cartList = FXCollections.observableArrayList();
     ObservableList<String> emptyList = FXCollections.observableArrayList();
-    ObservableList<RequestInfo> openList = FXCollections.observableArrayList(); //3
+    static ObservableList<RequestInfo> openList = FXCollections.observableArrayList(); //3
     ObservableList<InventoryItem> openDetailsList = FXCollections.observableArrayList();
-    ObservableList<RequestInfo> closedList = FXCollections.observableArrayList(); //4
+    static ObservableList<RequestInfo> closedList = FXCollections.observableArrayList(); //4
     ObservableList<InventoryItem> closedDetailsList = FXCollections.observableArrayList();
 
 	public ObservableList<Employee> getEmployeeList() {
