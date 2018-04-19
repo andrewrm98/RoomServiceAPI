@@ -345,13 +345,16 @@ public class roomServiceAPIController implements Initializable{
 
 
         //---------------------------------POPULATE LISTS From DATABASE------------------------
+        System.out.println("----------------Populating lists from DATABASE----------------");
 		List<InventoryItem> itemList = DataModelIAPI.getInstance().retrieveInventory();
+		inventoryList.clear();
 		for(InventoryItem aItem: itemList){
 			inventoryList.add(aItem);
 		}
 		List<Request> listOfRequest = DataModelIAPI.getInstance().retrieveRequests();
+		closedList.clear();
 		for(Request currReq : listOfRequest) {
-			RequestInfo aRequestInfo = new RequestInfo(currReq.getRequestInfo().getRoom(), currReq.getRequestInfo().getEmployee(), currReq.getRequestInfo().getItems());
+			RequestInfo aRequestInfo = new RequestInfo(currReq.getRequestID(), currReq.getRequestInfo().getRoom(), currReq.getRequestInfo().getEmployee(), currReq.getRequestInfo().getItems());
 			if (!currReq.getComplete()) {
 				openList.add(aRequestInfo);
             } else {
@@ -359,13 +362,14 @@ public class roomServiceAPIController implements Initializable{
             }
         }
 
+        employeeList.clear();
 		for(com.manlyminotaursAPI.users.Employee aEmployee : DataModelIAPI.getInstance().retrieveUsers()){
 			employeeList.add(aEmployee);
 		}
 
 
 
-		System.out.println("hello checkpoint");
+        System.out.println("------------------DONE POPULATING------------------------------");
         //-----------------------------------POPULATE LISTS ENDED----------------------------------
 
 		// Update Tables
@@ -627,7 +631,7 @@ public class roomServiceAPIController implements Initializable{
 			System.out.println("Not a valid room service request");
 
 		} else {
-			RequestInfo newReq = new RequestInfo(txtRoomNumberRequestRoomService.getText(), null, newCart);
+			RequestInfo newReq = new RequestInfo("", txtRoomNumberRequestRoomService.getText(), null, newCart);
 			openList.add(newReq);
 			cartList.clear();
 			cmboItemRequestRoomService.setValue(null);
@@ -693,7 +697,7 @@ public class roomServiceAPIController implements Initializable{
 	public void assignEmployee(ActionEvent event) {
 	    if (tblOpenRequests.getSelectionModel() == null) {
         } else {
-            RequestInfo replacedRequestInfo = new RequestInfo(tblOpenRequests.getSelectionModel().getSelectedItem().getRoom(), cmboAssignEmployee.getValue(), tblOpenRequests.getSelectionModel().getSelectedItem().getItems());
+            RequestInfo replacedRequestInfo = new RequestInfo("", tblOpenRequests.getSelectionModel().getSelectedItem().getRoom(), cmboAssignEmployee.getValue(), tblOpenRequests.getSelectionModel().getSelectedItem().getItems());
             openList.remove(tblOpenRequests.getSelectionModel().getSelectedItem());
             openList.add(replacedRequestInfo);
         }

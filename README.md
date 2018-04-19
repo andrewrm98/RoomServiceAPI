@@ -19,7 +19,7 @@ How To Run Jar:\
 
 How To Run Intellij:\
 -Build Via Gradle\
--Select com.manlyminotaurs.core.Main as your class with main() function\
+-Select com.manlyminotaursAPI.core.Main as your class with main() function\
 -run main\
 -cry when it errors out
 

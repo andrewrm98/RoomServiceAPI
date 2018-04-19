@@ -41,11 +41,11 @@ public class InventoryDBUtil {
 				// Add the new edge to the list
 				inventory = new InventoryItem(ID, type, quantity);
 				listOfInventory.add(inventory);
-				System.out.println("InventoryItem added to the list: "+ ID);
+				System.out.println("InventoryItem added to the list: "+ ID + " " + type);
 			}
 			rset.close();
 			stmt.close();
-			System.out.println("Done adding inventories");
+			System.out.println("RetrieveInventory: Done adding inventories");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -169,11 +169,11 @@ public class InventoryDBUtil {
 				// Add the new edge to the list
 				inventory = new InventoryItem(ID, type, quantity);
 				listOfInventory.add(inventory);
-				System.out.println("InventoryItem added to the list: "+ ID);
+				System.out.println("GetInventoryByID: InventoryItem added to the list: "+ ID + " " + type);
 			}
 			//rset.close();
 		//	stmt.close();
-			System.out.println("Done adding inventories");
+			System.out.println("GetInventoryByID: Done");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

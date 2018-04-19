@@ -142,13 +142,15 @@ public class TableInitializer {
                 statement.executeUpdate();
             }
             if(node_row != null){
-                new roomServiceAPIController().setRequestIDCounter(Integer.parseInt(node_row[0]) + 5);
+                requestIDCounter = Integer.parseInt(node_row[0]) + 5;
+                new roomServiceAPIController().setRequestIDCounter(requestIDCounter);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DataModelIAPI.getInstance().closeConnection();
         }
+        System.out.println("request ID Counter: " + requestIDCounter);
         return requestIDCounter;
     }
 
@@ -179,13 +181,15 @@ public class TableInitializer {
                 statement.executeUpdate();
             }
             if(node_row != null){
-                new InventoryDBUtil().setInventoryIDCounter(Integer.parseInt(node_row[0]) + 5);
+                inventoryIDCounter = (Integer.parseInt(node_row[0]) + 5);
+                new InventoryDBUtil().setInventoryIDCounter(inventoryIDCounter);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DataModelIAPI.getInstance().closeConnection();
         }
+        System.out.println("inventoryID Counter: " + inventoryIDCounter);
         return inventoryIDCounter;
     }
 
