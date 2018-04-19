@@ -1,1 +1,13 @@
-userID,firstName,middleName,lastName,language, userType
+userID,firstName,middleName,lastName,userType
+1,Andrew,,Morrison,security
+2,Edward,,Jang,visitor
+3,Christian,,Cedrone,interpreter
+4,Oliver,,Sanderson,patient
+5,Peter,,Christakos,doctor
+6,Joseph,,Yuen,visitor
+7,Zachary,G,Emil,nurse
+8,Jared,,Grimm,patient
+9,Andre,,Imperiali,janitor
+10,Rohit,,Unnam,patient
+11,Ebenezer,,Ampiah,admin
+12,Roger,,Rolfes,janitor

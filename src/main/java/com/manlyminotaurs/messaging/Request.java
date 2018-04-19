@@ -1,11 +1,12 @@
 package com.manlyminotaurs.messaging;
 
 import com.manlyminotaurs.databases.DataModelI;
+import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public abstract class Request implements IRequest {
+public class Request {
 	DataModelI dataModelI = DataModelI.getInstance();
     String requestID;
     String requestType;
@@ -14,11 +15,9 @@ public abstract class Request implements IRequest {
     Boolean adminConfirm;
     LocalDateTime startTime;
     LocalDateTime endTime;
-    String nodeID;
-    String messageID;
-    String password;
+    RequestInfo requestInfo;
 
-    public Request(String requestID, String requestType, int priority, Boolean isComplete, Boolean adminConfirm, LocalDateTime startTime, LocalDateTime endTime, String password, String nodeID, String messageID) {
+    public Request(String requestID, String requestType, int priority, Boolean isComplete, Boolean adminConfirm, LocalDateTime startTime, LocalDateTime endTime, String room, String employee, ObservableList<InventoryItem> items) {
         this.requestID = requestID;
         this.requestType = requestType;
         this.priority = priority;
@@ -26,9 +25,7 @@ public abstract class Request implements IRequest {
         this.adminConfirm = adminConfirm;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.nodeID = nodeID;
-        this.messageID = messageID;
-        this.password = password;
+        this.requestInfo = new RequestInfo(room, employee, items);
     }
 
     public String getRequestID() {
@@ -63,30 +60,6 @@ public abstract class Request implements IRequest {
         this.adminConfirm = adminConfirm;
     }
 
-    public String getNodeID() {
-        return nodeID;
-    }
-
-    public void setNodeID(String nodeID) {
-        this.nodeID = nodeID;
-    }
-
-    public String getMessageID() {
-        return messageID;
-    }
-
-    public void setMessageID(String messageID) {
-        this.messageID = messageID;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public void setRequestType(String requestType) {
         this.requestType = requestType;
     }
@@ -107,27 +80,11 @@ public abstract class Request implements IRequest {
         this.endTime = endTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Request request = (Request) o;
-        return priority == request.priority &&
-                Objects.equals(dataModelI, request.dataModelI) &&
-                Objects.equals(requestID, request.requestID) &&
-                Objects.equals(requestType, request.requestType) &&
-                Objects.equals(isComplete, request.isComplete) &&
-                Objects.equals(adminConfirm, request.adminConfirm) &&
-                Objects.equals(startTime, request.startTime) &&
-                Objects.equals(endTime, request.endTime) &&
-                Objects.equals(nodeID, request.nodeID) &&
-                Objects.equals(messageID, request.messageID) &&
-                Objects.equals(password, request.password);
+    public RequestInfo getRequestInfo() {
+        return requestInfo;
     }
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(dataModelI, requestID, requestType, priority, isComplete, adminConfirm, startTime, endTime, nodeID, messageID, password);
+    public void setRequestInfo(RequestInfo requestInfo) {
+        this.requestInfo = requestInfo;
     }
 }

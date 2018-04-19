@@ -1,9 +1,8 @@
 package com.manlyminotaurs.databases;
 
-import com.manlyminotaurs.messaging.Inventory;
+import com.manlyminotaurs.messaging.InventoryItem;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,23 +10,23 @@ public class InventoryDBUtil {
 
 	//------------------------------------------------------------------------------------------------------------------
 	//
-	//								Retrieve Inventory
+	//								Retrieve InventoryItem
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Creates a list of objects and stores them in the global variable dataModelI.getMessageList()
 	 */
-	public List<Inventory> retrieveInventory() {
+	public List<InventoryItem> retrieveInventory() {
 		// Connection
 		Connection connection = DataModelI.getInstance().getNewConnection();
 
 		// Variables
-		Inventory inventory = null;
+		InventoryItem inventory = null;
 		String ID;
 		String type;
 		int quantity;
 		String location;
-		List<Inventory> listOfInventory = new ArrayList<>();
+		List<InventoryItem> listOfInventory = new ArrayList<>();
 
 		try {
 			Statement stmt = connection.createStatement();
@@ -38,12 +37,11 @@ public class InventoryDBUtil {
 				ID = rset.getString("ID");
 				type = rset.getString("type");
 				quantity = rset.getInt("quantity");
-				location = rset.getString("location");
 
 				// Add the new edge to the list
-				inventory = new Inventory(ID, type, quantity, location);
+				inventory = new InventoryItem(ID, type, quantity);
 				listOfInventory.add(inventory);
-				System.out.println("Inventory added to the list: "+ ID);
+				System.out.println("InventoryItem added to the list: "+ ID);
 			}
 			rset.close();
 			stmt.close();
@@ -62,6 +60,7 @@ public class InventoryDBUtil {
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	private static int inventoryIDCounter = 0;
+
 	public static void setInventoryIDCounter(int inventoryIDCounter) {
 		InventoryDBUtil.inventoryIDCounter = inventoryIDCounter;
 	}
@@ -71,22 +70,21 @@ public class InventoryDBUtil {
 		return Integer.toString(inventoryIDCounter);
 	}
 
-	public Inventory addinventory(Inventory inventory){
-		System.out.println("addinventory");
+	public InventoryItem addInventory(InventoryItem inventory){
+		System.out.println("addInventory");
 		if(inventory.getID() == null || inventory.getID().equals("")) {
 			inventory.setID(generateInventoryID());
 		}
 
 		Connection connection = DataModelI.getInstance().getNewConnection();
 		try {
-			String str = "INSERT INTO inventory(ID, type, quantity, location) VALUES (?,?,?,?)";
+			String str = "INSERT INTO inventory(ID, type, quantity) VALUES (?,?,?)";
 
 			// Create the prepared statement
 			PreparedStatement statement = connection.prepareStatement(str);
 			statement.setString(1, inventory.getID());
-			statement.setString(2, inventory.getType());
+			statement.setString(2, inventory.getItemName());
 			statement.setInt(3, inventory.getQuantity());
-			statement.setString(4, inventory.getLocation());
 			System.out.println("Prepared statement created...");
 			statement.executeUpdate();
 			statement.close();
@@ -101,7 +99,7 @@ public class InventoryDBUtil {
 		return inventory;
 	}
 
-	public boolean removeinventory(Inventory inventory){
+	public boolean removeInventory(InventoryItem inventory){
 		boolean isSuccess = false;
 		Connection connection = DataModelI.getInstance().getNewConnection();
 		try {
@@ -119,17 +117,16 @@ public class InventoryDBUtil {
 		return isSuccess;
 	}
 
-	public boolean modifyinventory(Inventory inventory) {
+	public boolean modifyInventory(InventoryItem inventory) {
 		Connection connection = DataModelI.getInstance().getNewConnection();
 		boolean isSuccess = false;
 		try {
-			String str = "UPDATE inventory SET type = ?, quantity = ?, location = ? WHERE ID = '"+ inventory.getID() +"'" ;
+			String str = "UPDATE inventory SET type = ?, quantity = ? WHERE ID = '"+ inventory.getID() +"'" ;
 
 			// Create the prepared statement
 			PreparedStatement statement = connection.prepareStatement(str);
-			statement.setString(1, inventory.getType());
+			statement.setString(1, inventory.getItemName());
 			statement.setInt(2, inventory.getQuantity());
-			statement.setString(3, inventory.getLocation());
 			statement.executeUpdate();
 			System.out.println("inventory added to database");
 			statement.close();
@@ -145,43 +142,42 @@ public class InventoryDBUtil {
 
 	//------------------------------------------------------------------------------------------------------------------
 	//
-	//								Get inventory by...
+	//								Get inventory by ID
 	//
 	//------------------------------------------------------------------------------------------------------------------
-	public Inventory getInventoryByID(String ID){
+	public InventoryItem getInventoryByID(String ID){
 		// Connection
 		Connection connection = DataModelI.getInstance().getNewConnection();
 
 		// Variables
-		Inventory inventory = null;
+		InventoryItem inventory = null;
 		String type;
 		int quantity;
 		String location;
 
-		List<Inventory> listOfInventory = new ArrayList<>();
+		List<InventoryItem> listOfInventory = new ArrayList<>();
 
 		try {
 			Statement stmt = connection.createStatement();
-			String str = "SELECT * FROM Invetory Where ID = '" + ID + "'";
+			String str = "SELECT * FROM Inventory Where ID = '" + ID + "'";
 			ResultSet rset = stmt.executeQuery(str);
 
 			if (rset.next()) {
 				type = rset.getString("type");
 				quantity = rset.getInt("quantity");
-				location = rset.getString("location");
 
 				// Add the new edge to the list
-				inventory = new Inventory(ID, type, quantity, location);
+				inventory = new InventoryItem(ID, type, quantity);
 				listOfInventory.add(inventory);
-				System.out.println("Inventory added to the list: "+ ID);
+				System.out.println("InventoryItem added to the list: "+ ID);
 			}
-			rset.close();
-			stmt.close();
+			//rset.close();
+		//	stmt.close();
 			System.out.println("Done adding inventories");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			DataModelI.getInstance().closeConnection();
+		//	DataModelI.getInstance().closeConnection();
 		}
 		return inventory;
 	}

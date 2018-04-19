@@ -1,7 +1,7 @@
 package com.manlyminotaurs.databases;
 
 
-import com.manlyminotaurs.messaging.Inventory;
+import com.manlyminotaurs.viewControllers.roomServiceAPIController;
 
 import java.io.*;
 import java.sql.*;
@@ -52,7 +52,6 @@ class TableInitializer {
         initializer.initTables();
 
         UserDBUtil.setUserIDCounter(initializer.populateUserAccountTable("./UserAccountTable.csv"));
-        MessagesDBUtil.setMessageIDCounter(initializer.populateMessageTable("./MessageTable.csv"));
         RequestsDBUtil.setRequestIDCounter(initializer.populateRequestTable("./RequestTable.csv"));
         InventoryDBUtil.setInventoryIDCounter(initializer.populateInventoryTable("./InventoryTable.csv"));
 
@@ -91,14 +90,13 @@ class TableInitializer {
             while (iterator.hasNext()) {
                 userIDCounter++;
                 String[] node_row = iterator.next();
-                String str = "INSERT INTO UserAccount(userID,firstName,middleName,lastName,language, userType) VALUES (?,?,?,?,?,?)";
+                String str = "INSERT INTO UserAccount(userID,firstName,middleName,lastName, userType) VALUES (?,?,?,?,?)";
                 PreparedStatement statement = connection.prepareStatement(str);
                 statement.setString(1, node_row[0]);
                 statement.setString(2, node_row[1]);
                 statement.setString(3, node_row[2]);
                 statement.setString(4, node_row[3]);
                 statement.setString(5, node_row[4]);
-                statement.setString(6, node_row[5]);
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -109,74 +107,7 @@ class TableInitializer {
         return userIDCounter;
     }
 
-    private void populateUserPasswordTable(String CsvFileName) {
-        Connection connection = DataModelI.getInstance().getNewConnection();
-        try {
-            // parse UserTable.csv file
-            CsvFileController csvFileControl = new CsvFileController();
-            List<String[]> userAccountList = csvFileControl.parseCsvFile(CsvFileName);
-
-            Statement stmt = connection.createStatement();
-
-            Iterator<String[]> iterator = userAccountList.iterator();
-            iterator.next(); // get rid of the header
-
-            //insert rows
-            while (iterator.hasNext()) {
-                String[] node_row = iterator.next();
-                String str = "INSERT INTO UserPassword(userName, password, userID) VALUES (?,?,?)";
-                PreparedStatement statement = connection.prepareStatement(str);
-                statement.setString(1, node_row[0]);
-                statement.setString(2, node_row[1]);
-                statement.setString(3, node_row[2]);
-                statement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DataModelI.getInstance().closeConnection();
-        }
-    }
-
-    private int populateMessageTable(String CsvFileName) {
-        int messageIDCounter = 0;
-        Connection connection = DataModelI.getInstance().getNewConnection();
-        try {
-            // parse MessageTable.csv file
-            CsvFileController csvFileControl = new CsvFileController();
-            List<String[]> messageList = csvFileControl.parseCsvFile(CsvFileName);
-            if(messageList == null){
-                return 0;
-            }
-
-            Statement stmt = connection.createStatement();
-
-            Iterator<String[]> iterator = messageList.iterator();
-            iterator.next(); // get rid of the header
-
-            //insert rows
-            while (iterator.hasNext()) {
-                messageIDCounter++;
-                String[] node_row = iterator.next();
-                String str = "INSERT INTO message(messageID,message,isRead,sentDate,senderID,receiverID) VALUES (?,?,?,?,?,?)";
-                PreparedStatement statement = connection.prepareStatement(str);
-                statement.setString(1, node_row[0]);
-                statement.setString(2, node_row[1]);
-                statement.setBoolean(3, Boolean.valueOf(node_row[2]));
-                statement.setDate(4,convertStringToDate(node_row[3]));
-                statement.setString(5, node_row[4]);
-                statement.setString(6, node_row[5]);
-                statement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DataModelI.getInstance().closeConnection();
-        }
-        return messageIDCounter;
-    }
-
-    private int populateRequestTable(String CsvFileName) {
+    public int populateRequestTable(String CsvFileName) {
         Connection connection = DataModelI.getInstance().getNewConnection();
         int requestIDCounter = 0;
         try {
@@ -193,9 +124,9 @@ class TableInitializer {
             iterator.next(); // get rid of the header
 
             //insert rows
+            String[] node_row = null;
             while (iterator.hasNext()) {
-                requestIDCounter++;
-                String[] node_row = iterator.next();
+                node_row = iterator.next();
                 String str = "INSERT INTO Request(requestID,requestType,priority,isComplete,adminConfirm,startTime,endTime,nodeID,messageID,PASSWORD) VALUES (?,?,?,?,?,?,?,?,?,?)";
                 PreparedStatement statement = connection.prepareStatement(str);
                 statement.setString(1, node_row[0]);
@@ -209,6 +140,9 @@ class TableInitializer {
                 statement.setString(9, node_row[8]);
                 statement.setString(10, node_row[9]);
                 statement.executeUpdate();
+            }
+            if(node_row != null){
+                new roomServiceAPIController().setRequestIDCounter(Integer.parseInt(node_row[0]) + 5);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -230,21 +164,22 @@ class TableInitializer {
             }
 
             Statement stmt = connection.createStatement();
-
             Iterator<String[]> iterator = requestList.iterator();
             iterator.next(); // get rid of the header
 
             //insert rows
+            String[] node_row = null;
             while (iterator.hasNext()) {
-                inventoryIDCounter++;
-                String[] node_row = iterator.next();
-                String str = "INSERT INTO INVENTORY(ID, TYPE, QUANTITY, LOCATION) VALUES (?,?,?,?)";
+                node_row = iterator.next();
+                String str = "INSERT INTO INVENTORY(ID, TYPE, QUANTITY) VALUES (?,?,?)";
                 PreparedStatement statement = connection.prepareStatement(str);
                 statement.setString(1, node_row[0]);
                 statement.setString(2, node_row[1]);
                 statement.setInt(3, Integer.parseInt(node_row[2]));
-                statement.setBoolean(4, Boolean.valueOf(node_row[3]));
                 statement.executeUpdate();
+            }
+            if(node_row != null){
+                new InventoryDBUtil().setInventoryIDCounter(Integer.parseInt(node_row[0]) + 5);
             }
         } catch (SQLException e) {
             e.printStackTrace();

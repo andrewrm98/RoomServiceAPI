@@ -1,14 +1,12 @@
 package com.manlyminotaurs.databases;
 
-import com.manlyminotaurs.messaging.Inventory;
-import com.manlyminotaurs.messaging.Message;
+import com.manlyminotaurs.messaging.InventoryItem;
 import com.manlyminotaurs.messaging.Request;
-import com.manlyminotaurs.users.User;
+import com.manlyminotaurs.users.Employee;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 //
 //    ____  ____    ___       _             __
@@ -26,54 +24,40 @@ public interface IDataModel {
 
     Connection getNewConnection();
     boolean closeConnection();
-    /*----------------------------------------- Inventory -------------------------------------------------------------*/
-    /*------------------------------ Add / Modify / Remove Inventory ---------------------------------------------------*/
-    boolean modifyinventory(Inventory inventory);
-    boolean removeinventory(Inventory inventory);
-    Inventory addinventory(Inventory inventory);
+    /*----------------------------------------- InventoryItem -------------------------------------------------------------*/
+    /*------------------------------ Add / Modify / Remove InventoryItem ---------------------------------------------------*/
+    boolean modifyInventory(InventoryItem inventory);
+    boolean removeInventory(InventoryItem inventory);
+    InventoryItem addInventory(InventoryItem inventory);
     /*------------------------------ Retrieve/get ---------------------------------------------------*/
-    List<Inventory> retrieveInventory();
-    Inventory getInventoryByID(String ID);
-
-    /*----------------------------------------- Messages -------------------------------------------------------------*/
-    /*------------------------------ Add / Modify / Remove Message ---------------------------------------------------*/
-    Message addMessage(Message messageObject);
-    boolean removeMessage(Message oldMessage);
-    boolean modifyMessage(Message newMessage);
-    String getNextMessageID();
-    /*--------------------- Retrieve List of Messages / All or by Attribute ------------------------------------------*/
-    List<Message> retrieveMessages();
-    List<Message> getMessageBySender(String senderID);
-    List<Message> getMessageByReceiver(String receiverID);
-    Message getMessageByID(String ID);
+    List<InventoryItem> retrieveInventory();
+    InventoryItem getInventoryByID(String ID);
 
     /*----------------------------------------- Requests ------------------------------------------------------------*/
-    /*------------------------------ Add / Modify / Remove Request --------------------------------------------------*/
-    Request addRequest(Request requestObject, Message messageObject);
+    void addRequest(Request requestObject);
     boolean removeRequest(Request oldRequest);
     boolean modifyRequest(Request newRequest);
+    public List<Request> retrieveRequests();
     String getNextRequestID();
-    /*-------------------------- Retrieve List of Requests / All or by Attribute ------------------------------------*/
-    List<Request> retrieveRequests();
-    List<Request> getRequestBySender(String senderID);
-    List<Request> getRequestByReceiver(String receiverID);
     Request getRequestByID(String ID);
 
-
     /*------------------------------------------ Users -------------------------------------------------------------*/
-    /*-------------------------------- Add / Modify / Remove User --------------------------------------------------*/
-    User addUser(String firstName, String middleName, String lastName, List<String> languages, String userType, String userName, String password);
-    boolean removeUser(User oldUser);
+    /*-------------------------------- Add / Modify / Remove Employee --------------------------------------------------*/
+    Employee addUser(String firstName, String middleName, String lastName, List<String> languages, String userType, String userName, String password);
+    boolean removeUser(Employee oldUser);
 	boolean removeUserByID(String userID);
-    boolean modifyUser(User newUser);
+    boolean modifyUser(Employee newUser);
     /*------------------------ Retrieve List of Users / All or by Attribute ----------------------------------------*/
-    List<User> retrieveUsers();
-    User getUserByID(String ID);
+    List<Employee> retrieveUsers();
+    Employee getUserByID(String ID);
     String getLanguageString(List<String> languages);
     List<String> getLanguageList ( String languagesConcat);
 
 
     //---------------------------------------UPDATE CSV FIles--------------------------------
     void updateAllCSVFiles();
+
+    ObservableList<InventoryItem> getItemList (String itemConcat);
+    String getItemString(ObservableList<InventoryItem> items);
 
 }

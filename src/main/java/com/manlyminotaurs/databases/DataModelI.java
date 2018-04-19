@@ -1,16 +1,15 @@
 package com.manlyminotaurs.databases;
 
-import com.manlyminotaurs.messaging.Inventory;
-import com.manlyminotaurs.messaging.Message;
+import com.manlyminotaurs.messaging.InventoryItem;
 import com.manlyminotaurs.messaging.Request;
-import com.manlyminotaurs.users.User;
+import com.manlyminotaurs.messaging.RequestInfo;
+import com.manlyminotaurs.users.Employee;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 //
 //  '||''|.             .              '||    ||'              '||          '||
@@ -26,7 +25,6 @@ public class DataModelI implements IDataModel{
 	/*---------------------------------------------- Variables -------------------------------------------------------*/
 
 	// all the utils
-	private MessagesDBUtil messagesDBUtil;
 	private RequestsDBUtil requestsDBUtil;
 	private UserDBUtil userDBUtil;
 	private InventoryDBUtil inventoryDBUtil;
@@ -49,7 +47,6 @@ public class DataModelI implements IDataModel{
 	}
 
 	private DataModelI() {
-		messagesDBUtil = new MessagesDBUtil();
 		requestsDBUtil = new RequestsDBUtil();
 		userDBUtil = new UserDBUtil();
 		tableInitializer = new TableInitializer();
@@ -100,57 +97,11 @@ public class DataModelI implements IDataModel{
 		}
 	}
 
-
-	/*------------------------------------------------ Messages -------------------------------------------------------*/
-	@Override
-	public Message addMessage(Message messageObject) {
-		Message tempMessage = messagesDBUtil.addMessage(messageObject);
-		return tempMessage;
-	}
-
-	@Override
-	public boolean removeMessage(Message oldMessage) {
-		boolean tempBool = messagesDBUtil.removeMessage(oldMessage);
-		return tempBool;
-	}
-
-	@Override
-	public boolean modifyMessage(Message newMessage) {
-		boolean tempBool = messagesDBUtil.modifyMessage(newMessage);
-		return tempBool;
-	}
-
-	@Override
-	public String getNextMessageID() {
-		return messagesDBUtil.generateMessageID();
-	}
-
-	@Override
-	public List<Message> retrieveMessages() {
-		return messagesDBUtil.retrieveMessages();
-	}
-
-	@Override
-	public List<Message> getMessageBySender(String senderID) {
-		return messagesDBUtil.searchMessageBySender(senderID);
-	}
-
-	@Override
-	public List<Message> getMessageByReceiver(String receiverID) {
-		return messagesDBUtil.searchMessageByReceiver(receiverID);
-	}
-
-	@Override
-	public Message getMessageByID(String ID) {
-		return messagesDBUtil.getMessageByID(ID);
-	}
-
-
 	/*------------------------------------------------ Requests -------------------------------------------------------*/
 	@Override
-	public Request addRequest(Request requestObject, Message messageObject) {
-		Request newRequest = requestsDBUtil.addRequest(requestObject, messageObject);
-		return newRequest;
+	public void addRequest(Request requestObject) {
+		RequestInfo aInfo = requestObject.getRequestInfo();
+		requestsDBUtil.addRequest(aInfo.getRoom(),aInfo.getEmployee(),aInfo.getItems());
 	}
 
 	@Override
@@ -165,24 +116,13 @@ public class DataModelI implements IDataModel{
 		return tempBool;
 	}
 
-	@Override
-	public String getNextRequestID() {
-		return requestsDBUtil.generateRequestID();
-	}
-
-	@Override
-	public List<Request> retrieveRequests() {
+	public List<Request> retrieveRequests(){
 		return requestsDBUtil.retrieveRequests();
 	}
 
 	@Override
-	public List<Request> getRequestBySender(String senderID) {
-		return requestsDBUtil.searchRequestsBySender(senderID);
-	}
-
-	@Override
-	public List<Request> getRequestByReceiver(String receiverID) {
-		return requestsDBUtil.searchRequestsByReceiver(receiverID);
+	public String getNextRequestID() {
+		return requestsDBUtil.generateRequestID();
 	}
 
 	@Override
@@ -193,13 +133,13 @@ public class DataModelI implements IDataModel{
 	/*------------------------------------------------ Users -------------------------------------------------------*/
 
 	@Override
-	public User addUser(String firstName, String middleName, String lastName, List<String> languages, String userType, String userName, String password) {
-		User newUser = userDBUtil.addUser(firstName, middleName, lastName, languages, userType, userName, password);
+	public Employee addUser(String firstName, String middleName, String lastName, List<String> languages, String userType, String userName, String password) {
+		Employee newUser = userDBUtil.addUser(firstName, middleName, lastName, languages, userType, userName, password);
 		return newUser;
 	}
 
 	@Override
-	public boolean removeUser(User oldUser) {
+	public boolean removeUser(Employee oldUser) {
 		boolean tempBool = userDBUtil.removeUser(oldUser);
 		return tempBool;
 	}
@@ -210,18 +150,18 @@ public class DataModelI implements IDataModel{
 	}
 
 	@Override
-	public boolean modifyUser(User newUser) {
+	public boolean modifyUser(Employee newUser) {
 		boolean tempBool = userDBUtil.modifyUser(newUser);
 		return tempBool;
 	}
 
 	@Override
-	public List<User> retrieveUsers() {
+	public List<Employee> retrieveUsers() {
 		return userDBUtil.retrieveUsers();
 	}
 
 	@Override
-	public User getUserByID(String userID) {
+	public Employee getUserByID(String userID) {
 		return userDBUtil.getUserByID(userID);
 	}
 
@@ -242,30 +182,40 @@ public class DataModelI implements IDataModel{
 		new CsvFileController().updateAllCSVFiles();
 	}
 
-	/*------------------------------------------------ Inventory -------------------------------------------------------*/
-
 	@Override
-	public boolean modifyinventory(Inventory inventory) {
-		return inventoryDBUtil.modifyinventory(inventory);
+	public ObservableList<InventoryItem> getItemList(String itemConcat){
+		return requestsDBUtil.getItemList(itemConcat);
 	}
 
 	@Override
-	public boolean removeinventory(Inventory inventory) {
-		return inventoryDBUtil.removeinventory(inventory);
+	public String getItemString(ObservableList<InventoryItem> items) {
+		return requestsDBUtil.getItemString(items);
+	}
+
+	/*------------------------------------------------ InventoryItem -------------------------------------------------------*/
+
+	@Override
+	public boolean modifyInventory(InventoryItem inventory) {
+		return inventoryDBUtil.modifyInventory(inventory);
 	}
 
 	@Override
-	public Inventory addinventory(Inventory inventory) {
-		return inventoryDBUtil.addinventory(inventory);
+	public boolean removeInventory(InventoryItem inventory) {
+		return inventoryDBUtil.removeInventory(inventory);
 	}
 
 	@Override
-	public List<Inventory> retrieveInventory() {
+	public InventoryItem addInventory(InventoryItem inventory) {
+		return inventoryDBUtil.addInventory(inventory);
+	}
+
+	@Override
+	public List<InventoryItem> retrieveInventory() {
 		return inventoryDBUtil.retrieveInventory();
 	}
 
 	@Override
-	public Inventory getInventoryByID(String ID) {
+	public InventoryItem getInventoryByID(String ID) {
 		return inventoryDBUtil.getInventoryByID(ID);
 	}
 }

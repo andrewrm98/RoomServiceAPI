@@ -6,13 +6,11 @@ import com.jfoenix.controls.JFXTextField;
 import com.manlyminotaurs.databases.DataModelI;
 import com.manlyminotaurs.databases.InventoryDBUtil;
 import com.manlyminotaurs.databases.UserDBUtil;
-import com.manlyminotaurs.messaging.Inventory;
-import com.manlyminotaurs.messaging.Message;
+import com.manlyminotaurs.messaging.InventoryItem;
 import com.manlyminotaurs.messaging.Request;
-import com.manlyminotaurs.users.User;
-import javafx.beans.InvalidationListener;
+import com.manlyminotaurs.messaging.RequestInfo;
+import com.manlyminotaurs.users.Employee;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,9 +21,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
-import javax.swing.*;
-import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 //import static com.sun.tools.corba.se.idl.Util.capitalize;
@@ -126,7 +124,7 @@ public class roomServiceAPIController implements Initializable{
 	JFXButton btnDeleteRequest;
 
 
-	// Manage Inventory
+	// Manage InventoryItem
 
 	@FXML
 	JFXTextField txtItemInventory;
@@ -182,7 +180,6 @@ public class roomServiceAPIController implements Initializable{
 	@FXML
     Label lblEmployeeWarning;
 
-    UserDBUtil empDB = new UserDBUtil();
     InventoryDBUtil invDB = new InventoryDBUtil();
 	ObservableList<String> employeeTypes = FXCollections.observableArrayList("Doctor", "Nurse", "Admin", "Janitor", "Interpreter", "Patient", "Security");
 	final static ObservableList<String> currentItems = FXCollections.observableArrayList();
@@ -191,10 +188,10 @@ public class roomServiceAPIController implements Initializable{
     ObservableList<InventoryItem> inventoryList = FXCollections.observableArrayList(); //2
     ObservableList<InventoryItem> cartList = FXCollections.observableArrayList();
     ObservableList<String> emptyList = FXCollections.observableArrayList();
-    ObservableList<RequestInfo> openList = FXCollections.observableArrayList(); //4
-    ObservableList<InventoryItem> openDetailsList = FXCollections.observableArrayList(); //4
-    ObservableList<RequestInfo> closedList = FXCollections.observableArrayList(); //5
-    ObservableList<InventoryItem> closedDetailsList = FXCollections.observableArrayList(); //5
+    ObservableList<RequestInfo> openList = FXCollections.observableArrayList(); //3
+    ObservableList<InventoryItem> openDetailsList = FXCollections.observableArrayList();
+    ObservableList<RequestInfo> closedList = FXCollections.observableArrayList(); //4
+    ObservableList<InventoryItem> closedDetailsList = FXCollections.observableArrayList();
 
 	String firstName;
 	String middleName;
@@ -205,94 +202,23 @@ public class roomServiceAPIController implements Initializable{
 	String username;
 	String password;
 	String userID;
-	User user;
+	com.manlyminotaurs.users.Employee user;
 
-    public class InventoryItem{
+//-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
-        String itemName;
-        int quantity;
+	private static int requestIDCounter = 0;
 
-        InventoryItem(String itemName, int quantity){
-            this.itemName = itemName;
-            this.quantity = quantity;
-        }
+	public static void setRequestIDCounter(int requestIDCounter_in) {
+		requestIDCounter = requestIDCounter_in;
+	}
 
-        public String getItemName() {
-            return itemName;
-        }
+	public String generateRequestID() {
+		requestIDCounter++;
+		return Integer.toString(requestIDCounter);
+	}
 
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int num) {
-            this.quantity = num;
-        }
-
-    }
-
-    public class Employee{
-
-        String firstName;
-        String middleName;
-        String lastName;
-        String employeeID;
-        String employeeType;
-
-
-        Employee(String firstName, String middleName, String lastName, String employeeID, String employeeType){
-            this.firstName = firstName;
-            this.middleName = middleName;
-            this.lastName = lastName;
-            this.employeeID = employeeID;
-            this.employeeType = employeeType;
-        }
-
-
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public String getMiddleName() {
-            return middleName;
-        }
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public String getEmployeeID() {
-            return employeeID;
-        }
-
-        public String getEmployeeType() {
-            return employeeType;
-        }
-    }
-
-    public class RequestInfo {
-        String room;
-        String employee;
-        ObservableList<InventoryItem> items;
-
-        public RequestInfo(String room, String employee, ObservableList<InventoryItem> items) {
-            this.room = room;
-            this.employee = employee;
-            this.items = items;
-        }
-
-        public String getRoom() {
-            return room;
-        }
-
-        public String getEmployee() {
-            return employee;
-        }
-
-        public ObservableList<InventoryItem> getItems() {
-            return items;
-        }
-    }
 
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -335,7 +261,7 @@ public class roomServiceAPIController implements Initializable{
 		tblEmployeeDatabase.setColumnResizePolicy(tblInventory.CONSTRAINED_RESIZE_POLICY);
 
 
-		// Create Inventory Table
+		// Create InventoryItem Table
         TableColumn itemName = new TableColumn("Item");
         TableColumn quantity = new TableColumn("Quantity");
 
@@ -347,7 +273,7 @@ public class roomServiceAPIController implements Initializable{
 
 		tblInventory.setColumnResizePolicy(tblInventory.CONSTRAINED_RESIZE_POLICY);
 
-        // Create Inventory Menu Table
+        // Create InventoryItem Menu Table
         TableColumn itemNameMenu = new TableColumn("Item");
         TableColumn quantityMenu = new TableColumn("Quantity");
 
@@ -407,17 +333,28 @@ public class roomServiceAPIController implements Initializable{
         itemDetailsClosed.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("itemName"));
         quantityDetailsClosed.setCellValueFactory(new PropertyValueFactory<InventoryItem, String>("quantity"));
 
-        //TODO fix this
-        /*
-        //POPULATE LISTS----------------------------------------
-        for(Request currReq : DataModelI.getInstance().retrieveRequests()) {
-            if (!currReq.getComplete()) {
-                openList.add(new RequestInfo(currReq.getRequestID(), currReq.getRequestType(), null));
-            } else {
-                closedList.add(new RequestInfo(currReq.getRequestID(), currReq.getRequestType(), null));
-            }
-        } */
 
+        //---------------------------------POPULATE LISTS From DATABASE------------------------
+		List<InventoryItem> itemList = DataModelI.getInstance().retrieveInventory();
+		for(InventoryItem aItem: itemList){
+			inventoryList.add(aItem);
+		}
+		List<Request> listOfRequest = DataModelI.getInstance().retrieveRequests();
+		for(Request currReq : listOfRequest) {
+			RequestInfo aRequest = new RequestInfo(currReq.getRequestInfo().getRoom(), currReq.getRequestInfo().getEmployee(), currReq.getRequestInfo().getItems());
+			if (!currReq.getComplete()) {
+				openList.add(aRequest);
+            } else {
+				closedList.add(aRequest);
+            }
+        }
+
+		for(com.manlyminotaurs.users.Employee aEmployee : DataModelI.getInstance().retrieveUsers()){
+			employeeList.add(aEmployee);
+		}
+
+		System.out.println("hello checkpoint");
+        //-----------------------------------POPULATE LISTS ENDED----------------------------------
 
 		// Update Tables
         //updateTablesInventory();
@@ -513,7 +450,7 @@ public class roomServiceAPIController implements Initializable{
 		btnManageEmployees.setStyle("-fx-background-color: #2b65ac");
 
 		// Change Subtitle
-		lblSubtitle.setText("Manage Inventory");
+		lblSubtitle.setText("Manage InventoryItem");
 
 		// Clean fields
 		cleanManageInventory();
@@ -608,9 +545,9 @@ public class roomServiceAPIController implements Initializable{
         } else {
 
             for (InventoryItem item: inventoryList) {
-                if(item.itemName.equals(cmboItemRequestRoomService.getValue())) {
+                if(item.getItemName().equals(cmboItemRequestRoomService.getValue())) {
                     sameItemIndex = inventoryList.indexOf(item);
-                    currentQuantity = item.quantity;
+                    currentQuantity = item.getQuantity();
                     break;
                 }
             }
@@ -625,8 +562,8 @@ public class roomServiceAPIController implements Initializable{
 
             } else {
 
-                InventoryItem newItemInCart = new InventoryItem(cmboItemRequestRoomService.getValue(),subtractedQuantity);
-                InventoryItem returnedItemInInventory = new InventoryItem(cmboItemRequestRoomService.getValue(),currentQuantity);
+                InventoryItem newItemInCart = new InventoryItem("", cmboItemRequestRoomService.getValue(),subtractedQuantity);
+                InventoryItem returnedItemInInventory = new InventoryItem("",cmboItemRequestRoomService.getValue(),currentQuantity);
                 inventoryList.remove(sameItemIndex);
                 inventoryList.add(sameItemIndex,returnedItemInInventory);
                 cartList.add(newItemInCart);
@@ -647,16 +584,16 @@ public class roomServiceAPIController implements Initializable{
         else {
 
             for (InventoryItem item: inventoryList) {
-                if(item.itemName.equals(tblCart.getSelectionModel().getSelectedItem().itemName)) {
+                if(item.getItemName().equals(tblCart.getSelectionModel().getSelectedItem().getItemName())) {
                     sameItemIndex = inventoryList.indexOf(item);
-                    currentQuantity = item.quantity;
+                    currentQuantity = item.getQuantity();
                     break;
                 }
             }
 
             int addedQuantity = tblCart.getSelectionModel().getSelectedItem().getQuantity();
             currentQuantity = currentQuantity + addedQuantity;
-            InventoryItem renewedItem = new InventoryItem(tblCart.getSelectionModel().getSelectedItem().itemName, currentQuantity);
+            InventoryItem renewedItem = new InventoryItem("", tblCart.getSelectionModel().getSelectedItem().getItemName(), currentQuantity);
             inventoryList.remove(sameItemIndex);
             cartList.remove(tblCart.getSelectionModel().getSelectedItem());
             inventoryList.add(sameItemIndex,renewedItem);
@@ -691,7 +628,7 @@ public class roomServiceAPIController implements Initializable{
 
     public void updateTablesInventoryMenu() {
 
-        // Populate List Based on Inventory
+        // Populate List Based on InventoryItem
         tblInventoryMenu.setItems(inventoryList);
     }
 
@@ -738,7 +675,7 @@ public class roomServiceAPIController implements Initializable{
 	//------------------------------------------------------------------------------------------------------------------
 	public void assignEmployee(ActionEvent event) {
 
-		RequestInfo replacedRequestInfo = new RequestInfo(tblOpenRequests.getSelectionModel().getSelectedItem().room, cmboAssignEmployee.getValue(),tblOpenRequests.getSelectionModel().getSelectedItem().getItems());
+		RequestInfo replacedRequestInfo = new RequestInfo(tblOpenRequests.getSelectionModel().getSelectedItem().getRoom(), cmboAssignEmployee.getValue(),tblOpenRequests.getSelectionModel().getSelectedItem().getItems());
 		openList.remove(tblOpenRequests.getSelectionModel().getSelectedItem());
         openList.add(replacedRequestInfo);
 	}
@@ -801,8 +738,8 @@ public class roomServiceAPIController implements Initializable{
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	public void addItemToInventory(ActionEvent event) {
-		//Inventory inventory = new Inventory(null, txtItemInventory.getText(), );
-		//DataModelI.getInstance().addinventory(inventory);
+		//InventoryItem inventory = new InventoryItem(null, txtItemInventory.getText(), );
+		//DataModelI.getInstance().addInventory(inventory);
 
         int sameItemIndex = -1;
         int currentQuantity = 0;
@@ -811,9 +748,9 @@ public class roomServiceAPIController implements Initializable{
             System.out.print("Error: Not a valid item");
         } else {
             for (InventoryItem item: inventoryList) {
-                if(item.itemName.equals(txtItemInventory.getText())) {
+                if(item.getItemName().equals(txtItemInventory.getText())) {
                     sameItemIndex = inventoryList.indexOf(item);
-                    currentQuantity = item.quantity;
+                    currentQuantity = item.getQuantity();
                     System.out.println("There's something that is the same");
                     break;
                 }
@@ -822,14 +759,14 @@ public class roomServiceAPIController implements Initializable{
 
             if (sameItemIndex == -1) { // not same item
 
-                inventoryList.add(new InventoryItem(txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText())));
+                inventoryList.add(new InventoryItem("",txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText())));
                 cleanManageInventory();
 
             } else {
 
                 int addedQuantity = Integer.parseInt(txtQuantityInventory.getText());
                 currentQuantity = currentQuantity + addedQuantity;
-                InventoryItem replacedItem = new InventoryItem(txtItemInventory.getText(), currentQuantity);
+                InventoryItem replacedItem = new InventoryItem("",txtItemInventory.getText(), currentQuantity);
                 inventoryList.remove(sameItemIndex);
                 inventoryList.add(sameItemIndex,replacedItem);
                 cleanManageInventory();
@@ -843,7 +780,7 @@ public class roomServiceAPIController implements Initializable{
         if(tblInventory.getSelectionModel().getSelectedItem() == null){
         } else {
             int inventoryIndex = tblInventory.getSelectionModel().getSelectedIndex();
-            InventoryItem item = new InventoryItem(txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText()));
+            InventoryItem item = new InventoryItem("",txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText()));
             inventoryList.remove(tblInventory.getSelectionModel().getSelectedItem());
             inventoryList.add(inventoryIndex, item);
             cleanManageInventory();
@@ -862,12 +799,12 @@ public class roomServiceAPIController implements Initializable{
 
 	public void updateTablesInventory() {
         // Populate List
-        /*List<Inventory> inventory = invDB.retrieveInventory();
+        /*List<InventoryItem> inventory = invDB.retrieveInventory();
 
         inventoryList.clear(); // !!!
         tblInventory.setItems(inventoryList);
 
-        for(Inventory inv : inventory) {
+        for(InventoryItem inv : inventory) {
             inventoryList.add(new InventoryItem(inv.getType(), inv.getQuantity()));
         }*/
 
@@ -969,14 +906,14 @@ public class roomServiceAPIController implements Initializable{
 	public void updateTablesEmployee() {
 
         // Populate List
-        List<User> userList = empDB.retrieveUsers();
+        List<com.manlyminotaurs.users.Employee> userList = DataModelI.getInstance().retrieveUsers();
 
 		employeeList.removeAll();
 		employeeList.clear();
 		tblEmployeeDatabase.setItems(employeeList);
 
-        for(User user : userList) {
-            employeeList.add(new Employee(user.getFirstName(),user.getMiddleName(), user.getLastName(), user.getUserID(), user.getUserType()));
+        for(com.manlyminotaurs.users.Employee user : userList) {
+            employeeList.add(new Employee(user.getFirstName(),user.getMiddleName(), user.getLastName(), user.getEmployeeID(), user.getEmployeeType()));
         }
 
 	}
@@ -1006,11 +943,11 @@ public class roomServiceAPIController implements Initializable{
 					"Location: " + dBUtil.getNodeByIDFromList(actualRequest.getNodeID(), dBUtil.retrieveNodes()).getLongName() + "\n" +
 					"Message: " + dBUtil.getMessageByID(actualRequest.getMessageID()).getMessage());
 			*/
-			txtFirstName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().firstName);
-			txtMiddleName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().middleName);
-			txtLastName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().lastName);
-			txtEmployeeID.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().employeeID);
-			cmboEmployeeType.getSelectionModel().select(capitalize(tblEmployeeDatabase.getSelectionModel().getSelectedItem().employeeType));
+			txtFirstName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getFirstName());
+			txtMiddleName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getMiddleName());
+			txtLastName.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getLastName());
+			txtEmployeeID.setText(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getEmployeeID());
+			cmboEmployeeType.getSelectionModel().select(capitalize(tblEmployeeDatabase.getSelectionModel().getSelectedItem().getEmployeeType()));
 		}
 	}
 

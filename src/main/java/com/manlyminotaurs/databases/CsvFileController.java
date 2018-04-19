@@ -1,19 +1,13 @@
 package com.manlyminotaurs.databases;
 
-import com.manlyminotaurs.messaging.Inventory;
-import com.manlyminotaurs.messaging.Message;
+import com.manlyminotaurs.messaging.InventoryItem;
 import com.manlyminotaurs.messaging.Request;
-import com.manlyminotaurs.users.User;
+import com.manlyminotaurs.users.Employee;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 //
 //  .oPYo. .oPYo. o     o   .oPYo.                o               8 8
@@ -72,34 +66,10 @@ public class CsvFileController {
     /*---------------------------------- Update CSV Files --------------------------------------------------*/
 
     public void updateAllCSVFiles(){
-        updateMessageCSVFile("./MessageTable.csv");
         updateRequestCSVFile("./RequestTable.csv");
         updateUserCSVFile("./UserAccountTable.csv");
         updateInventoryCSVFile("./InventoryTable.csv");
     }
-    /*---------------------------------- Messages --------------------------------------------------*/
-    /**
-     * Write formatted String to CSVFile using PrintWriter class
-     * @param csvFileName the csv file to be updated
-     */
-    private void updateMessageCSVFile(String csvFileName) {
-        Iterator<Message> iterator = DataModelI.getInstance().retrieveMessages().iterator();
-        System.out.println("Updating message csv file...");
-        try {
-            FileWriter fileWriter = new FileWriter(csvFileName);
-            PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.print("messageID,message,isRead,sentTime,senderID,receiverID\n");
-            while (iterator.hasNext()) {
-                Message a_message = iterator.next();
-                printWriter.printf("%s,%s,%b,%s,%s,%s\n", a_message.getMessageID(), a_message.getMessage(), a_message.getRead(), a_message.getSentDate().toString(), a_message.getSenderID(), a_message.getReceiverID());
-            }
-            printWriter.close();
-            System.out.println("csv file updated");
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-    }//updateMessageCSVFile ends
 
 
     /*---------------------------------- Requests --------------------------------------------------*/
@@ -116,7 +86,7 @@ public class CsvFileController {
             printWriter.print("requestID,requestType,priority,isComplete,adminConfirm,startTime,endTime,nodeID,messageID,password\n");
             while (iterator.hasNext()) {
                 Request a_request = iterator.next();
-                printWriter.printf("%s,%s,%d,%b,%b,%s,%s,%s,%s,%s\n", a_request.getRequestID(),a_request.getRequestType(),a_request.getPriority(),a_request.getComplete(),a_request.getAdminConfirm(), a_request.getStartTime().toString().replace("T"," ").replace(".",":"), a_request.getEndTime().toString().replace("T"," ").replace(".",":"),a_request.getNodeID(),a_request.getMessageID(),a_request.getPassword());
+                printWriter.printf("%s,%s,%d,%b,%b,%s,%s,%s,%s,%s\n", a_request.getRequestID(),a_request.getRequestType(),a_request.getPriority(),a_request.getComplete(),a_request.getAdminConfirm(), a_request.getStartTime().toString().replace("T"," ").replace(".",":"), a_request.getEndTime().toString().replace("T"," ").replace(".",":"),a_request.getRequestInfo().getRoom(),a_request.getRequestInfo().getEmployee(),DataModelI.getInstance().getItemString(a_request.getRequestInfo().getItems()));
             }
             printWriter.close();
             System.out.println("csv file updated");
@@ -133,15 +103,15 @@ public class CsvFileController {
      * @param csvFileName the csv file to be updated
      */
     private void updateUserCSVFile(String csvFileName) {
-        Iterator<User> iterator = DataModelI.getInstance().retrieveUsers().iterator();
+        Iterator<Employee> iterator = DataModelI.getInstance().retrieveUsers().iterator();
         System.out.println("Updating user csv file...");
         try {
             FileWriter fileWriter = new FileWriter(csvFileName);
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.print("userID,firstName,middleName,lastName,language, userType\n");
+            printWriter.print("userID,firstName,middleName,lastName,userType\n");
             while (iterator.hasNext()) {
-                User a_user = iterator.next();
-                printWriter.printf("%s,%s,%s,%s,%s,%s\n", a_user.getUserID(), a_user.getFirstName(),a_user.getMiddleName(),a_user.getLastName(),DataModelI.getInstance().getLanguageString(a_user.getLanguages()),a_user.getUserType());
+                Employee a_user = iterator.next();
+                printWriter.printf("%s,%s,%s,%s,%s\n", a_user.getEmployeeID(), a_user.getFirstName(),a_user.getMiddleName(),a_user.getLastName(),a_user.getEmployeeType());
             }
             printWriter.close();
             System.out.println("csv file updated");
@@ -151,17 +121,17 @@ public class CsvFileController {
         }
     }//updateUserCSVFile ends
 
-    /*---------------------------------- Inventory --------------------------------------------------*/
+    /*---------------------------------- InventoryItem --------------------------------------------------*/
     private void updateInventoryCSVFile(String csvFileName) {
-        Iterator<Inventory> iterator = DataModelI.getInstance().retrieveInventory().iterator();
+        Iterator<InventoryItem> iterator = DataModelI.getInstance().retrieveInventory().iterator();
         System.out.println("Updating request csv file...");
         try {
             FileWriter fileWriter = new FileWriter(csvFileName);
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.print("ID,type,quantity, ocation\n");
+            printWriter.print("ID,type,quantity\n");
             while (iterator.hasNext()) {
-                Inventory a_inventory = iterator.next();
-                printWriter.printf("%s,%s,%d,%s\n", a_inventory.getID(), a_inventory.getType(), a_inventory.getQuantity(),a_inventory.getLocation());
+                InventoryItem a_inventory = iterator.next();
+                printWriter.printf("%s,%s,%d\n", a_inventory.getID(), a_inventory.getItemName(), a_inventory.getQuantity());
             }
             printWriter.close();
             System.out.println("csv file updated");
