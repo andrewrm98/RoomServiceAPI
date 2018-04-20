@@ -465,7 +465,8 @@ public class roomServiceAPIController implements Initializable{
 		btnManageEmployees.setStyle("-fx-background-color: #2b65ac");
 
 		// Change Subtitle
-		lblSubtitle.setText("Manage InventoryItem");
+		lblSubtitle.setText("Manage Inventory Item");
+		lblInventoryWarning.setVisible(false);
 
 		// Clean fields
 		cleanManageInventory();
@@ -490,6 +491,7 @@ public class roomServiceAPIController implements Initializable{
 
 		// Change Subtitle
 		lblSubtitle.setText("Manage Employees");
+		lblEmployeeWarning.setVisible(false);
 
 		// Clean fields
 		cleanManageEmployees();
@@ -548,10 +550,15 @@ public class roomServiceAPIController implements Initializable{
 
         int sameItemIndex = -1;
         int currentQuantity = 0;
+        int itemInCart = 0;
+        int sameItemInCartIndex = -1;
+        int newQuantity = 0;
 
 
         if ((txtRoomNumberRequestRoomService.getText().equals("")) || (txtQuantityRequestRoomService.getText().equals("")) || (cmboItemRequestRoomService.getValue() == null) || (isNotNumber(txtQuantityRequestRoomService.getText()))) {
             System.out.print("Error: Not a valid selection");
+			lblRoomServiceWarning.setVisible(true);
+			lblRoomServiceWarning.setText("Please set a room, item, and quantity to add an item to the cart");
 
         } else {
 
@@ -570,18 +577,42 @@ public class roomServiceAPIController implements Initializable{
             if (currentQuantity < 0) {
 
                 System.out.print("Error: Quantity not large enough for selected item");
+				lblRoomServiceWarning.setVisible(true);
+				lblRoomServiceWarning.setText("Quantity too large for selected item");
 
             } else {
 
-                InventoryItem newItemInCart = new InventoryItem("", cmboItemRequestRoomService.getValue(),subtractedQuantity);
-                InventoryItem returnedItemInInventory = new InventoryItem("",cmboItemRequestRoomService.getValue(),currentQuantity);
-                inventoryList.remove(sameItemIndex);
-                inventoryList.add(sameItemIndex,returnedItemInInventory);
-                cartList.add(newItemInCart);
 
-            }
+            	for (int y=0;y<cartList.size();y++) {
+            		if(cartList.get(y).getItemName().equals(cmboItemRequestRoomService.getValue())) {
 
-        }
+            			sameItemInCartIndex = y;
+            			newQuantity = cartList.get(y).getQuantity() + subtractedQuantity;
+						InventoryItem newItemInCart = new InventoryItem("", cmboItemRequestRoomService.getValue(),newQuantity);
+						cartList.remove(sameItemInCartIndex);
+            			cartList.add(sameItemInCartIndex, newItemInCart);
+
+						itemInCart = 1;
+						break;
+					}
+				}
+
+				InventoryItem returnedItemInInventory = new InventoryItem("",cmboItemRequestRoomService.getValue(),currentQuantity);//
+				inventoryList.remove(sameItemIndex);
+				inventoryList.add(sameItemIndex,returnedItemInInventory);
+
+				if (itemInCart != 1) {
+            		cartList.add(new InventoryItem("", cmboItemRequestRoomService.getValue(),subtractedQuantity));
+				}
+
+				lblRoomServiceWarning.setVisible(false);
+
+			}
+
+
+		}
+
+
 	}
 
 	public void deleteRoomServiceRequest(ActionEvent event) {
@@ -611,6 +642,8 @@ public class roomServiceAPIController implements Initializable{
 
             cleanManageInventory();
 
+            lblRoomServiceWarning.setVisible(false);
+
         }
 	}
 
@@ -625,7 +658,8 @@ public class roomServiceAPIController implements Initializable{
 
 		if(txtRoomNumberRequestRoomService.getText().equals("") || (newCart.size() == 0)) {
 			System.out.println("Not a valid room service request");
-
+			lblRoomServiceWarning.setVisible(true);
+			lblRoomServiceWarning.setText("Not a valid room service request. Please add an item and a room number to add.");
 		} else {
 			RequestInfo newReq = new RequestInfo(txtRoomNumberRequestRoomService.getText(), null, newCart);
 			openList.add(newReq);
@@ -634,7 +668,12 @@ public class roomServiceAPIController implements Initializable{
 			txtQuantityRequestRoomService.clear();
 			txtRoomNumberRequestRoomService.clear();
 			System.out.println(openList.size());
+			lblRoomServiceWarning.setVisible(false);
+
+			lblRoomServiceWarning.setVisible(false);
+
 		}
+
 
 	}
 
@@ -765,6 +804,8 @@ public class roomServiceAPIController implements Initializable{
 
         if ((txtItemInventory.getText().equals("")) || (isNotNumber(txtQuantityInventory.getText()))) {
             System.out.print("Error: Not a valid item");
+            lblInventoryWarning.setVisible(true);
+            lblInventoryWarning.setText("Not a valid item. Please add a quantity greater than or equal to 0");
         } else {
             for (InventoryItem item: inventoryList) {
                 if(item.getItemName().toLowerCase().equals(txtItemInventory.getText().toLowerCase())) {
@@ -779,7 +820,9 @@ public class roomServiceAPIController implements Initializable{
             if (sameItemIndex == -1) { // not same item
 
                 inventoryList.add(new InventoryItem("",txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText())));
-                cleanManageInventory();
+
+				lblInventoryWarning.setVisible(false);
+				cleanManageInventory();
 
             } else {
 
@@ -788,6 +831,8 @@ public class roomServiceAPIController implements Initializable{
                 InventoryItem replacedItem = new InventoryItem("",inventoryList.get(sameItemIndex).getItemName(), currentQuantity);
                 inventoryList.remove(sameItemIndex);
                 inventoryList.add(sameItemIndex,replacedItem);
+
+                lblInventoryWarning.setVisible(false);
                 cleanManageInventory();
 
             }
@@ -798,6 +843,8 @@ public class roomServiceAPIController implements Initializable{
 	public void modifyItemToInventory(ActionEvent event) {
         if((tblInventory.getSelectionModel().getSelectedItem() == null) || (txtItemInventory.getText().equals("")) || (isNotNumber(txtQuantityInventory.getText()))) {
 			System.out.print("Error: Not a valid quantity");
+			lblInventoryWarning.setVisible(true);
+			lblInventoryWarning.setText("Not a valid item. Please add a quantity greater than or equal to 0");
 		} else {
             int inventoryIndex = tblInventory.getSelectionModel().getSelectedIndex();
             InventoryItem item = new InventoryItem("",txtItemInventory.getText(), Integer.parseInt(txtQuantityInventory.getText()));
@@ -805,6 +852,8 @@ public class roomServiceAPIController implements Initializable{
             inventoryList.add(inventoryIndex, item);
             cleanManageInventory();
             tblInventory.getSelectionModel().clearSelection();
+            lblInventoryWarning.setVisible(false);
+
         }
 	}
 
@@ -868,15 +917,18 @@ public class roomServiceAPIController implements Initializable{
 		lastName = txtLastName.getText();
 		type = cmboEmployeeType.getValue();
 		DataModelIAPI.getInstance().addUser(firstName,middleName,lastName,languages,type,null,null); */
-		UserDBUtil db = new UserDBUtil();
+		//UserDBUtil db = new UserDBUtil();
 
 		if ((txtFirstName.getText().equals("")) || (txtLastName.getText().equals("")) || (txtEmployeeID.getText().equals("")) || (cmboEmployeeType.getValue() == (null)) ) {
 			System.out.print("Error: Not a valid Employee");
+			lblEmployeeWarning.setVisible(true);
+			lblEmployeeWarning.setText("Not a valid employee - an employee requires a first name, last name, id, and type");
 		} else {
 			System.out.println(cmboEmployeeType.getValue());
 			employeeList.add(new Employee(txtFirstName.getText(), txtMiddleName.getText(), txtLastName.getText(), txtEmployeeID.getText(), cmboEmployeeType.getValue()));
 			cleanManageEmployees();
 			updateAssignEmployee();
+			lblEmployeeWarning.setVisible(false);
 		}
 	}
 
@@ -902,6 +954,7 @@ public class roomServiceAPIController implements Initializable{
 			cleanManageEmployees();
 			updateAssignEmployee();
 			tblEmployeeDatabase.getSelectionModel().clearSelection();
+			lblEmployeeWarning.setVisible(false);
 		}
 
 
@@ -918,7 +971,7 @@ public class roomServiceAPIController implements Initializable{
 			cleanManageEmployees();
 			updateAssignEmployee();
 			tblEmployeeDatabase.getSelectionModel().clearSelection();
-
+			lblEmployeeWarning.setVisible(false);
 		}
 
 	}

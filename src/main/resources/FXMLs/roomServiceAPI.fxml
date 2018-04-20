@@ -99,7 +99,7 @@
                             </children></Pane>
                     </children>
                 </VBox>
-                <HBox fx:id="boxManageEmployees" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxManageEmployees" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="920.0" prefWidth="1600.0">
                             <children>
@@ -171,7 +171,10 @@
                                                 <Font size="50.0" />
                                             </font>
                                         </Label>
-                              <Label fx:id="lblEmployeeWarning" layoutX="50.0" layoutY="625.0" prefHeight="20.0" prefWidth="465.0" text="Warning" visible="false" />
+                              <Label fx:id="lblEmployeeWarning" layoutX="50.0" layoutY="625.0" prefHeight="20.0" prefWidth="465.0" text="Warning" textFill="#102c57" visible="false">
+                                 <font>
+                                    <Font size="8.0" />
+                                 </font></Label>
                                     </children>
                                 </Pane>
                                 <Pane fx:id="paneDelete" layoutX="610.0" prefHeight="920.0" prefWidth="990.0" style="-fx-background-color: #d4dee9;">
@@ -216,7 +219,7 @@
                                                 <Font size="40.0" />
                                             </font>
                                         </JFXButton>
-                                        <JFXButton fx:id="btnModifyItem" buttonType="RAISED" layoutX="50.0" layoutY="620.0" onAction="#modifyItemToInventory" prefHeight="104.0" prefWidth="510.0" style="-fx-background-color: #102C57;" text="MODIFY" textFill="WHITE">
+                                        <JFXButton fx:id="btnModifyItem" buttonType="RAISED" layoutX="50.0" layoutY="620.0" onAction="#modifyItemToInventory" prefHeight="104.0" prefWidth="510.0" style="-fx-background-color: #102C57;" text="UPDATE" textFill="WHITE">
                                             <font>
                                                 <Font size="40.0" />
                                             </font>
@@ -226,7 +229,7 @@
                                                 <Font size="40.0" />
                                             </font>
                                         </JFXButton>
-                              <Label fx:id="lblInventoryWarning" layoutX="50.0" layoutY="430.0" prefHeight="30.0" prefWidth="510.0" text="WARNING" visible="false" />
+                              <Label fx:id="lblInventoryWarning" layoutX="50.0" layoutY="430.0" prefHeight="30.0" prefWidth="510.0" text="WARNING" textFill="#102c57" visible="false" />
                                     </children>
                                 </Pane>
                                 <Pane layoutX="610.0" prefHeight="920.0" prefWidth="990.0" style="-fx-background-color: #d4dee9;">
@@ -315,7 +318,7 @@
                             </children></Pane>
                     </children>
                 </HBox>
-                <HBox fx:id="boxRequestRoomService" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <HBox fx:id="boxRequestRoomService" prefHeight="100.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Pane prefHeight="920.0" prefWidth="1600.0">
                             <children>
@@ -370,7 +373,7 @@
                                         <Font size="15.0" />
                                     </font>
                                 </JFXButton>
-                        <Label fx:id="lblRoomServiceWarning" layoutX="50.0" layoutY="290.0" prefHeight="17.0" prefWidth="690.0" text="Warning" visible="false" />
+                        <Label fx:id="lblRoomServiceWarning" layoutX="50.0" layoutY="285.0" prefHeight="17.0" prefWidth="690.0" text="Warning" textFill="#102c57" visible="false" />
                             </children>
                         </Pane>
                     </children>
