@@ -1,6 +1,7 @@
 package com.manlyminotaursAPI.databases;
 
 
+import com.manlyminotaursAPI.messaging.RequestInfo;
 import com.manlyminotaursAPI.viewControllers.roomServiceAPIController;
 
 import java.io.*;
@@ -60,6 +61,9 @@ public class TableInitializer {
         System.out.println("Finished Setting up Database");
         System.out.println("-----------------------------");
         System.out.println("-----------------------------");
+
+   //     RequestInfo aInfo = new RequestInfo("", "helloRoom","5",null);
+    //    DataModelIAPI.getInstance().addRequest("",false,aInfo);
         //initializer.populateExitTable("./NodeExitTable.csv");
         //initializer.populateHallwayTable("./NodeHallwayTable.csv");
         ;
@@ -143,7 +147,7 @@ public class TableInitializer {
             }
             if(node_row != null){
                 requestIDCounter = Integer.parseInt(node_row[0]) + 5;
-                new roomServiceAPIController().setRequestIDCounter(requestIDCounter);
+                RequestsDBUtil.setRequestIDCounter(requestIDCounter);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -182,7 +186,7 @@ public class TableInitializer {
             }
             if(node_row != null){
                 inventoryIDCounter = (Integer.parseInt(node_row[0]) + 5);
-                new InventoryDBUtil().setInventoryIDCounter(inventoryIDCounter);
+                InventoryDBUtil.setInventoryIDCounter(inventoryIDCounter);
             }
         } catch (SQLException e) {
             e.printStackTrace();

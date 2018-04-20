@@ -30,4 +30,20 @@ public class RequestInfo {
     public String getRequestID() {
         return requestID;
     }
+
+    public void setRequestID(String requestID) {
+        this.requestID = requestID;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public void setItems(ObservableList<InventoryItem> items) {
+        this.items = items;
+    }
 }

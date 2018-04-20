@@ -14,7 +14,7 @@ Create Table Request (
   startTime     TIMESTAMP,
   endTime       TIMESTAMP,
   nodeID        VARCHAR(50),
-  messageID     VARCHAR(50) UNIQUE,
+  messageID     VARCHAR(50),
   password      VARCHAR(255));
 
 CREATE TABLE Inventory (

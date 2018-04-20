@@ -2,6 +2,7 @@ package com.manlyminotaursAPI.databases;
 
 import com.manlyminotaursAPI.messaging.InventoryItem;
 import com.manlyminotaursAPI.messaging.Request;
+import com.manlyminotaursAPI.messaging.RequestInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,14 +37,19 @@ class RequestsDBUtil {
     }
     /*------------------------------------------------ Add/Remove Request -------------------------------------------------------*/
 
-    public void addRequest(String requestID, boolean isComplete, String room, String employee, ObservableList<InventoryItem> itemList) {
+    public void addRequest(String requestID, boolean isComplete, RequestInfo aInfo) {
         Connection connection = null;
+        String room = aInfo.getRoom();
+        String employee = aInfo.getEmployee();
+        ObservableList<InventoryItem> itemList = aInfo.getItems();
+
         try {
             connection = DriverManager.getConnection("jdbc:derby:requestDB;create=true");
             String str = "INSERT INTO Request(requestID,requestType,priority,isComplete,adminConfirm,startTime,endTime,nodeID,messageID,password) VALUES (?,?,?,?,?,?,?,?,?,?)";
             if(requestID == null || requestID.equals("")) {
                 requestID = generateRequestID();
             }
+            aInfo.setRequestID(requestID);
             // Create the prepared statement
             PreparedStatement statement = connection.prepareStatement(str);
             statement.setString(1, requestID);
