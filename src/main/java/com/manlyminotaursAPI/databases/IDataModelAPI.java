@@ -35,7 +35,7 @@ public interface IDataModelAPI {
     InventoryItem getInventoryByID(String ID);
 
     /*----------------------------------------- Requests ------------------------------------------------------------*/
-    void addRequest(boolean openRequest, RequestInfo aInfo);
+    void addRequest(String requestID, boolean isComplete, RequestInfo aInfo);
     boolean removeRequest(Request oldRequest);
     boolean modifyRequest(Request newRequest);
     public List<Request> retrieveRequests();

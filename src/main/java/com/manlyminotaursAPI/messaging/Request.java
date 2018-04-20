@@ -24,7 +24,7 @@ public class Request {
         this.adminConfirm = adminConfirm;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.requestInfo = new RequestInfo(room, employee, items);
+        this.requestInfo = new RequestInfo(requestID, room, employee, items);
     }
 
     public String getRequestID() {

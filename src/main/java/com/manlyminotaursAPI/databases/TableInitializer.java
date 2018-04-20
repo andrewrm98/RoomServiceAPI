@@ -1,6 +1,7 @@
 package com.manlyminotaursAPI.databases;
 
 
+import com.manlyminotaursAPI.messaging.RequestInfo;
 import com.manlyminotaursAPI.viewControllers.roomServiceAPIController;
 
 import java.io.*;
@@ -60,6 +61,9 @@ public class TableInitializer {
         System.out.println("Finished Setting up Database");
         System.out.println("-----------------------------");
         System.out.println("-----------------------------");
+
+   //     RequestInfo aInfo = new RequestInfo("", "helloRoom","5",null);
+    //    DataModelIAPI.getInstance().addRequest("",false,aInfo);
         //initializer.populateExitTable("./NodeExitTable.csv");
         //initializer.populateHallwayTable("./NodeHallwayTable.csv");
         ;
@@ -142,13 +146,15 @@ public class TableInitializer {
                 statement.executeUpdate();
             }
             if(node_row != null){
-                new roomServiceAPIController().setRequestIDCounter(Integer.parseInt(node_row[0]) + 5);
+                requestIDCounter = Integer.parseInt(node_row[0]) + 5;
+                RequestsDBUtil.setRequestIDCounter(requestIDCounter);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DataModelIAPI.getInstance().closeConnection();
         }
+        System.out.println("request ID Counter: " + requestIDCounter);
         return requestIDCounter;
     }
 
@@ -179,13 +185,15 @@ public class TableInitializer {
                 statement.executeUpdate();
             }
             if(node_row != null){
-                new InventoryDBUtil().setInventoryIDCounter(Integer.parseInt(node_row[0]) + 5);
+                inventoryIDCounter = (Integer.parseInt(node_row[0]) + 5);
+                InventoryDBUtil.setInventoryIDCounter(inventoryIDCounter);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DataModelIAPI.getInstance().closeConnection();
         }
+        System.out.println("inventoryID Counter: " + inventoryIDCounter);
         return inventoryIDCounter;
     }
 

@@ -1,6 +1,9 @@
 package com.manlyminotaursAPI.core;
 
 import com.manlyminotaursAPI.databases.DataModelIAPI;
+import com.manlyminotaursAPI.databases.TableInitializer;
+import com.manlyminotaursAPI.viewControllers.roomServiceAPIController;
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 
-public class RoomService {
+public class RoomService{
 
     private Stage primaryStage;
     private static DataModelIAPI dataModelIAPI;
@@ -19,6 +22,7 @@ public class RoomService {
     public RoomService() {
         dataModelIAPI = DataModelIAPI.getInstance();
     }
+
 
     public void thing(int xcoord, int ycoord, int windowWidth, int windowLength, String cssPath) {
         Stage primaryStage = new Stage();
@@ -40,6 +44,8 @@ public class RoomService {
         primaryStage.setY((double)ycoord);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(listener -> save());
     }
 
     public void run(int xcoord, int ycoord, int windowWidth, int windowLength, String cssPath, String destNodeID, String originNodeID) throws Exception {
@@ -53,4 +59,17 @@ public class RoomService {
         }
 
     }
+
+    public void save(){
+        System.out.println("closing Application");
+        roomServiceAPIController apiController = new roomServiceAPIController();
+
+        TableInitializer tableInitializer = new TableInitializer();
+        tableInitializer.initTables();
+        DataModelIAPI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList());
+        DataModelIAPI.getInstance().updateAllCSVFiles();
+
+        System.out.println("Files Saved!");
+    }
+
 }

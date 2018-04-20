@@ -98,9 +98,8 @@ public class DataModelIAPI implements IDataModelAPI {
 	}
 
 	/*------------------------------------------------ Requests -------------------------------------------------------*/
-	@Override
-	public void addRequest(boolean openRequest,RequestInfo aInfo) {
-		requestsDBUtil.addRequest(openRequest, aInfo.getRoom(),aInfo.getEmployee(),aInfo.getItems());
+	public void addRequest(String requestID, boolean isComplete,RequestInfo aInfo) {
+		requestsDBUtil.addRequest(requestID, isComplete, aInfo);
 	}
 
 	@Override
@@ -186,12 +185,12 @@ public class DataModelIAPI implements IDataModelAPI {
 
         for(RequestInfo aRequest: openList){
             System.out.println("openList");
-            DataModelIAPI.getInstance().addRequest(true,aRequest);
+            DataModelIAPI.getInstance().addRequest(aRequest.getRequestID(),false,aRequest);
         }
 
         for(RequestInfo aRequest: closedList){
             System.out.println("closedList");
-            DataModelIAPI.getInstance().addRequest(false,aRequest);
+            DataModelIAPI.getInstance().addRequest(aRequest.getRequestID(),true,aRequest);
         }
 
         for(Employee employee: employeeList){

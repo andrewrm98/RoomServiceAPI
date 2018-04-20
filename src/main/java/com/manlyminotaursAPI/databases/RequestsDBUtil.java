@@ -2,6 +2,7 @@ package com.manlyminotaursAPI.databases;
 
 import com.manlyminotaursAPI.messaging.InventoryItem;
 import com.manlyminotaursAPI.messaging.Request;
+import com.manlyminotaursAPI.messaging.RequestInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,18 +37,25 @@ class RequestsDBUtil {
     }
     /*------------------------------------------------ Add/Remove Request -------------------------------------------------------*/
 
-    public void addRequest(boolean openRequest, String room, String employee, ObservableList<InventoryItem> itemList) {
+    public void addRequest(String requestID, boolean isComplete, RequestInfo aInfo) {
         Connection connection = null;
+        String room = aInfo.getRoom();
+        String employee = aInfo.getEmployee();
+        ObservableList<InventoryItem> itemList = aInfo.getItems();
+
         try {
             connection = DriverManager.getConnection("jdbc:derby:requestDB;create=true");
             String str = "INSERT INTO Request(requestID,requestType,priority,isComplete,adminConfirm,startTime,endTime,nodeID,messageID,password) VALUES (?,?,?,?,?,?,?,?,?,?)";
-            String requestID = generateRequestID();
+            if(requestID == null || requestID.equals("")) {
+                requestID = generateRequestID();
+            }
+            aInfo.setRequestID(requestID);
             // Create the prepared statement
             PreparedStatement statement = connection.prepareStatement(str);
             statement.setString(1, requestID);
             statement.setString(2, "Room Service");
             statement.setInt(3, 1);
-            statement.setBoolean(4, openRequest);
+            statement.setBoolean(4, isComplete);
             statement.setBoolean(5, false);
             statement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
             statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
@@ -149,6 +157,7 @@ class RequestsDBUtil {
                 // Add the new edge to the list
                 ObservableList<InventoryItem> items = DataModelIAPI.getInstance().getItemList(password);
                 requestObject = new Request(requestID, requestType, priority, isComplete, adminConfirm, startTime.toLocalDateTime(), endTime.toLocalDateTime(), nodeID, messageID, items);
+                System.out.println("RetrieveRequest: "+ requestID + " " + requestType);
                 listOfRequest.add(requestObject);
             }
             rset.close();
