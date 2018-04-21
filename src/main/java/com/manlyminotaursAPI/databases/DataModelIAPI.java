@@ -98,8 +98,8 @@ public class DataModelIAPI implements IDataModelAPI {
 	}
 
 	/*------------------------------------------------ Requests -------------------------------------------------------*/
-	public void addRequest(String requestID, boolean isComplete,RequestInfo aInfo) {
-		requestsDBUtil.addRequest(requestID, isComplete, aInfo);
+	public String addRequest(String requestID, boolean isComplete,RequestInfo aInfo) {
+		return requestsDBUtil.addRequest(requestID, isComplete, aInfo);
 	}
 
 	@Override

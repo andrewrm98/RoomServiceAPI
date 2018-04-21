@@ -1,0 +1,13 @@
+ID,type,quantity,requestInventoryID
+3,jojo,6,
+23,Hat,48,null
+24,Shoes,498,null
+1,bed,15,1
+2,table,12,2
+8,junbong,13,2
+9,Jang,15,1
+15,Ramen,16,2
+16,Cake,17,1
+17,Water,18,8
+25,Two words,50,20
+26,one_word,51,20

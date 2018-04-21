@@ -37,7 +37,7 @@ class RequestsDBUtil {
     }
     /*------------------------------------------------ Add/Remove Request -------------------------------------------------------*/
 
-    public void addRequest(String requestID, boolean isComplete, RequestInfo aInfo) {
+    public String addRequest(String requestID, boolean isComplete, RequestInfo aInfo) {
         Connection connection = null;
         String room = aInfo.getRoom();
         String employee = aInfo.getEmployee();
@@ -71,6 +71,7 @@ class RequestsDBUtil {
         } finally {
             DataModelIAPI.getInstance().closeConnection();
         }
+        return requestID;
     }
 
     boolean removeRequest(Request request) {

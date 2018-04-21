@@ -687,8 +687,9 @@ public class roomServiceAPIController implements Initializable{
 			lblRoomServiceWarning.setText("Not a valid room service request. Please add an item and a room number to add.");
 		} else {
 			RequestInfo newReq = new RequestInfo("", txtRoomNumberRequestRoomService.getText(), null, newCart);
+			String requestID = DataModelIAPI.getInstance().addRequest("",false,newReq);
 			for(InventoryItem aItem: newCart) {
-               aItem.setRequestID(newReq.getRequestID());
+               aItem.setRequestID(requestID);
                openDetailsList.add(aItem);
             }
 
@@ -761,9 +762,15 @@ public class roomServiceAPIController implements Initializable{
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	public void assignEmployee(ActionEvent event) {
+        RequestInfo getReqInfo = tblOpenRequests.getSelectionModel().getSelectedItem();
+        String requestID = getReqInfo.getRequestID();
+        String requestRoom = getReqInfo.getRoom();
+        String employee = cmboAssignEmployee.getValue();
+        ObservableList<InventoryItem> items = getReqInfo.getItems();
+
 	    if (tblOpenRequests.getSelectionModel() == null) {
         } else {
-            RequestInfo replacedRequestInfo = new RequestInfo("", tblOpenRequests.getSelectionModel().getSelectedItem().getRoom(), cmboAssignEmployee.getValue(), tblOpenRequests.getSelectionModel().getSelectedItem().getItems());
+            RequestInfo replacedRequestInfo = new RequestInfo(requestID, requestRoom, employee, items);
             openList.remove(tblOpenRequests.getSelectionModel().getSelectedItem());
             openList.add(replacedRequestInfo);
         }
