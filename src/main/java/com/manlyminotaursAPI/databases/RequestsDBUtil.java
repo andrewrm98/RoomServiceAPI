@@ -61,7 +61,7 @@ class RequestsDBUtil {
             statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
             statement.setString(8, room);
             statement.setString(9, employee);
-            statement.setString(10, getItemString(itemList));
+            statement.setString(10, null);
             statement.executeUpdate();
             statement.close();
             System.out.println("Request added to database");
@@ -106,7 +106,7 @@ class RequestsDBUtil {
             statement.setTimestamp(6, Timestamp.valueOf(newRequest.getEndTime()));
             statement.setString(7, newRequest.getRequestInfo().getRoom());
             statement.setString(8, newRequest.getRequestInfo().getEmployee());
-            statement.setString(9, getItemString(newRequest.getRequestInfo().getItems()));
+            statement.setString(9, null);
             System.out.println("Prepared statement created...");
             statement.executeUpdate();
             statement.close();

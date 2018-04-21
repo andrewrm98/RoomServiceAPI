@@ -369,12 +369,12 @@ public class roomServiceAPIController implements Initializable{
         List<InventoryItem> itemList = DataModelIAPI.getInstance().retrieveInventory();
 		inventoryList.clear();
 		for(InventoryItem aItem: itemList){
-			if(aItem.getRequestID() == null || aItem.getRequestID().equals("")) {
+			if(aItem.getRequestID().equals("null") || aItem.getRequestID().equals("") || aItem.getRequestID() == null) {
 				inventoryList.add(aItem);
 			}
 			else {
 				Request aRequest = DataModelIAPI.getInstance().getRequestByID(aItem.getRequestID());
-				if (openList.contains(aRequest.getRequestInfo())) {
+				if (openList != null && openList.contains(aRequest.getRequestInfo())) {
 					openDetailsList.add(aItem);
 				}
 				else {
@@ -689,11 +689,9 @@ public class roomServiceAPIController implements Initializable{
 			RequestInfo newReq = new RequestInfo("", txtRoomNumberRequestRoomService.getText(), null, newCart);
 			for(InventoryItem aItem: newCart) {
                aItem.setRequestID(newReq.getRequestID());
+               openDetailsList.add(aItem);
             }
 
-			for (int x = 0; x < cartList.size(); x++) {
-				openDetailsList.add(cartList.get(x));
-			}
 
 			openList.add(newReq);
 			cartList.clear();
@@ -818,8 +816,10 @@ public class roomServiceAPIController implements Initializable{
         }
         else {
             System.out.println("loadRequestDetails closed");
-			String selectedRequestID = tblOpenRequests.getSelectionModel().getSelectedItem().getRequestID();
-			for(InventoryItem aItem: inventoryList) {
+			String selectedRequestID = tblClosedRequests.getSelectionModel().getSelectedItem().getRequestID();
+			List<InventoryItem> newList = new ArrayList<>(openDetailsList);
+			newList.addAll(closedDetailsList);
+			for(InventoryItem aItem: newList) {
 				if(selectedRequestID.equals(aItem.getRequestID())) {
 					tempClosedDetailsList.add(aItem);
 				}
