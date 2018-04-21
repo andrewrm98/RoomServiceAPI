@@ -28,7 +28,7 @@ public class Runner extends Application{
     public void exitApplication(ActionEvent event) {
         Platform.exit();
     }
-
+/*
     @Override
     public void stop(){
         System.out.println("closing Application");
@@ -36,10 +36,10 @@ public class Runner extends Application{
 
         TableInitializer tableInitializer = new TableInitializer();
         tableInitializer.initTables();
-        DataModelIAPI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList());
-        DataModelIAPI.getInstance().updateAllCSVFiles();
+        DataModelIAPI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList(), apiController.getOpenDetailsList(), apiController.getClosedDetailsList());
+     //   DataModelIAPI.getInstance().updateAllCSVFiles();
 
         System.out.println("Files Saved!");
     }
-
+*/
 }

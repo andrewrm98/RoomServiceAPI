@@ -176,7 +176,7 @@ public class DataModelIAPI implements IDataModelAPI {
 	//--------------------------------------CSV stuffs------------------------------------------
 
     @Override
-    public void updateAllDatabase(List<InventoryItem> inventoryList, List<RequestInfo> openList, List<RequestInfo> closedList,List<Employee> employeeList){
+    public void updateAllDatabase(List<InventoryItem> inventoryList, List<RequestInfo> openList, List<RequestInfo> closedList, List<Employee> employeeList, List<InventoryItem> openDetailList,  List<InventoryItem> closedDetailList){
 
 	    for(InventoryItem aItem: inventoryList){
             System.out.println("inventory");
@@ -197,6 +197,17 @@ public class DataModelIAPI implements IDataModelAPI {
             System.out.println("employee");
             DataModelIAPI.getInstance().addUser(employee.getEmployeeID(),employee.getFirstName(),employee.getMiddleName(),employee.getLastName(),employee.getEmployeeType());
         }
+
+        for(InventoryItem aItem: openDetailList){
+			System.out.println("Detail inventory");
+			DataModelIAPI.getInstance().addInventory(aItem);
+		}
+
+		for(InventoryItem aItem: closedDetailList){
+			System.out.println("Detail inventory");
+			DataModelIAPI.getInstance().addInventory(aItem);
+		}
+
     }
 
 	@Override

@@ -18,6 +18,7 @@ Create Table Request (
   password      VARCHAR(255));
 
 CREATE TABLE Inventory (
-  ID                VARCHAR(10) PRIMARY KEY,
-  type              VARCHAR(10) UNIQUE,
-  quantity          INTEGER);
+  ID                  VARCHAR(10) PRIMARY KEY,
+  type                VARCHAR(10) UNIQUE,
+  quantity            INTEGER,
+  requestInventoryID  VARCHAR(10));

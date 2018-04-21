@@ -1,3 +1,4 @@
-ID,type,quantity
-1,bed,5
-2,jojo,10
+ID,type,quantity,requestInventoryID
+3,jojo,6,
+1,bed,15,1
+2,table,12,2

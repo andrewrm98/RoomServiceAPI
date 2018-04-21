@@ -2,6 +2,8 @@ package com.manlyminotaursAPI.messaging;
 
 import javafx.collections.ObservableList;
 
+import java.util.Objects;
+
 public class RequestInfo {
     String requestID;
     String room;
@@ -45,5 +47,21 @@ public class RequestInfo {
 
     public void setItems(ObservableList<InventoryItem> items) {
         this.items = items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestInfo that = (RequestInfo) o;
+        return Objects.equals(requestID, that.requestID) &&
+                Objects.equals(room, that.room) &&
+                Objects.equals(employee, that.employee);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(requestID, room, employee);
     }
 }

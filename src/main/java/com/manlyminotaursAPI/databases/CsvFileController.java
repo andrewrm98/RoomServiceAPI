@@ -41,7 +41,7 @@ public class CsvFileController {
 
             while ((line = bufferedReader.readLine()) != null) {
                 // use comma as separator
-                String[] node_row = line.split(",");
+                String[] node_row = line.split(",",-1);
                 list_of_rows.add(node_row);
             }
             fileReader.close();
@@ -129,10 +129,10 @@ public class CsvFileController {
         try {
             FileWriter fileWriter = new FileWriter(csvFileName);
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.print("ID,type,quantity\n");
+            printWriter.print("ID,type,quantity,requestInventoryID\n");
             while (iterator.hasNext()) {
                 InventoryItem a_inventory = iterator.next();
-                printWriter.printf("%s,%s,%d\n", a_inventory.getID(), a_inventory.getItemName(), a_inventory.getQuantity());
+                printWriter.printf("%s,%s,%d,%s\n", a_inventory.getID(), a_inventory.getItemName(), a_inventory.getQuantity(),a_inventory.getRequestID());
             }
             printWriter.close();
             System.out.println("csv file updated");

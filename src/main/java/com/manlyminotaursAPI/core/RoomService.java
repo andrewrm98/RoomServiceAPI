@@ -66,7 +66,7 @@ public class RoomService{
 
         TableInitializer tableInitializer = new TableInitializer();
         tableInitializer.initTables();
-        DataModelIAPI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList());
+        DataModelIAPI.getInstance().updateAllDatabase(apiController.getInventoryList(), apiController.getOpenList(), apiController.getClosedList(), apiController.getEmployeeList(), apiController.getOpenDetailsList(), apiController.getClosedDetailsList());
         DataModelIAPI.getInstance().updateAllCSVFiles();
 
         System.out.println("Files Saved!");

@@ -25,7 +25,7 @@ public class InventoryDBUtil {
 		String ID;
 		String type;
 		int quantity;
-		String location;
+		String requestID;
 		List<InventoryItem> listOfInventory = new ArrayList<>();
 
 		try {
@@ -37,11 +37,12 @@ public class InventoryDBUtil {
 				ID = rset.getString("ID");
 				type = rset.getString("type");
 				quantity = rset.getInt("quantity");
+				requestID = rset.getString("requestInventoryID");
 
 				// Add the new edge to the list
-				inventory = new InventoryItem(ID, type, quantity);
+				inventory = new InventoryItem(ID, type, quantity, requestID);
 				listOfInventory.add(inventory);
-				System.out.println("InventoryItem added to the list: "+ ID + " " + type);
+				System.out.println("InventoryItem added to the list: "+ ID + " " + type+ " requestID: " + requestID);
 			}
 			rset.close();
 			stmt.close();
@@ -78,13 +79,14 @@ public class InventoryDBUtil {
 
 		Connection connection = DataModelIAPI.getInstance().getNewConnection();
 		try {
-			String str = "INSERT INTO inventory(ID, type, quantity) VALUES (?,?,?)";
+			String str = "INSERT INTO inventory(ID, type, quantity, requestInventoryID) VALUES (?,?,?,?)";
 
 			// Create the prepared statement
 			PreparedStatement statement = connection.prepareStatement(str);
 			statement.setString(1, inventory.getID());
 			statement.setString(2, inventory.getItemName());
 			statement.setInt(3, inventory.getQuantity());
+			statement.setString(4, inventory.getRequestID());
 			System.out.println("Prepared statement created...");
 			statement.executeUpdate();
 			statement.close();
@@ -121,12 +123,13 @@ public class InventoryDBUtil {
 		Connection connection = DataModelIAPI.getInstance().getNewConnection();
 		boolean isSuccess = false;
 		try {
-			String str = "UPDATE inventory SET type = ?, quantity = ? WHERE ID = '"+ inventory.getID() +"'" ;
+			String str = "UPDATE inventory SET type = ?, quantity = ?, requestInventoryID = ? WHERE ID = '"+ inventory.getID() +"'" ;
 
 			// Create the prepared statement
 			PreparedStatement statement = connection.prepareStatement(str);
 			statement.setString(1, inventory.getItemName());
 			statement.setInt(2, inventory.getQuantity());
+			statement.setString(3, inventory.getRequestID());
 			statement.executeUpdate();
 			System.out.println("inventory added to database");
 			statement.close();
@@ -153,7 +156,7 @@ public class InventoryDBUtil {
 		InventoryItem inventory = null;
 		String type;
 		int quantity;
-		String location;
+		String requestID;
 
 		List<InventoryItem> listOfInventory = new ArrayList<>();
 
@@ -165,11 +168,11 @@ public class InventoryDBUtil {
 			if (rset.next()) {
 				type = rset.getString("type");
 				quantity = rset.getInt("quantity");
-
+				requestID = rset.getString("requestInventoryID");
 				// Add the new edge to the list
-				inventory = new InventoryItem(ID, type, quantity);
+				inventory = new InventoryItem(ID, type, quantity, requestID);
 				listOfInventory.add(inventory);
-				System.out.println("GetInventoryByID: InventoryItem added to the list: "+ ID + " " + type);
+				System.out.println("GetInventoryByID: InventoryItem added to the list: "+ ID + " " + type + " requestID: " + requestID);
 			}
 			//rset.close();
 		//	stmt.close();

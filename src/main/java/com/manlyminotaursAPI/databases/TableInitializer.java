@@ -1,6 +1,7 @@
 package com.manlyminotaursAPI.databases;
 
 
+import com.manlyminotaursAPI.messaging.InventoryItem;
 import com.manlyminotaursAPI.messaging.RequestInfo;
 import com.manlyminotaursAPI.viewControllers.roomServiceAPIController;
 
@@ -62,8 +63,11 @@ public class TableInitializer {
         System.out.println("-----------------------------");
         System.out.println("-----------------------------");
 
-   //     RequestInfo aInfo = new RequestInfo("", "helloRoom","5",null);
-    //    DataModelIAPI.getInstance().addRequest("",false,aInfo);
+    //    InventoryItem inventoryItem = new InventoryItem("","junbong",13,"2");
+    //    DataModelIAPI.getInstance().addInventory(inventoryItem);
+
+    //    RequestInfo aInfo = new RequestInfo("", "helloRoom","5",null);
+   //     DataModelIAPI.getInstance().addRequest("",false,aInfo);
         //initializer.populateExitTable("./NodeExitTable.csv");
         //initializer.populateHallwayTable("./NodeHallwayTable.csv");
         ;
@@ -177,11 +181,12 @@ public class TableInitializer {
             String[] node_row = null;
             while (iterator.hasNext()) {
                 node_row = iterator.next();
-                String str = "INSERT INTO INVENTORY(ID, TYPE, QUANTITY) VALUES (?,?,?)";
+                String str = "INSERT INTO INVENTORY(ID, TYPE, QUANTITY, REQUESTINVENTORYID) VALUES (?,?,?,?)";
                 PreparedStatement statement = connection.prepareStatement(str);
                 statement.setString(1, node_row[0]);
                 statement.setString(2, node_row[1]);
                 statement.setInt(3, Integer.parseInt(node_row[2]));
+                statement.setString(4, node_row[3]);
                 statement.executeUpdate();
             }
             if(node_row != null){

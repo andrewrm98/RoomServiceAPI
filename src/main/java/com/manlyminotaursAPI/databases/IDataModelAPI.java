@@ -57,7 +57,7 @@ public interface IDataModelAPI {
 
     //---------------------------------------UPDATE CSV FIles--------------------------------
     void updateAllCSVFiles();
-    void updateAllDatabase(List<InventoryItem> inventoryList, List<RequestInfo> openList, List<RequestInfo> closedList, List<Employee> employeeList);
+    void updateAllDatabase(List<InventoryItem> inventoryList, List<RequestInfo> openList, List<RequestInfo> closedList, List<Employee> employeeList, List<InventoryItem> openDetailsList,  List<InventoryItem> closedDetailsList);
 
     ObservableList<InventoryItem> getItemList (String itemConcat);
     String getItemString(ObservableList<InventoryItem> items);
