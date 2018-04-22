@@ -374,21 +374,19 @@ public class roomServiceAPIController implements Initializable{
 			}
 			else {
 				Request aRequest = DataModelIAPI.getInstance().getRequestByID(aItem.getRequestID());
-				if (openList != null && openList.contains(aRequest.getRequestInfo())) {
-					openDetailsList.add(aItem);
-				}
-				else {
+
+				if (openList == null) {
 					closedDetailsList.add(aItem);
+				} else if (openList.contains(aRequest.getRequestInfo())){
+					openDetailsList.add(aItem);
 				}
 			}
 		}
 
+
         employeeList.clear();
-		for(com.manlyminotaursAPI.users.Employee aEmployee : DataModelIAPI.getInstance().retrieveUsers()){
-			employeeList.add(aEmployee);
-		}
-
-
+		List<Employee> userList = DataModelIAPI.getInstance().retrieveUsers();
+		employeeList.addAll(userList);
 
         System.out.println("------------------DONE POPULATING------------------------------");
         //-----------------------------------POPULATE LISTS ENDED----------------------------------
