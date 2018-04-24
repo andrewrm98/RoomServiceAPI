@@ -67,9 +67,18 @@ public class CsvFileController {
     /*---------------------------------- Update CSV Files --------------------------------------------------*/
 
     public void updateAllCSVFiles(){
-        updateRequestCSVFile("./csv/RequestTableAPI.csv");
-        updateUserCSVFile("./csv/UserAccountTableAPI.csv");
-        updateInventoryCSVFile("./csv/InventoryTableAPI.csv");
+        File file = new File("./roomServiceCsv");
+        if (!file.exists()) {
+            if (file.mkdir()) {
+                System.out.println("Directory is created!");
+            } else {
+                System.out.println("Failed to create directory!");
+            }
+        }
+
+        updateRequestCSVFile("./roomServiceCsv/RequestTableAPI.csv");
+        updateUserCSVFile("./roomServiceCsv/UserAccountTableAPI.csv");
+        updateInventoryCSVFile("./roomServiceCsv/InventoryTableAPI.csv");
     }
 
 
